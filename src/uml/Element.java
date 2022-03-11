@@ -1,20 +1,22 @@
-/**
- * 
- */
 package uml;
 
-/**
- * @author xpopdo00
- *
- */
 public class Element {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.println("Čau");
-
+	// Attributes
+	private java.lang.String name;
+	
+	// Constructors
+	public Element(java.lang.String name) {
+		this.name = name;
 	}
-
+	
+	// Methods
+	public java.lang.String getName(){
+		return this.name;
+	}
+	
+	public void rename(java.lang.String newName) {
+		this.name = newName;
+	}	
+	
 }
