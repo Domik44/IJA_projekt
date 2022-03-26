@@ -1,0 +1,30 @@
+@startuml -> zacatek souboru
+@enduml -> konec souboru
+
+Vztahy mezi tridamy:
+
+Relation 'type' {
+  lClass 'nazevTridy'
+  rClass 'nazevTridy'
+  lCard 'kardinalita'
+  rCard 'kardinalita'
+  label 'popisek'
+  aClass 'nazevTridy'
+}
+
+'type' -> Aggregation, Composition, Asociation, Generalization
+'l/pCard' -> kardinality -> nepovinna
+'label' -> popisek -> nepovinny
+[asocTridy je nepovinna]
+
+Definice tridy:
+
+Class 'name' {
+  attrib 'nazev' 'typ' 'visibilita'
+  oper 'nazev' 'typ' 'visibilita' 'atribbs:types'
+}
+'attribs' -> nepovinne atributy operace
+
+Interface 'name' {
+  oper 'nazev' 'typ' 'atribbs:types' 
+}
