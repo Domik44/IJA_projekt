@@ -1,21 +1,41 @@
+/**
+* <h1>Element</h1>
+* Basic class used for inheritance of name.
+*
+* @author  Dominik Pop
+* @version 1.0
+* @since   2022-03-23 
+*/
+
 package uml;
 
 public class Element {
 
 	// Attributes
-	private java.lang.String name;
+	private String name;
 	
 	// Constructors
-	public Element(java.lang.String name) {
+	public Element(String name) {
 		this.name = name;
 	}
 	
-	// Methods
-	public java.lang.String getName(){
+	/** <h1>Methods</h1> */ 
+	
+	/**
+	* This method is used to receive name of object.
+	* 
+	* @return Returns name of object.
+	*/
+	public String getName(){
 		return this.name;
 	}
 	
-	public void rename(java.lang.String newName) {
+	/**
+	* This method is used to change name of object.
+	* 
+	* @param newName This is the new name of object.
+	*/
+	public void rename(String newName) {
 		this.name = newName;
 	}	
 	
