@@ -1,0 +1,21 @@
+JAVA projekt - návrh postupu appky:
+1) Načtení diagramů ze vstupního souboru -> Reader
+2) Při načítání vytvářet objekty tříd/objektů/čehokoliv ukládat je do listů (př list tříd, asociaci, agregaci, atd.)
+3) Zobrazení načtených diagramů do GUI
+4) Čekání na editace
+5) Provedení editací -> zápis + zobrazení -> Editer + 'něco'
+6) Uložení editací -> Writer
+
+Nový package -> workers:
+			Class:
+				-> Reader -> čte ze vstupního filu
+				-> Creator -> vytváří objekty diagramu
+				-> Writer -> zapisuje do vstupního filu
+				-> Editer -> edituje objekty v databázi
+	     -> uml:
+			Class:
+				-> classy pro uchovavani informaci o diagramu
+             -> gui:
+             -> main:
+			Class:
+				-> Main -> hlavni telo appky
