@@ -1,12 +1,22 @@
+/**
+* <h1>UMLClass</h1>
+* This class represents class
+* in class diagrams.
+*
+* @author  Dominik Pop
+* @version 1.0
+* @since   2022-03-23 
+*/
+
 package uml;
 
 import java.util.List;
 
-public class UMLClass extends UMLClassifier {
+public class UMLClass extends UMLInterface {
 
 	// Attributes
 	private boolean abstraction;
-	private java.util.List<UMLAttribute> attributes = new java.util.ArrayList<UMLAttribute>();
+	private List<UMLAttribute> attributes = new java.util.ArrayList<UMLAttribute>();
 	
 	// Constructors
 	public UMLClass(String name) {
@@ -23,6 +33,7 @@ public class UMLClass extends UMLClassifier {
 		this.abstraction = isAbstract;
 	}
 	
+	// Attribute methods
 	public boolean addAttribute(UMLAttribute attr) {
 		return this.attributes.add(attr);
 	}
@@ -42,10 +53,9 @@ public class UMLClass extends UMLClassifier {
 		return -1;
 	}
 	
-	public java.util.List<UMLAttribute> getAttributes(){
-		java.util.List<UMLAttribute> copy = List.copyOf(this.attributes);
+	public List<UMLAttribute> getAttributes(){
+		List<UMLAttribute> copy = List.copyOf(this.attributes);
 		
 		return copy;
 	}
-
 }
