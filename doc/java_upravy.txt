@@ -5,3 +5,9 @@ JAva:
 Napad k UI
 - udelat si mapy pro urcite pocty trid -> mapy budou mit policka kde budou moct být tridy a podle poctu se budou zvetsovat 
 - relace pak budou mit predem predepsane cesty a budou se pouze zviditelnovat
+
+
+SPUSTENI MAVEN:
+mvn clean
+mvn package 
+java -cp build/jmeno_jaru.jar main.Main
