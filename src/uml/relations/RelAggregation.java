@@ -8,7 +8,10 @@
 * @since   2022-03-23 
 */
 
-package uml;
+package uml.relations;
+
+import uml.UMLInterface;
+import uml.UMLRelation;
 
 public class RelAggregation extends UMLRelation {
 	private String leftCardinality = "";

@@ -8,7 +8,9 @@
 * @since   2022-03-23 
 */
 
-package uml;
+package uml.relations;
+
+import uml.UMLInterface;
 
 public class RelAssociation extends RelAggregation {
 	private UMLInterface asociationClass;
