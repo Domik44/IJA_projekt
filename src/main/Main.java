@@ -1,13 +1,3 @@
-/**
-* <h1>Main</h1>
-* This is the main body of application. It calls all 
-* other parts of application. 
-*
-* @author  Dominik Pop
-* @version 1.0
-* @since   2022-03-23 
-*/
-
 package main;
 
 import uml.*;
@@ -15,8 +5,20 @@ import workers.Reader;
 import uml.pos.Position;
 import uml.relations.*;
 
+/**
+* Main is the main body of application. It calls all 
+* other parts of application. 
+*
+* @author  Dominik Pop
+* @version 1.0
+* @since   2022-03-23 
+*/
 public class Main {
 
+	/**
+	 * Main function of application.
+	 * @param args Input arguments.
+	 */
 	public static void main(String[] args) {
 		// Calling reader
 		ClassDiagram diagram = new ClassDiagram("ClassDiagram");

@@ -1,26 +1,27 @@
+package uml;
+
 /**
-* <h1>Element</h1>
-* Basic class used for inheritance of name.
+* Element class is used for inheritance of name attribute.
 *
 * @author  Dominik Pop
 * @version 1.0
 * @since   2022-03-23 
 */
-
-package uml;
-
 public class Element {
 
 	// Attributes
 	private String name;
 	
 	// Constructors
+	/**
+	 * Constructor for Element class. Sets name of created object.
+	 * @param name Contains name of object.
+	 */
 	public Element(String name) {
 		this.name = name;
 	}
 	
-	/** <h1>Methods</h1> */ 
-	
+	// Methods
 	/**
 	* This method is used to receive name of object.
 	* 

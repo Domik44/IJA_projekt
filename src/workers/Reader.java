@@ -1,23 +1,8 @@
-/**
-* <h1>Reader</h1>
-* This program reads data from input files
-* and stores them for further use.
-*
-* @author  Dominik Pop
-* @version 1.0
-* @since   2022-03-23 
-*/
-
 package workers;
 
 import java.io.File;
-
 import java.io.FileNotFoundException;
-//import java.io.FileReader;
-//import java.nio.file.Path;
-//import java.nio.file.Paths;
 import java.util.Scanner;
-
 import uml.*;
 import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
@@ -26,21 +11,45 @@ import uml.pos.*;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+* Reader class reads data from input files
+* and stores them for further use.
+*
+* @author  Dominik Pop
+* @version 1.0
+* @since   2022-03-23 
+*/
 public class Reader {
 	private String fileName;
 	
+	/**
+	 * Constructor for reader.
+	 * @param fileName Sets fileName of input file.
+	 */
 	public Reader(String fileName) {
 		this.fileName = fileName;
 	}
 	
+	/**
+	 * Setter for new fileName of new input file.
+	 * @param fileName Input file.
+	 */
 	public void setNewFileName(String fileName) {
 		this.fileName = fileName;
 	}
 	
+	/**
+	 * Gets name of input file.
+	 * @return Returns name of input file.
+	 */
 	public String getFileName() {
 		return "data/"+this.fileName;
 	}
 	
+	/**
+	 * Method starts reading informations about class diagram from input file.
+	 * @param diagram Contains reference to diagram object, where all information will be stored.
+	 */
 	public static void startReading(ClassDiagram diagram) {
 		Reader reader = new Reader("ClassDiagram.cl");
 		try {
@@ -78,7 +87,11 @@ public class Reader {
 		 }
 	}
 	
-	
+	/**
+	 * Method for reading information about class from input file.
+	 * @param readFile Input file.
+	 * @param newClass Object representing new class.
+	 */
 	public void readClass(Scanner readFile, UMLClass newClass) {
 		while (readFile.hasNextLine()) {
 			String line = readFile.nextLine();
@@ -116,6 +129,11 @@ public class Reader {
 		}
 	}
 	
+	/**
+	 * Method for reading information about interface from input file.
+	 * @param readFile Input file.
+	 * @param newInterface Object representing new interface.
+	 */
 	public void readInterface(Scanner readFile, UMLInterface newInterface) {
 		while (readFile.hasNextLine()) {
 			String line = readFile.nextLine();
@@ -149,7 +167,12 @@ public class Reader {
 		}
 	}
 	
-	// TODO -> dodelat
+	/**
+	 * Method for reading information about relation and creating it.
+	 * @param readFile Input file.
+	 * @param type Contains type of relation.
+	 * @param diagram Object representing class diagram.
+	 */
 	public void readRelation(Scanner readFile, String type, ClassDiagram diagram) {
 		String label = "";
 		String lCard = "", rCard = "";

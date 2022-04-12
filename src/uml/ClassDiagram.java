@@ -1,23 +1,19 @@
+package uml;
+
+import java.util.ArrayList;
+import java.util.List;
+import uml.relations.RelAggregation;
+import uml.relations.RelAssociation;
+import uml.relations.RelGeneralization;
+
 /**
-* <h1>ClassDiagram</h1>
-* This class represents class diagram
-* as one piece.
+* Class diagram class represents class diagram
+* as one piece. <br>It contains Classes/Interfaces and Relations.
 *
 * @author  Dominik Pop
 * @version 1.0
 * @since   2022-03-23 
 */
-
-package uml;
-
-import java.util.ArrayList;
-
-import java.util.List;
-
-import uml.relations.RelAggregation;
-import uml.relations.RelAssociation;
-import uml.relations.RelGeneralization;
-
 public class ClassDiagram extends Element {
 	// Attributes
 	private List<UMLInterface> interfaces = new ArrayList<UMLInterface>();
@@ -28,13 +24,24 @@ public class ClassDiagram extends Element {
 	private List<UMLClassifier> types = new ArrayList<UMLClassifier>();
 
 	// Constructors
+	/**
+	 * Constructor for ClassDiagram object. 
+	 * Calls constructor of super class Element.
+	 * @param name Contains name of class diagram.
+	 */
 	public ClassDiagram(String name) {
 		super(name);
 	}
 	
-	// Methods
-	
-	// Tries to find classifier, if it doesn't exist it creates new one
+	/**
+	 * <h2>Methods</h2>
+	 */
+
+	/**
+	 * Tries to find classifier, if it doesn't exist, creates new one.
+	 * @param name Contains name of searched classifier.
+	 * @return Returns reference to found/created classifier.
+	 */
 	public UMLClassifier classifierForName(String name) {	 // TO DO
 		
 		UMLClassifier res = this.findClassifier(name);
@@ -47,7 +54,11 @@ public class ClassDiagram extends Element {
 		return result;
 	}
 	
-	// In case of success returns Classifier, otherwise null
+	/**
+	 * Method for finding classifier by a name.
+	 * @param name Contains name of the classifier.
+	 * @return If found returns reference to classifier, otherwise null.
+	 */
 	public UMLClassifier findClassifier(String name) { // TO DO
 		
 		for (UMLClassifier classifier : this.types) {
@@ -59,7 +70,9 @@ public class ClassDiagram extends Element {
 		return null;
 	}
 	
-	// Creates basic data types and adds them to types list
+	/**
+	 * Method for creating basic data types and adding them to types list.
+	 */
 	public void basicTypes() {
 		String[] basices = {"int", "str", "bool", "float", "+", "-", "#", "~"};
 		for(String str : basices) {
@@ -68,7 +81,11 @@ public class ClassDiagram extends Element {
 		}
 	}
 	
-	// Creates interface and adds it to interface list
+	/**
+	 * Method for creating interface object and adding it to class list.
+	 * @param name Contains name of created interface.
+	 * @return Returns reference to newly created interface.
+	 */
 	public UMLInterface createInterface(String name) { // TO DO
 		UMLInterface newInterface = new UMLInterface(name);
 		this.interfaces.add(newInterface);		
@@ -76,12 +93,20 @@ public class ClassDiagram extends Element {
 		return newInterface;	
 	}
 	
-	
+	/**
+	 * Getter for list of interfaces.
+	 * @return Returns unmodifiable list of itnerfaces.
+	 */
 	public List<UMLInterface> getInterfaces(){
 		List<UMLInterface> copyList = List.copyOf(this.interfaces);
 		return copyList;
 	}
 	
+	/**
+	 * Method compares interfaces in list by name.
+	 * @param name Contains name of interface we are searching for.
+	 * @return If comparison is successful return reference to interface, otherwise null.
+	 */
 	public UMLInterface getInterface(String name) {
 		for(UMLInterface in : this.interfaces) {
 			if(in.getName().equals(name)) {
@@ -92,7 +117,11 @@ public class ClassDiagram extends Element {
 		return null;
 	}
 	
-	// Creates class and adds it to class list
+	/**
+	 * Method for creating class object and adding it to class list.
+	 * @param name Contains name of created class.
+	 * @return Returns reference to newly created class.
+	 */
 	public UMLClass createClass(String name) { // TO DO
 		UMLClass newClass = new UMLClass(name);
 		this.classes.add(newClass);		
@@ -100,12 +129,20 @@ public class ClassDiagram extends Element {
 		return newClass;	
 	}
 	
-	
+	/**
+	 * Getter for list of classes.
+	 * @return Returns unmodifiable list of classes.
+	 */
 	public List<UMLClass> getClasses(){
 		List<UMLClass> copyList = List.copyOf(this.classes);
 		return copyList;
 	}
 	
+	/**
+	 * Method compares classes in list by name.
+	 * @param name Contains name of class we are searching for.
+	 * @return If comparison is successful return reference to class, otherwise null.
+	 */
 	public UMLClass getClass(String name) {
 		for(UMLClass cl : this.classes) {
 			if(cl.getName().equals(name)) {
@@ -116,14 +153,27 @@ public class ClassDiagram extends Element {
 		return null;
 	}
 	
-	// Creates relation and adds it to relation list
-	public RelGeneralization createGeneralization(UMLInterface parent, List<UMLInterface> childClasses,String type) {
+	/**
+	 * Method for creating Generalizations and adding them to Generalizations list.
+	 * @param parent Contains reference to parent Class/Interface.
+	 * @param childClasses Contains reference to list of child Classes/Interfaces.
+	 * @param type Contains type of Relation.
+	 * @return Method returns newly created Aggregation.
+	 */
+	public RelGeneralization createGeneralization(UMLInterface parent, List<UMLInterface> childClasses, String type) {
 		RelGeneralization newRelation = new RelGeneralization(parent, childClasses, type);
 		this.relGeneralization.add(newRelation);
 		
 		return newRelation;
 	}
 	
+	/**
+	 * Method for creating Aggregations and adding them to Aggregations list.
+	 * @param parent Contains reference to Class/Interface of relation where compozition/aggregagtion is.
+	 * @param child Contains reference to Class/Interface of relation.
+	 * @param type Contains type of Relation.
+	 * @return Method returns newly created Aggregation.
+	 */
 	public RelAggregation createAggregation(UMLInterface parent, UMLInterface child, String type) {
 		RelAggregation newRelation = new RelAggregation(parent, child, type);
 		this.relAggregation.add(newRelation);
@@ -131,6 +181,13 @@ public class ClassDiagram extends Element {
 		return newRelation;
 	}
 	
+	/**
+	 * Method for creating Associations and adding them to Associations list.
+	 * @param parent Contains reference to left Class/Interface of relation.
+	 * @param child Contains reference to right Class/Interface of relation.
+	 * @param type Contains type of Relation.
+	 * @return Method returns newly created Association.
+	 */
 	public RelAssociation createAssociation(UMLInterface parent, UMLInterface child, String type) {
 		RelAssociation newRelation = new RelAssociation(parent, child, type);
 		this.relAssociation.add(newRelation);
@@ -138,17 +195,28 @@ public class ClassDiagram extends Element {
 		return newRelation;
 	}
 	
-	//
+	/**
+	 * Getter for Aggregations list.
+	 * @return Method returns unmodifiable list of Aggregations.
+	 */
 	public List<RelAggregation> getAggregations(){
 		List<RelAggregation> copyList = List.copyOf(this.relAggregation);
 		return copyList;
 	}
 	
+	/**
+	 * Getter for Generalizations list.
+	 * @return Method returns unmodifiable list of Generalizations.
+	 */
 	public List<RelGeneralization> getGeneralizations(){
 		List<RelGeneralization> copyList = List.copyOf(this.relGeneralization);
 		return copyList;
 	}
 	
+	/**
+	 * Getter for Associations list.
+	 * @return Method returns unmodifiable list of Associations.
+	 */
 	public List<RelAssociation> getAssociations(){
 		List<RelAssociation> copyList = List.copyOf(this.relAssociation);
 		return copyList;

@@ -1,6 +1,10 @@
+package uml;
+
+import java.util.List;
+import uml.pos.Position;
+
 /**
-* <h1>UMLRelation</h1>
-* This class represents relation
+* UMLRelation class represents relation
 * in class diagrams.
 * 
 * It is used for generalization of basic
@@ -10,19 +14,18 @@
 * @version 1.0
 * @since   2022-03-23 
 */
-
-
-package uml;
-
-import java.util.List;
-import uml.pos.Position;
-
 public class UMLRelation{
 	private UMLInterface leftClass;
 	private UMLInterface rightClass;
 	private String type;
 	private List<Position> listPoints = new java.util.ArrayList<Position>();
 	
+	/**
+	 * Constructor for relation object. Sets type, left and right class of relation.
+	 * @param left Contains reference to interface/class.
+	 * @param right Contains reference to interface/class.
+	 * @param type Contains type of relation.
+	 */
 	public UMLRelation(UMLInterface left, UMLInterface right, String type) {
 		this.type = type;
 		this.leftClass = left;
@@ -30,27 +33,52 @@ public class UMLRelation{
 	}
 	
 	// POZOR MOMENTALNE NEVRACI REFERENCE ALE JMENA!!
+	/**
+	 * Getter for left class/interface of relation.
+	 * @return Returns reference to class/interface.
+	 */
 	public UMLInterface getLeftClass() {
 		return this.leftClass;
 	}
 	
+	/**
+	 * Getter for right class/interface of relation.
+	 * @return Returns reference to class/interface.
+	 */
 	public UMLInterface getRightClass() {
 		return this.rightClass;
 	}
 	
 	// TODO  -> dodelat getType -> popremylet jestli ho nedelat pres Classifier
+	/**
+	 * Getter for type of realtion.
+	 * @return Returns type of relation.
+	 */
 	public String getType() {
 		return this.type;
 	}
 	
+	/**
+	 * Method adds position of relation point to points list.
+	 * @param pos Contains position of point holding (x, y) coordinates.
+	 */
 	public void addPosition(Position pos) {
 		listPoints.add(pos);
 	}
 	
+	/**
+	 * Getter for points list.
+	 * @return Returns unmodifiable list of relation points.
+	 */
 	public List<Position> getPoints() {
-		return this.listPoints;
+		List<Position> copy = List.copyOf(this.listPoints);
+		return copy;
 	}
 	
+	/**
+	 * Method gets rid of old list of points and takes new one.
+	 * @param newList Returns reference to new points list.
+	 */
 	public void changeList(List<Position> newList) {
 		this.listPoints = null;
 		this.listPoints = newList;

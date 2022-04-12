@@ -1,28 +1,40 @@
+package uml.relations;
+
+import uml.UMLInterface;
+
 /**
-* <h1>RelAssociation</h1>
-* This class represents association
+* RelAssociation class represents association
 * relation between classes.
 *
 * @author  Dominik Pop
 * @version 1.0
 * @since   2022-03-23 
 */
-
-package uml.relations;
-
-import uml.UMLInterface;
-
 public class RelAssociation extends RelAggregation {
 	private UMLInterface asociationClass;
 	
+	/**
+	 * Constructor for association. Calls constructor of super class RelAggregation.
+	 * @param left Contains left class of association.
+	 * @param right Contains right class of association.
+	 * @param type Contains type of relation.
+	 */
 	public RelAssociation(UMLInterface left, UMLInterface right, String type) {
 		super(left, right, type);
 	}
 	
+	/**
+	 * Sets association class of relation (if there is one).
+	 * @param assocClass Contains association class.
+	 */
 	public void setAssociationClass(UMLInterface assocClass) {
 		this.asociationClass = assocClass;
 	}
 	
+	/**
+	 * Getter for association class.
+	 * @return Returns reference to association class, null if there isn't one.
+	 */
 	public UMLInterface getAssociationClass() {
 		return this.asociationClass;
 	}
