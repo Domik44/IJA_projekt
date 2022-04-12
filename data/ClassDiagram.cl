@@ -1,20 +1,20 @@
 @startuml
 
 Class Motorka {
-  position 15 10
+  position 100 300
   attrib omezeni bool +
   oper postavitNaZadni str + hvezdicky:int
 }
 
 Class Auto {
-  position 5 10
+  position 400 300
   attrib tazne bool +
   oper vypisInfo str -
   oper vypisBarva str + barva:str
 }
 
 Interface Vozidlo {
-  position 10 10
+  position 250 100
   attrib vykon int +
   attrib hmotnost int -
   attrib znacka str ~
@@ -30,8 +30,10 @@ Relation Generalization {
 }
 
 Relation Association {
-  position 6 14
-  position 6 6
+  position 0 50
+  position 80 350
+  position 80 150
+  position 0 50
   lClass Auto
   rClass Vozidlo
   lCard 0
