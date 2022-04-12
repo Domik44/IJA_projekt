@@ -15,5 +15,6 @@ public class Writer {
 	
 	public Writer(String fileName) {
 		this.fileName = fileName;
+		System.out.println(this.fileName);
 	}
 }

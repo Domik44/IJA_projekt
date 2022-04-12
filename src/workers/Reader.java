@@ -11,6 +11,7 @@
 package workers;
 
 import java.io.File;
+
 import java.io.FileNotFoundException;
 //import java.io.FileReader;
 //import java.nio.file.Path;
@@ -18,6 +19,12 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import uml.*;
+import uml.relations.RelAggregation;
+import uml.relations.RelAssociation;
+import uml.relations.RelGeneralization;
+import uml.pos.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Reader {
 	private String fileName;
@@ -101,6 +108,11 @@ public class Reader {
 				UMLOperation op = UMLOperation.createOperation(lineParsed[1], UMLClassifier.forName(lineParsed[2]), UMLClassifier.forName(lineParsed[3]), argsArray);
 				newClass.addOperation(op);
 			}
+			else if(lineParsed[0].equals("position")) {
+				int x = Integer.parseInt(lineParsed[1]);
+				int y = Integer.parseInt(lineParsed[2]);
+				newClass.setPosition(x, y);
+			}
 		}
 	}
 	
@@ -129,6 +141,11 @@ public class Reader {
 				UMLOperation op = UMLOperation.createOperation(lineParsed[1], UMLClassifier.forName(lineParsed[2]), UMLClassifier.forName(lineParsed[3]), argsArray);
 				newInterface.addOperation(op);
 			}
+			else if(lineParsed[0].equals("position")) {
+				int x = Integer.parseInt(lineParsed[1]);
+				int y = Integer.parseInt(lineParsed[2]);
+				newInterface.setPosition(x, y);
+			}
 		}
 	}
 	
@@ -137,6 +154,8 @@ public class Reader {
 		String label = "";
 		String lCard = "", rCard = "";
 		UMLInterface lClass = null, rClass = null, aClass = null;
+		List<UMLInterface> childClasses = new ArrayList<UMLInterface>();
+		List<Position> listPos = new java.util.ArrayList<Position>();
 		while (readFile.hasNextLine()) {
 			String line = readFile.nextLine();
 			line = line.trim();
@@ -151,7 +170,7 @@ public class Reader {
 			else if(lineParsed[0].equals("rCard")) {
 				rCard = lineParsed[1];
 			}
-			else if(lineParsed[0].equals("lClass")) {
+			else if(lineParsed[0].equals("lClass") || lineParsed[0].equals("pClass")) {
 				lClass = diagram.getInterface(lineParsed[1]);
 				if (lClass == null) {
 					lClass = diagram.getClass(lineParsed[1]);
@@ -163,6 +182,13 @@ public class Reader {
 					rClass = diagram.getClass(lineParsed[1]);
 				}
 			}
+			else if(lineParsed[0].equals("cClass")) {
+				rClass = diagram.getInterface(lineParsed[1]);
+				if (rClass == null) {
+					rClass = diagram.getClass(lineParsed[1]);
+				}
+				childClasses.add(rClass);
+			}
 			else if(lineParsed[0].equals("label")) {
 				label = lineParsed[1];
 			}
@@ -172,22 +198,30 @@ public class Reader {
 					aClass = diagram.getClass(lineParsed[1]);
 				}
 			}
+			else if(lineParsed[0].equals("position")) {
+				int x = Integer.parseInt(lineParsed[1]);
+				int y = Integer.parseInt(lineParsed[2]);
+				Position pos = new Position(x, y);
+				listPos.add(pos);
+			}
 		}
 
 		if (type.equals("Generalization")){
 			@SuppressWarnings("unused")
-			RelGeneralization rel = diagram.createGeneralization(lClass, rClass, type);
+			RelGeneralization rel = diagram.createGeneralization(lClass, childClasses, type);
 		}
 		else if (type.equals("Aggregation")){
 			RelAggregation rel = diagram.createAggregation(lClass, rClass, type);
 			rel.setCardinality(lCard, rCard);
 			rel.setLabel(label);
+			rel.changeList(listPos);
 		}
 		else if (type.equals("Association")){
 			RelAssociation rel = diagram.createAssociation(lClass, rClass, type);
 			rel.setCardinality(lCard, rCard);
 			rel.setLabel(label);
 			rel.setAssociationClass(aClass);
+			rel.changeList(listPos);
 		}
 	}
 	
