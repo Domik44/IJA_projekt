@@ -5,11 +5,15 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <build>
+
 	<finalName>ija-app</finalName>
 	<directory>build</directory>
 	<outputDirectory>${project.build.directory}/classes</outputDirectory>  
     <sourceDirectory>src</sourceDirectory>
+	<defaultGoal>clean package javadoc:javadoc</defaultGoal>
+
     <plugins>
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
@@ -17,6 +21,7 @@
           <release>11</release>
         </configuration>
       </plugin>
+
 	  <plugin>
       	<groupId>org.apache.maven.plugins</groupId>
       	<artifactId>maven-jar-plugin</artifactId>
@@ -26,11 +31,24 @@
 			<archive>
             <manifest>
               <addClasspath>true</addClasspath>
+				<classpathPrefix>${project.build.directory}/classes</classpathPrefix>
               <mainClass>main.Main</mainClass>
             </manifest>
           </archive>
       	</configuration>
       </plugin>
+
+	  <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.3.2</version>
+          <configuration>
+            <reportOutputDirectory>${basedir}</reportOutputDirectory>
+            <destDir>doc</destDir>
+          </configuration>
+       </plugin>
+
     </plugins>
   </build>
+
 </project>
