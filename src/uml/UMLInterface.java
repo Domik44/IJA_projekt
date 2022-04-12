@@ -11,9 +11,12 @@
 package uml;
 
 import java.util.List;
+import uml.pos.Position;
 
 public class UMLInterface extends UMLClassifier {
 	private List<UMLOperation> methods = new java.util.ArrayList<UMLOperation>();
+	//private int[] position = new int[]{0,0};
+	private Position position = new Position(0, 0);
 	
 	// Constructors
 		public UMLInterface(String name) {
@@ -44,5 +47,16 @@ public class UMLInterface extends UMLClassifier {
 		List<UMLOperation> copy = List.copyOf(this.methods);
 		
 		return copy;
+	}
+	
+	// Position methods
+	
+	public Position getPosition() {
+		return this.position;
+	}
+	
+	public void setPosition(int x, int y) {
+		this.position.setX(x);
+		this.position.setY(y);
 	}
 }

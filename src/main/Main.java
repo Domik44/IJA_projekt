@@ -12,6 +12,8 @@ package main;
 
 import uml.*;
 import workers.Reader;
+import uml.pos.Position;
+import uml.relations.*;
 
 public class Main {
 
@@ -20,7 +22,9 @@ public class Main {
 		ClassDiagram diagram = new ClassDiagram("ClassDiagram");
 		Reader.startReading(diagram);
 		for(UMLClass cl : diagram.getClasses()) {
-			System.out.println("Class: "+cl);
+			Position pos = cl.getPosition();
+			pos.setX(11);
+			System.out.println("Class: "+cl + " " + cl.getPosition().getX() + " " + cl.getPosition().getY());
 			for(UMLAttribute at : cl.getAttributes()) {
 				String attr = at.toString(); // tohle je jen pro demostraci funkcnosti toString
 				// Takhle si to budes moct ulozit do stringu a pak to jen rovnou hodit na zobrazeni
@@ -31,6 +35,7 @@ public class Main {
 			for(UMLOperation op : cl.getOperations()) {
 				System.out.println(op);
 			}
+			System.out.println();
 		}
 		
 		System.out.println();
@@ -40,17 +45,47 @@ public class Main {
 			for(UMLOperation op : inter.getOperations()) {
 				System.out.println(op);
 			}
+			System.out.println();
 		}
 		
 		System.out.println();
 		
-		for(UMLRelation rl : diagram.getRelations()) {
+		for(RelGeneralization rl : diagram.getGeneralizations()) {
+			System.out.println(rl.getType());
+			System.out.println(rl.getLeftClass());
+			for(UMLInterface cl : rl.getChildren()) {
+				System.out.println(cl.getName());
+			}
+			System.out.println();
+		}
+		
+		for(RelAggregation rl : diagram.getAggregations()) {
 			System.out.println(rl.getType());
 			System.out.println(rl.getLeftClass());
 			System.out.println(rl.getRightClass());
+			for(Position pos : rl.getPoints()) {
+				System.out.println(pos.getX() + " " + pos.getY());
+			}
+			System.out.println(rl.getLabel());
+			System.out.println(rl.getLeftCardinality());
+			System.out.println(rl.getRightCardinality());
+			System.out.println();
 		}
 		
-		
+		for(RelAssociation rl : diagram.getAssociations()) {
+			System.out.println(rl.getType());
+			System.out.println(rl.getLeftClass());
+			System.out.println(rl.getRightClass());
+			for(Position pos : rl.getPoints()) {
+				System.out.println(pos.getX() + " " + pos.getY());
+			}
+			System.out.println(rl.getLabel());
+			System.out.println(rl.getLeftCardinality());
+			System.out.println(rl.getRightCardinality());
+			if(rl.getAssociationClass() != null)
+				System.out.println(rl.getAssociationClass().getName());
+			System.out.println();
+		}
 	}
 
 }
