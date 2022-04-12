@@ -4,6 +4,8 @@
 Vztahy mezi tridamy:
 
 Relation 'type' {
+  position x y
+  position x y
   lClass 'nazevTridy'
   rClass 'nazevTridy'
   lCard 'kardinalita'
@@ -20,11 +22,13 @@ Relation 'type' {
 Definice tridy:
 
 Class 'name' {
+  position x y	
   attrib 'nazev' 'typ' 'visibilita'
   oper 'nazev' 'typ' 'visibilita' 'atribbs:types'
 }
 'attribs' -> nepovinne atributy operace
 
 Interface 'name' {
+  position x y	
   oper 'nazev' 'typ' 'atribbs:types' 
 }
