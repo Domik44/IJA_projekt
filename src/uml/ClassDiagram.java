@@ -156,7 +156,7 @@ public class ClassDiagram extends Element {
 	/**
 	 * Method for creating Generalizations and adding them to Generalizations list.
 	 * @param parent Contains reference to parent Class/Interface.
-	 * @param childClasses Contains reference to list of child Classes/Interfaces.
+	 * @param child Contains reference to child Class/Interface.
 	 * @param type Contains type of Relation.
 	 * @return Method returns newly created Aggregation.
 	 */
