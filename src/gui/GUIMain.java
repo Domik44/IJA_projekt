@@ -17,14 +17,13 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import uml.*;
 import uml.pos.Position;
+import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
+import uml.relations.RelGeneralization;
 import workers.Reader;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class GUIMain extends Application implements Observer {
 
@@ -41,6 +40,13 @@ public class GUIMain extends Application implements Observer {
         scene = new Scene(vBox, 1000, 600);
     }
 
+    public Gclass getClassByName(String name){
+        for (Gclass gclass: gclassList){
+            if (gclass.classLabel.getText() == name)
+                return gclass;
+        }
+        return null;
+    }
 
     public void setupClasses(List<UMLClass> classes) {
         for (UMLClass c : classes) {
@@ -57,7 +63,6 @@ public class GUIMain extends Application implements Observer {
             pane.getChildren().add(tmp.getRoot());
 
             for (UMLAttribute attr : c.getAttributes()) {
-                System.out.println(attr.toString());
                 tmp.attrList.add(new Label(attr.toString()));
             }
             tmp.classVB.getChildren().addAll(tmp.attrList);
@@ -65,7 +70,6 @@ public class GUIMain extends Application implements Observer {
             tmp.classVB.getChildren().add(tmp.separator2);
 
             for (UMLAttribute opr : c.getOperations()) {
-                System.out.println(opr.toString() + "xx");
                 tmp.methodList.add(new Label(opr.toString()));
             }
             tmp.classVB.getChildren().addAll(tmp.methodList);
@@ -89,7 +93,6 @@ public class GUIMain extends Application implements Observer {
 
 
             for (UMLAttribute opr : i.getOperations()) {
-                System.out.println(opr.toString() + "xx");
                 tmp.methodList.add(new Label(opr.toString()));
             }
             tmp.classVB.getChildren().addAll(tmp.methodList);
@@ -98,16 +101,89 @@ public class GUIMain extends Application implements Observer {
 
     public void setupAssociation(List<RelAssociation> associations) {
         for (RelAssociation a : associations) {
-            //create Gclass object
             List<Position> list = a.getPoints();
-            List<MyNode> listNode = new ArrayList<>();
-            for ( Position point : list){
-                listNode.add(new MyNode(point.getX(), point.getY(), false));
-            }
+            int len = list.size();
 
-            GAssociation ass = new GAssociation(gclassList.get(0), gclassList.get(2));
-            ass.setFromList(listNode);
+            //create anchors
+            MyNodeAnchor start = new MyNodeAnchor(list.get(0).getX(), list.get(0).getY(), false);
+            MyNodeAnchor end = new MyNodeAnchor(list.get(len -1).getX(), list.get(len -1).getY(), false);
+
+            //create Gclass list
+            List<MyNode> listNode = new ArrayList<>();
+            for ( int i = 1; i < len - 1; i++){
+                Position point = list.get(i);
+                listNode.add(new MyNode(point.getX(), point.getY(), true));
+            }
+            Collections.reverse(listNode);
+            //create association
+            //select classes
+            Gclass first = getClassByName(a.getLeftClass().getName());
+            Gclass second = getClassByName(a.getRightClass().getName());
+            GAssociation ass = new GAssociation(first, second);
+            ass.setFromList(listNode, start, end);
+            ass.setLabels(a.getLeftCardinality(),a.getRightCardinality(), a.getLabel());
+            ass.setLabelName(a.getLabel(), a.getLabelPosition());
+            pane.getChildren().add(ass.rLabel);
+            ass.showLabels(pane, start, end); //TODO implement search by class name
             ass.show(pane);
+        }
+    }
+
+    public void setupAggregation(List<RelAggregation> aggregations) {
+        for (RelAggregation a : aggregations) {
+            List<Position> list = a.getPoints();
+            int len = list.size();
+
+            //create anchors
+            MyNodeAnchor start = new MyNodeAnchor(list.get(0).getX(), list.get(0).getY(), false);
+            MyNodeAnchor end = new MyNodeAnchor(list.get(len -1).getX(), list.get(len -1).getY(), false);
+
+            //create Gclass list
+            List<MyNode> listNode = new ArrayList<>();
+            for ( int i = 1; i < len - 1; i++){
+                Position point = list.get(i);
+                listNode.add(new MyNode(point.getX(), point.getY(), true));
+            }
+            //create association
+            //select classes
+            Gclass first = getClassByName(a.getLeftClass().getName());
+            Gclass second = getClassByName(a.getRightClass().getName());
+            GAggregation aggr = new GAggregation(first, second);
+            aggr.setFromList(listNode, start, end);
+            aggr.setLabels(a.getLeftCardinality(),a.getRightCardinality());
+            aggr.showLabels(pane, start, end); //TODO implement search by class name
+            start.polygonSquare();
+            start.polygonSetRotatoin(first);
+            aggr.show(pane);
+        }
+    }
+
+    private void setupGeneralization(List<RelGeneralization> generalizations) {
+        for (RelGeneralization g : generalizations) {
+            List<Position> list = g.getPoints();
+            int len = list.size();
+            System.out.println(len);
+
+            //create anchors
+            MyNodeAnchor start = new MyNodeAnchor(list.get(0).getX(), list.get(0).getY(), false);
+            MyNodeAnchor end = new MyNodeAnchor(list.get(len -1).getX(), list.get(len -1).getY(), false);
+
+            //create Gclass list
+            List<MyNode> listNode = new ArrayList<>();
+            for ( int i = 1; i < len - 1; i++){
+                Position point = list.get(i);
+                listNode.add(new MyNode(point.getX(), point.getY(), true));
+            }
+            //create association
+            //select classes
+            Gclass first = getClassByName(g.getLeftClass().getName());
+            Gclass second = getClassByName(g.getRightClass().getName());
+            GAggregation aggr = new GAggregation(first, second);
+            aggr.setFromList(listNode, start, end);
+            aggr.showLabels(pane, start, end); //TODO implement search by class name
+            start.polygonTriangle();
+            start.polygonSetRotatoin(gclassList.get(0));
+            aggr.show(pane);
         }
     }
 
@@ -116,7 +192,6 @@ public class GUIMain extends Application implements Observer {
         System.out.println("Update called with Arguments: " + arg);
     }
 
-    double x;
     public void Start(){
 
         launch();
@@ -125,21 +200,6 @@ public class GUIMain extends Application implements Observer {
     public void start(Stage orig) throws IOException {
         ClassDiagram diagram = new ClassDiagram("ClassDiagram");
         Reader.startReading(diagram);
-        for(UMLClass cl : diagram.getClasses()) {
-            Position pos = cl.getPosition();
-            System.out.println("Class: "+cl + " " + cl.getPosition().getX() + " " + cl.getPosition().getY());
-            for(UMLAttribute at : cl.getAttributes()) {
-                String attr = at.toString(); // tohle je jen pro demostraci funkcnosti toString
-                // Takhle si to budes moct ulozit do stringu a pak to jen rovnou hodit na zobrazeni
-                System.out.println(attr);
-                //System.out.println(at); -> stacilo by takhle
-            }
-
-            for(UMLOperation op : cl.getOperations()) {
-                System.out.println(op);
-            }
-            System.out.println();
-        }
 
 
         //*****GUI START*****//
@@ -147,13 +207,32 @@ public class GUIMain extends Application implements Observer {
 //        Image icon = new Image("icon.png");
 //        stage.getIcons().add(icon);
 //        stage.setTitle("ER DIAGRAM EDITOR FOR IJA");
+
+
         stage = new Stage();
         setupClasses(diagram.getClasses());
         setupInterfaces(diagram.getInterfaces());
         setupAssociation(diagram.getAssociations());
-        Button addClass = new Button("Add Class");
+        setupAggregation(diagram.getAggregations());
+        setupGeneralization(diagram.getGeneralizations());
+
+
+        //create buttons and button bar
         ButtonBar buttonBar = new ButtonBar();
+        Button addClass = new Button("Add Class");
         buttonBar.getButtons().add(addClass);
+
+        Button addAssociation = new Button("Ad AssociationClass");
+        addAssociation.setDisable(true);
+        buttonBar.getButtons().add(addAssociation);
+
+        Button addGeneralization = new Button("Add Generalization");
+        addGeneralization.setDisable(true);
+        buttonBar.getButtons().add(addGeneralization);
+
+        Button addAggregation = new Button("Add Aggregation");
+        addAggregation.setDisable(true);
+        buttonBar.getButtons().add(addAggregation);
 
         pane.setStyle("-fx-background-color: grey; -fx-border-color: black");
 
@@ -184,93 +263,11 @@ public class GUIMain extends Application implements Observer {
         };
         addClass.addEventHandler(MouseEvent.MOUSE_CLICKED, eve);
 
-//        Gclass tmpc1 = new Gclass(pane, true);
-//        makeDraggable(tmpc1.getRoot(), scene.getWidth(), scene.getHeight());
-//        gclassList.add(tmpc1);
-//        tmpc1.getRoot().toBack();
-//        pane.getChildren().add(tmpc1.getRoot());
-//
-//
-//
-//        System.out.println(tmpc1.getHeight());
-//        MyNode n1 = new MyNode(200,50, false);
-//        MyNode n2 = new MyNode(400,100, true);
-//        MyNode n3 = new MyNode(100,0, false);
-//
-//        List<MyNode> init = new ArrayList<>();
-//        init.add(n1);
-//        init.add(n2);
-//        init.add(n3);
-
-//        GInheritence inh = new Ggeneralization(tmpc1, tmpc2);
-//        inh.setFromList(init);
-//        inh.show(pane);
-
-//        GConnection test = new GConnection();
-//        test.setStart(n1);
-//        test.setEnd(n2);
-//        test.setBind();
-//        test.connect();
-//
-//        pane.getChildren().addAll(test.start.g, test.end.g);
-//        for (MyNode node: test.between) {
-//            pane.getChildren().add(node.g);
-//            node.g.toFront();
-//        }
-//
-//        tmpc1.addAnchor(test.start);
-//        tmpc2.addAnchor(test.end);
-//
-//        pane.getChildren().add(test.path);
-
-//        Polygon b = new Polygon(
-//                0.0,12.0,
-//                12.0,0.0,
-//                24.0, 12.0);
-
-//        double firstval = 20.0;
-//        double X = 300;
-//        double Y = 300;
-//
-//        Polygon b = new Polygon(
-//                0.0,0.0,
-//                -firstval, firstval,
-//                firstval, firstval);
-//
-//        b.setStroke(Color.BLACK);
-//        b.setStrokeWidth(3);
-//        b.setFill(Color.WHITE);
-//        b.setStrokeLineCap(StrokeLineCap.ROUND);
-//
-////        inh.connection.start.g.getChildren().add(b);
-//
-//        Rotate r = new Rotate();
-//        r.setPivotX(0);
-//        r.setPivotY(0);
-//        r.setAngle(-90);
-//
-//        b.getTransforms().add(r);
-//
-//        Polygon p = new Polygon(
-//                0.0,0.0,
-//                -firstval, firstval,
-//                0.0,0.0,
-//                firstval, firstval);
-//
-//        p.setStroke(Color.BLACK);
-//        p.setStrokeWidth(3);
-//        p.setFill(Color.WHITE);
-//        p.setStrokeLineCap(StrokeLineCap.ROUND);
-//        p.setTranslateX(X);
-//        p.setTranslateY(Y);
-//        pane.getChildren().add(b);
-//        pane.getChildren().add(p);
-
-
 
         stage.setScene(scene);
         stage.show();
     }
+
 
 
 

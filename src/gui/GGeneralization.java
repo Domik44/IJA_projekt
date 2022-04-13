@@ -14,9 +14,9 @@ public class GGeneralization {
         connection = new GConnection();
     }
 
-    public void setFromList(List<MyNode> list){
-        connection.setStart(list.get(0));
-        connection.setEnd(list.get(list.size() - 1));
+    public void setFromList(List<MyNode> list, MyNodeAnchor start, MyNodeAnchor end){
+        connection.setStart(start);
+        connection.setEnd(end);
         if (list.size() > 2){
             connection.setBetween(list.subList(1, list.size() - 1));
         }

@@ -9,6 +9,12 @@ import javafx.scene.shape.Circle;
 
 import java.util.Observable;
 
+/**
+ * MyNode represents GUI UMLclass
+ *
+ * @author  Adam Hos
+ * @version 1.0
+ */
 public class MyNode extends Observable {
     Group g;
     Circle c;

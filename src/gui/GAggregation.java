@@ -5,33 +5,27 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
-import uml.pos.Position;
 
 import java.util.List;
 
-public class GAssociation {
+public class GAggregation {
     Gclass parent;
     Gclass child;
     GConnection connection;
     Label pLabel;   //label near parent
     Label cLabel;   //label near child
-    Label rLabel;   //label for association name
 
-    public GAssociation(Gclass parent, Gclass child) {
+    public GAggregation(Gclass parent, Gclass child) {
         this.parent = parent;
         this.child = child;
         connection = new GConnection();
         pLabel = new Label();
         cLabel = new Label();
-        rLabel = new Label();
-        pLabel.setFont(new Font("Arial", 15));
-        cLabel.setFont(new Font("Arial", 15));
-        rLabel.setFont(new Font("Arial", 20));
     }
 
     public void setFromList(List<MyNode> list, MyNodeAnchor start, MyNodeAnchor end){
-        connection.setStart(end);
-        connection.setEnd(start);
+        connection.setStart(start);
+        connection.setEnd(end);
         if (list.size() > 0){
             connection.setBetween(list);
         }
@@ -42,10 +36,11 @@ public class GAssociation {
         child.addAnchor(connection.end);
     }
 
-    public void setLabels(String parent, String child, String relation){
+    public void setLabels(String parent, String child){
+        pLabel.setFont(new Font("Arial", 30));
         pLabel.setText(parent);
+        cLabel.setFont(new Font("Arial", 30));
         cLabel.setText(child);
-        rLabel.setText(relation);
     }
 
     public void show(Pane pane){
@@ -59,12 +54,12 @@ public class GAssociation {
 
     }
 
-    public void showLabels(Pane pane, MyNode childNode, MyNode parentNode){
+    public void showLabels(Pane pane, MyNodeAnchor parentNode, MyNodeAnchor childNode){
         showLabelsCardinality(parent, parentNode, pLabel);
         showLabelsCardinality(child, childNode, cLabel);
     }
     public void showLabelsCardinality(Gclass gclass, MyNode node, Label label){
-        Group tmpRoot = gclass.getRoot();
+        Group tmpRoot =gclass.getRoot();
         node.g.getChildren().add(label);
         Platform.runLater(() ->{
             double xdiff = node.g.getTranslateX() - tmpRoot.getTranslateX();
@@ -81,16 +76,10 @@ public class GAssociation {
                 label.setLayoutX(5);
                 label.setLayoutY(-5 - label.getHeight());  //TODO check this
             }
-            else if (ydiff == parent.getWidth()){
+            else if (ydiff == parent.getHeight()){
                 label.setLayoutX(5);
                 label.setLayoutY(+5 + label.getHeight()); //TODO check this
             }
         });
-    }
-
-    public void setLabelName(String label, Position labelPosition) {
-        rLabel.setText(label);
-        rLabel.setTranslateX(labelPosition.getX());
-        rLabel.setTranslateY(labelPosition.getY());
     }
 }

@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -16,6 +17,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+/**
+ * Gclass represents GUI UMLclass
+ *
+ * @author  Adam Hos
+ * @version 1.0
+ */
 public class Gclass extends Observable {
     Group root;
     Rectangle border;
@@ -51,8 +58,8 @@ public class Gclass extends Observable {
 
 
     public Gclass(Pane pane, boolean dummy) {
-        final int initialClassWidth = 200;
-        int initialClassHeight = 100;
+        final int initialClassWidth = 250;
+        int initialClassHeight = 80;
 
         this.root = new Group();
         border = new Rectangle(initialClassWidth, initialClassHeight);
@@ -108,6 +115,9 @@ public class Gclass extends Observable {
 
         DoubleBinding result = classVB.heightProperty().add(20);
         border.heightProperty().bind(result);
+        Platform.runLater(()->{
+            System.out.println(border.getHeight());
+        });
 
 
         root.getChildren().add(classVB);
@@ -119,7 +129,7 @@ public class Gclass extends Observable {
             public void handle(MouseEvent e) {
                 seteX(e.getX() + root.getTranslateX());
                 seteY(e.getY() + root.getTranslateY());
-                System.out.printf("Root %f   %f\n",root.getTranslateX(), root.getTranslateY());
+//                System.out.printf("Root %f   %f\n",root.getTranslateX(), root.getTranslateY());
 
                 setChanged();
                 notifyObservers(e);
@@ -156,5 +166,8 @@ public class Gclass extends Observable {
 
     public double getHeight(){
         return border.heightProperty().getValue();
+    }
+    public double getWidth(){
+        return border.widthProperty().getValue();
     }
 }

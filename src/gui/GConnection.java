@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GConnection {
-    MyNode start;
-    MyNode end;
+    MyNodeAnchor start;
+    MyNodeAnchor end;
     List<MyNode> between;
     Path path;
 
@@ -21,15 +21,13 @@ public class GConnection {
         path = new Path();
         plines = new ArrayList<>();
 
-        MyNode tmp = new MyNode(400, 50, true);
-        between.add(tmp);
     }
 
-    public void setStart(MyNode start) {
+    public void setStart(MyNodeAnchor start) {
         this.start = start;
     }
 
-    public void setEnd(MyNode end) {
+    public void setEnd(MyNodeAnchor end) {
         this.end = end;
     }
 
