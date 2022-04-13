@@ -249,6 +249,7 @@ public class Reader {
 			RelAssociation rel = diagram.createAssociation(lClass, rClass, type);
 			rel.setCardinality(lCard, rCard);
 			rel.setLabel(label);
+			rel.setLabelPosition(labelX, labelY);
 			rel.setAssociationClass(aClass);
 			rel.changeList(listPos);
 		}
