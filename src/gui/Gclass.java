@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Observable;
 
 /**
- * Gclass represents GUI UMLclass
+ * Gclass represents GUI UMLclass object
  *
  * @author  Adam Hos
  * @version 1.0
@@ -37,27 +37,12 @@ public class Gclass extends Observable {
 
     double eX;
     double eY;
-    public void seteX(double newX){
-        eX = newX;
-    }
 
-    public void seteY(double newY){
-        eY = newY;
-    }
-
-    public void addAnchor(MyNode node){
-        double origX = node.getXprop().doubleValue();
-        double origY = node.getYprop().doubleValue();
-
-        DoubleBinding resultX = root.translateXProperty().add(origX);
-        DoubleBinding resultY = root.translateYProperty().add(origY);
-
-        node.getXprop().bind(resultX);
-        node.getYprop().bind(resultY);
-    }
-
-
-    public Gclass(Pane pane, boolean dummy) {
+    /**
+     * Constructor for Gclass. Set border, VBox, Labels(name, attributes, methods) and separators(rectangles)
+     * @param dummy if dummy, fill GClass with dummy data
+     */
+    public Gclass( boolean dummy) {
         final int initialClassWidth = 250;
         int initialClassHeight = 80;
 
@@ -154,19 +139,56 @@ public class Gclass extends Observable {
 //            }
 //        });
     }
+    /**
+     * Setter for eX (dragg event related)
+     * @param newX
+     */
+    public void seteX(double newX){
+        eX = newX;
+    }
 
+    /**
+     * Setter for eY (dragg event related)
+     * @param newY
+     */
+    public void seteY(double newY){
+        eY = newY;
+    }
+
+
+    /**
+     * Add Anchor to class so it will be dragged around with it
+     * @param node anchor to be added
+     */
+    public void addAnchor(MyNodeAnchor node){
+        double origX = node.getXprop().doubleValue();
+        double origY = node.getYprop().doubleValue();
+
+        DoubleBinding resultX = root.translateXProperty().add(origX);
+        DoubleBinding resultY = root.translateYProperty().add(origY);
+
+        node.getXprop().bind(resultX);
+        node.getYprop().bind(resultY);
+    }
+
+    /**
+     * Getter for root
+     * @return root node
+     */
     public Group getRoot(){
         return this.root;
     }
-
-    public void Move(double X, double Y){
-        root.setTranslateX(X);
-        root.setTranslateY(Y);
-    }
-
+    /**
+     * Getter for value of border height Property
+     * @return border height
+     */
     public double getHeight(){
         return border.heightProperty().getValue();
     }
+    /**
+     * Getter for value of border width Property
+     * @return border width
+     */
     public double getWidth(){
         return border.widthProperty().getValue();
     }

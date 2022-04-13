@@ -1,7 +1,6 @@
 package gui;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,10 +9,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import uml.*;
 import uml.pos.Position;
@@ -25,35 +20,56 @@ import workers.Reader;
 import java.io.IOException;
 import java.util.*;
 
+
+/**
+ * GUIMain represents GUI
+ * @extends Application
+ * @implements Observer
+ *
+ * @author  Adam Hos
+ * @version 1.0
+ */
 public class GUIMain extends Application implements Observer {
 
     VBox vBox;
     Pane pane;
-    List<Gclass> gclassList;
+    List<Gclass> gClassList;
     Scene scene;
     Stage stage;
 
+    /**
+     * Constructor for GUIMain. Allocate memory, set scene
+     */
     public GUIMain() {
         vBox = new VBox();
         pane = new Pane();
-        gclassList = new ArrayList<>();
+        gClassList = new ArrayList<>();
         scene = new Scene(vBox, 1000, 600);
     }
 
+    /**
+     * Search through gClassList for GClass with name
+     * @param name class name
+     * @return found GClass or null
+     */
     public Gclass getClassByName(String name){
-        for (Gclass gclass: gclassList){
+        for (Gclass gclass: gClassList){
             if (gclass.classLabel.getText() == name)
                 return gclass;
         }
         return null;
     }
 
+    /**
+     * Setup all GClasses from diagram input
+     * @param classes list of UMLClass to be converted
+     */
     public void setupClasses(List<UMLClass> classes) {
         for (UMLClass c : classes) {
             //create Gclass object
-            Gclass tmp = new Gclass(pane, false);
+            Gclass tmp = new Gclass(false);
             makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
-            gclassList.add(tmp);
+            gClassList.add(tmp);
             tmp.getRoot().toBack();
             //setup class data
             tmp.classLabel.setText(c.getName());
@@ -76,12 +92,16 @@ public class GUIMain extends Application implements Observer {
         }
     }
 
-    public void setupInterfaces(List<UMLInterface> interfaces) {
+    /**
+     * Setup all interfaces from diagram input
+     * @param interfaces list of interfaces to be converted
+     */
+    public void setupInterfaces(List<UMLInterface> interfaces) {//TODO create separate list
         for (UMLInterface i : interfaces) {
             //create Gclass object
-            Gclass tmp = new Gclass(pane, false);
+            Gclass tmp = new Gclass(false);
             makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
-            gclassList.add(tmp);        //TODO create separate list
+            gClassList.add(tmp);
             tmp.getRoot().toBack();
             tmp.classVB.getChildren().add(0,new Label("<<interface>>"));
             //setup class data
@@ -99,6 +119,10 @@ public class GUIMain extends Application implements Observer {
         }
     }
 
+    /**
+     * Setup all GAssociation from diagram input
+     * @param associations list of associations to be converted
+     */
     public void setupAssociation(List<RelAssociation> associations) {
         for (RelAssociation a : associations) {
             List<Position> list = a.getPoints();
@@ -129,6 +153,10 @@ public class GUIMain extends Application implements Observer {
         }
     }
 
+    /**
+     * Setup all GAggregations from diagram input
+     * @param aggregations list of aggregations to be converted
+     */
     public void setupAggregation(List<RelAggregation> aggregations) {
         for (RelAggregation a : aggregations) {
             List<Position> list = a.getPoints();
@@ -151,13 +179,17 @@ public class GUIMain extends Application implements Observer {
             GAggregation aggr = new GAggregation(first, second);
             aggr.setFromList(listNode, start, end);
             aggr.setLabels(a.getLeftCardinality(),a.getRightCardinality());
-            aggr.showLabels(pane, start, end); //TODO implement search by class name
+            aggr.showLabels(start, end); //TODO implement search by class name
             start.polygonSquare();
             start.polygonSetRotatoin(first);
             aggr.show(pane);
         }
     }
 
+    /**
+     * Setup all GGeneralization from diagram input
+     * @param generalizations list of generalization to be converted
+     */
     private void setupGeneralization(List<RelGeneralization> generalizations) {
         for (RelGeneralization g : generalizations) {
             List<Position> list = g.getPoints();
@@ -178,24 +210,33 @@ public class GUIMain extends Application implements Observer {
             //select classes
             Gclass first = getClassByName(g.getLeftClass().getName());
             Gclass second = getClassByName(g.getRightClass().getName());
-            GAggregation aggr = new GAggregation(first, second);
-            aggr.setFromList(listNode, start, end);
-            aggr.showLabels(pane, start, end); //TODO implement search by class name
+            GGeneralization generalization = new GGeneralization(first, second);
+            generalization.setFromList(listNode, start, end);
             start.polygonTriangle();
-            start.polygonSetRotatoin(gclassList.get(0));
-            aggr.show(pane);
+            start.polygonSetRotatoin(gClassList.get(0));
+            generalization.show(pane);
         }
     }
 
+    /**
+     * Observer method
+     * @param  o observable object
+     * @param arg argument that was sent
+     */
     @Override
     public void update(java.util.Observable o, Object arg) {
         System.out.println("Update called with Arguments: " + arg);
     }
 
+    /**
+     * Startup GUI
+     */
     public void Start(){
-
         launch();
     }
+    /**
+     * Application start
+     */
     @Override
     public void start(Stage orig) throws IOException {
         ClassDiagram diagram = new ClassDiagram("ClassDiagram");
@@ -222,7 +263,11 @@ public class GUIMain extends Application implements Observer {
         Button addClass = new Button("Add Class");
         buttonBar.getButtons().add(addClass);
 
-        Button addAssociation = new Button("Ad AssociationClass");
+        Button editClass = new Button("Edit Class");
+        editClass.setDisable(true);
+        buttonBar.getButtons().add(editClass);
+
+        Button addAssociation = new Button("Add AssociationClass");
         addAssociation.setDisable(true);
         buttonBar.getButtons().add(addAssociation);
 
@@ -233,6 +278,10 @@ public class GUIMain extends Application implements Observer {
         Button addAggregation = new Button("Add Aggregation");
         addAggregation.setDisable(true);
         buttonBar.getButtons().add(addAggregation);
+
+        Button deleteteRelation = new Button("Delete Relation");
+        deleteteRelation.setDisable(true);
+        buttonBar.getButtons().add(deleteteRelation);
 
         pane.setStyle("-fx-background-color: grey; -fx-border-color: black");
 
@@ -254,9 +303,9 @@ public class GUIMain extends Application implements Observer {
             @Override public void handle(MouseEvent e) {
 //                addClass.setEffect(null);
                 System.out.println("Created new Class");
-                Gclass tmpClass = new Gclass(pane, true);
+                Gclass tmpClass = new Gclass(true);
                 makeDraggable(tmpClass.getRoot(), scene.getWidth(), scene.getHeight());
-                gclassList.add(tmpClass);
+                gClassList.add(tmpClass);
                 pane.getChildren().add(0,tmpClass.getRoot());
 
             }
@@ -273,6 +322,12 @@ public class GUIMain extends Application implements Observer {
 
     private double startX;
     private  double startY;
+    /**
+     * Makes the Node draggable with movement restriction
+     * @param node Node to be made draggable
+     * @param maxH maximum height
+     * @param maxW maximum width
+     */
     private void makeDraggable(Group node, double maxW, double maxH) {
 
         node.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {

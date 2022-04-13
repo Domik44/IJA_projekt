@@ -6,17 +6,34 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Rotate;
 
+/**
+ * MyNodeAnchor nocde with a small circle in Pane
+ * used for ending GUI Paths on GClasses.
+ * Also holds end points of Paths (like generalization arrow)
+ *
+ * @author  Adam Hos
+ * @version 1.0
+ */
 public class MyNodeAnchor extends MyNode{
+    //attributes
     Polygon polygon;
     Rotate rotation;
 
-
+    /**
+     * Constructor for MyNodeAnchor. Call super MyNode constructor, make circle smaller and allocate rotation
+     * @param X value of X Position
+     * @param Y value of y Position
+     * @param makeDraggable if the node should be created as draggable
+     */
     public MyNodeAnchor(double X, double Y, boolean makeDraggable) {
         super(X, Y, makeDraggable);
         c.setRadius(3);
         rotation = new Rotate();
     }
 
+    /**
+     * Create new triangle and give it to this.polygon
+     */
     public void polygonTriangle(){
         double size = 20.0;
         polygon = new Polygon(
@@ -31,6 +48,9 @@ public class MyNodeAnchor extends MyNode{
         g.getChildren().add(polygon);
     }
 
+    /**
+     * Create new square and give it to this.polygon
+     */
     public void polygonSquare(){
         double size = 15.0;
         polygon = new Polygon(
@@ -46,6 +66,10 @@ public class MyNodeAnchor extends MyNode{
         g.getChildren().add(polygon);
     }
 
+    /**
+     * Setup rotation of polygon, based on this MyAnchorNodes location on GClass
+     * @param gclass the class that the Anchor sits on
+     */
     public void polygonSetRotatoin(Gclass gclass) {
         rotation.setPivotX(0);
         rotation.setPivotY(0);
