@@ -192,7 +192,6 @@ public class GUIMain extends Application implements Observer {
         for (RelGeneralization g : generalizations) {
             List<Position> list = g.getPoints();
             int len = list.size();
-            System.out.println(len);
 
             //create anchors
             MyNodeAnchor start = new MyNodeAnchor(list.get(0).getX(), list.get(0).getY(), false);

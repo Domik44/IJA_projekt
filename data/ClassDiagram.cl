@@ -9,22 +9,22 @@ Class Motorka {
 Class Auto {
   position 500 300
   attrib tazne bool +
-  oper vypisInfo str -
-  oper vypisBarva str + barva:str
-}
-
-Interface Vozidlo {
-  position 300 100
   attrib vykon int +
   attrib hmotnost int -
   attrib znacka str ~
   attrib barva str #
   oper vypisInfo str -
+  oper vypisKM int + najezd:int
+}
+
+Interface OperaceVozidlo {
+  position 300 100
+  oper vypisInfo str -
   oper vypisBarva str + barva:str
 }
 
 Relation Generalization {
-  lClass Vozidlo
+  lClass OperaceVozidlo
   rClass Auto
   position 170 93
   position 470 250
@@ -33,12 +33,21 @@ Relation Generalization {
 }
 
 Relation Generalization {
-  lClass Vozidlo
+  lClass OperaceVozidlo
   rClass Motorka
   position 70 93
   position 370 250
   position 225 250
   position 125 0
+}
+
+Relation Generalization {
+  lClass Auto
+  rClass Motorka
+  position 125 171
+  position 625 520
+  position 225 520
+  position 125 86
 }
 
 Relation Association {
@@ -47,7 +56,7 @@ Relation Association {
   position 800 350
   position 250 50
   lClass Auto
-  rClass Vozidlo
+  rClass OperaceVozidlo
   lCard 1
   rCard *
   label je 805 280

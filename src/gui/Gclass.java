@@ -101,7 +101,7 @@ public class Gclass extends Observable {
         DoubleBinding result = classVB.heightProperty().add(20);
         border.heightProperty().bind(result);
         Platform.runLater(()->{
-            System.out.println(border.getHeight());
+//            System.out.println(border.getHeight()); //TODO use this to get border height
         });
 
 
