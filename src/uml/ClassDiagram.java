@@ -160,8 +160,8 @@ public class ClassDiagram extends Element {
 	 * @param type Contains type of Relation.
 	 * @return Method returns newly created Aggregation.
 	 */
-	public RelGeneralization createGeneralization(UMLInterface parent, List<UMLInterface> childClasses, String type) {
-		RelGeneralization newRelation = new RelGeneralization(parent, childClasses, type);
+	public RelGeneralization createGeneralization(UMLInterface parent, UMLInterface child, String type) {
+		RelGeneralization newRelation = new RelGeneralization(parent, child, type);
 		this.relGeneralization.add(newRelation);
 		
 		return newRelation;

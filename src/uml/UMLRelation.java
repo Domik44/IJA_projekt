@@ -32,10 +32,9 @@ public class UMLRelation{
 		this.rightClass = right;
 	}
 	
-	// POZOR MOMENTALNE NEVRACI REFERENCE ALE JMENA!!
 	/**
 	 * Getter for left class/interface of relation.
-	 * @return Returns reference to class/interface.
+	 * @return Returns name of class/interface. (Because of override toString in UMLClassifier)
 	 */
 	public UMLInterface getLeftClass() {
 		return this.leftClass;
@@ -43,15 +42,14 @@ public class UMLRelation{
 	
 	/**
 	 * Getter for right class/interface of relation.
-	 * @return Returns reference to class/interface.
+	 * @return Returns name of class/interface.
 	 */
 	public UMLInterface getRightClass() {
 		return this.rightClass;
 	}
 	
-	// TODO  -> dodelat getType -> popremylet jestli ho nedelat pres Classifier
 	/**
-	 * Getter for type of realtion.
+	 * Getter for type of relation.
 	 * @return Returns type of relation.
 	 */
 	public String getType() {

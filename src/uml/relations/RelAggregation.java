@@ -2,6 +2,7 @@ package uml.relations;
 
 import uml.UMLInterface;
 import uml.UMLRelation;
+import uml.pos.Position;
 
 /**
 * RelAggregation class represents aggregation
@@ -15,6 +16,7 @@ public class RelAggregation extends UMLRelation {
 	private String leftCardinality = "";
 	private String rightCardinality = "";
 	private String label = "";
+	private Position labelPos = new Position(0,0);
 	
 	/**
 	 * Constructor for aggregation object. Calls constructor of super class UMLRelation.
@@ -58,6 +60,16 @@ public class RelAggregation extends UMLRelation {
 	 */
 	public void setLabel(String label) {
 		this.label = label;
+	}
+	
+	/**
+	 * Sets label position.
+	 * @param x Contains x coordinate.
+	 * @param y Contains y coordinate.
+	 */
+	public void setLabelPosition(int x, int y) {
+		this.labelPos.setX(x);
+		this.labelPos.setY(y);
 	}
 	
 	/**

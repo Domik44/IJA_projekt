@@ -44,6 +44,7 @@ public class Reader {
 	 */
 	public String getFileName() {
 		return "data/"+this.fileName;
+		//return this.fileName;
 	}
 	
 	/**
@@ -179,6 +180,8 @@ public class Reader {
 		UMLInterface lClass = null, rClass = null, aClass = null;
 		List<UMLInterface> childClasses = new ArrayList<UMLInterface>();
 		List<Position> listPos = new java.util.ArrayList<Position>();
+		int labelX = 0; int labelY = 0;
+		
 		while (readFile.hasNextLine()) {
 			String line = readFile.nextLine();
 			line = line.trim();
@@ -214,6 +217,8 @@ public class Reader {
 			}
 			else if(lineParsed[0].equals("label")) {
 				label = lineParsed[1];
+				labelX = Integer.parseInt(lineParsed[2]);
+				labelY = Integer.parseInt(lineParsed[3]);
 			}
 			else if(lineParsed[0].equals("aClass")) {
 				aClass = diagram.getInterface(lineParsed[1]);
@@ -231,12 +236,13 @@ public class Reader {
 
 		if (type.equals("Generalization")){
 			@SuppressWarnings("unused")
-			RelGeneralization rel = diagram.createGeneralization(lClass, childClasses, type);
+			RelGeneralization rel = diagram.createGeneralization(lClass, rClass, type);
 		}
-		else if (type.equals("Aggregation")){
+		else if (type.equals("Aggregation") || type.equals("Composition")){
 			RelAggregation rel = diagram.createAggregation(lClass, rClass, type);
 			rel.setCardinality(lCard, rCard);
 			rel.setLabel(label);
+			rel.setLabelPosition(labelX, labelY);
 			rel.changeList(listPos);
 		}
 		else if (type.equals("Association")){

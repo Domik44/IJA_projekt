@@ -10,7 +10,7 @@ Relation 'type' {
   rClass 'nazevTridy'
   lCard 'kardinalita'
   rCard 'kardinalita'
-  label 'popisek'
+  label 'popisek' x y
   aClass 'nazevTridy'
 }
 

@@ -22,9 +22,8 @@ public class RelGeneralization extends UMLRelation {
 	 * @param childClasses Contains list of child classes/interfaces.
 	 * @param type Contains type of relation.
 	 */
-	public RelGeneralization(UMLInterface parent, List<UMLInterface> childClasses, String type) {
-		super(parent, null, type);
-		this.childClasses = childClasses;
+	public RelGeneralization(UMLInterface parent, UMLInterface child, String type) {
+		super(parent, child, type);
 	}
 	
 	/**

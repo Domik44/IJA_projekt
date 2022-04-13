@@ -1,66 +1,125 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>IJA_projekt</groupId>
-  <artifactId>IJA_projekt</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-    <dependencies>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>11.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>11.0.2</version>
-        </dependency>
-    </dependencies>
-    <packaging>jar</packaging>
-  <build>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>IJA_projekt</groupId>
+	<artifactId>IJA_projekt</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 
-	<finalName>ija-app</finalName>
-	<directory>build</directory>
-	<outputDirectory>${project.build.directory}/classes</outputDirectory>  
-    <sourceDirectory>src</sourceDirectory>
-	<defaultGoal>clean package javadoc:javadoc</defaultGoal>
+	<dependencies>
 
-    <plugins>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx</artifactId>
+			<version>11.0.2</version>
+			<type>pom</type>
+		</dependency>
 
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <release>11</release>
-        </configuration>
-      </plugin>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>11.0.2</version>
+		</dependency>
 
-	  <plugin>
-      	<groupId>org.apache.maven.plugins</groupId>
-      	<artifactId>maven-jar-plugin</artifactId>
-      	<version>2.3.1</version>
-      	<configuration>
-        	<outputDirectory>dest</outputDirectory>
-			<archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-				<classpathPrefix>${project.build.directory}/classes</classpathPrefix>
-              <mainClass>main.Main</mainClass>
-            </manifest>
-          </archive>
-      	</configuration>
-      </plugin>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>11.0.2</version>
+		</dependency>
 
-	  <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.3.2</version>
-          <configuration>
-            <reportOutputDirectory>${basedir}</reportOutputDirectory>
-            <destDir>doc</destDir>
-          </configuration>
-       </plugin>
+	</dependencies>
 
-    </plugins>
-  </build>
+	<packaging>jar</packaging>
+
+	<build>
+
+		<finalName>ija-app</finalName>
+		<directory>build</directory>
+		<outputDirectory>${project.build.directory}/classes</outputDirectory>
+		<sourceDirectory>src</sourceDirectory>
+		<defaultGoal>clean package javadoc:javadoc</defaultGoal>
+
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resource-one</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/dest/data</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/data</directory>
+									<includes>
+										<include>ClassDiagram.cl</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>
+                    	dest/dependencies
+                	</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<outputDirectory>dest</outputDirectory>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>dependencies</classpathPrefix>
+							<mainClass>main.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.3.2</version>
+				<configuration>
+					<reportOutputDirectory>${basedir}</reportOutputDirectory>
+					<destDir>doc</destDir>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
 
 </project>
