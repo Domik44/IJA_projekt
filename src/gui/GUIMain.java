@@ -22,9 +22,7 @@ import java.util.*;
 
 
 /**
- * GUIMain represents GUI
- * @extends Application
- * @implements Observer
+ * GUIMain represents GUI extends Application implements Observer
  *
  * @author  Adam Hos
  * @version 1.0
@@ -148,7 +146,7 @@ public class GUIMain extends Application implements Observer {
             ass.setLabels(a.getLeftCardinality(),a.getRightCardinality(), a.getLabel());
             ass.setLabelName(a.getLabel(), a.getLabelPosition());
             pane.getChildren().add(ass.rLabel);
-            ass.showLabels(pane, start, end); //TODO implement search by class name
+            ass.showLabels(start, end); //TODO implement search by class name
             ass.show(pane);
         }
     }

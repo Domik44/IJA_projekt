@@ -64,6 +64,7 @@ public class GAssociation {
      * Setup labels near classes
      * @param parent string for parent label
      * @param child string for child label
+     * @param relation name of relation
      */
     public void setLabels(String parent, String child, String relation){
         pLabel.setText(parent);
@@ -86,10 +87,10 @@ public class GAssociation {
     }
     /**
      * Add cardinality labels
-     * @param parentNode anchor that will hold LCardinality label
      * @param childNode anchor that will hold RCardinality label
+     * @param parentNode anchor that will hold LCardinality label
      */
-    public void showLabels(Pane pane, MyNode childNode, MyNode parentNode){
+    public void showLabels(MyNode childNode, MyNode parentNode){
         showLabelsCardinality(parent, parentNode, pLabel);
         showLabelsCardinality(child, childNode, cLabel);
     }

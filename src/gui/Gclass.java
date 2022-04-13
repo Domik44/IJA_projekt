@@ -141,7 +141,7 @@ public class Gclass extends Observable {
     }
     /**
      * Setter for eX (dragg event related)
-     * @param newX
+     * @param newX new X value
      */
     public void seteX(double newX){
         eX = newX;
@@ -149,7 +149,7 @@ public class Gclass extends Observable {
 
     /**
      * Setter for eY (dragg event related)
-     * @param newY
+     * @param newY new Y value
      */
     public void seteY(double newY){
         eY = newY;
