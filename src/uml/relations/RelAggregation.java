@@ -73,6 +73,14 @@ public class RelAggregation extends UMLRelation {
 	}
 	
 	/**
+	 * Getter for position of label of relation.
+	 * @return Returns reference to position object holding (x, y) coordinates.
+	 */
+	public Position getLabelPosition() {
+		return this.labelPos;
+	}
+	
+	/**
 	 * Getter for label of aggregation.
 	 * @return Return aggregation label.
 	 */
