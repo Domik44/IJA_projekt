@@ -237,6 +237,7 @@ public class Reader {
 		if (type.equals("Generalization")){
 			@SuppressWarnings("unused")
 			RelGeneralization rel = diagram.createGeneralization(lClass, rClass, type);
+			rel.changeList(listPos);
 		}
 		else if (type.equals("Aggregation") || type.equals("Composition")){
 			RelAggregation rel = diagram.createAggregation(lClass, rClass, type);
