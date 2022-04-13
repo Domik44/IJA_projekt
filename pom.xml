@@ -64,6 +64,41 @@
 				</executions>
 			</plugin>
 
+			<plugin>
+          		<artifactId>maven-clean-plugin</artifactId>
+          		<version>3.1.0</version>
+				<configuration>
+				<filesets>
+  					<fileset>
+    					<directory>${project.basedir}/dest</directory>
+    						<followSymlinks>false</followSymlinks>
+    						<useDefaultExcludes>true</useDefaultExcludes>
+    						<includes>
+      							<include>**/*</include>
+    						</includes>
+  					</fileset>
+					<fileset>
+    					<directory>${project.basedir}/build</directory>
+    						<followSymlinks>false</followSymlinks>
+    						<useDefaultExcludes>true</useDefaultExcludes>
+    						<includes>
+      							<include>**/*</include>
+    						</includes>
+  					</fileset>
+					<fileset>
+    					<directory>${project.basedir}/doc</directory>
+    						<followSymlinks>false</followSymlinks>
+    						<useDefaultExcludes>true</useDefaultExcludes>
+    						<includes>
+      							<include>**/*</include>
+    						</includes>
+							<excludes>
+      							<exclude>others/*</exclude>
+    						</excludes>
+  					</fileset>
+				</filesets>
+				</configuration>
+        	</plugin>
 
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
