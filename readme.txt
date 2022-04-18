@@ -17,3 +17,6 @@ Příklady spuštění:
 - V adresáři dest:
 	-> příkaz: java -jar ija-app.jar
 	-> kliknutím myší na ija-app.jar soubor
+
+Poznámky:
+Adresář others v adresáři doc obsahuje plán
