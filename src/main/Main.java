@@ -1,6 +1,10 @@
 package main;
 
+import workers.Reader;
+
 import gui.GUIMain;
+import uml.ClassDiagram;
+import workers.Writer;
 
 /**
 * Main is the main body of application. It calls all 
@@ -18,8 +22,14 @@ public class Main {
 	 * @param args Input arguments.
 	 */
 	public static void main(String[] args) {
-		GUIMain gui = new GUIMain();
-		gui.Start();
+		//System.out.println("Working directory = " + System.getProperty("user.dir"));
+		//GUIMain gui = new GUIMain();
+		//gui.Start();
+		// TODO -> vratit spusteni gui
+		// TODO -> vratit zpatky mazani v pom.xml ze zalohy (v others)
+		ClassDiagram classDiagram = new ClassDiagram("diagram");
+		Reader.startReading(classDiagram);
+		Writer.startWriting(classDiagram);
 	}
 }
 
