@@ -21,6 +21,7 @@ public class RelAssociation extends RelAggregation {
 	 */
 	public RelAssociation(UMLInterface left, UMLInterface right, String type) {
 		super(left, right, type);
+		//this.asociationClass = null;
 	}
 	
 	/**
