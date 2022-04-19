@@ -43,7 +43,10 @@ public class Reader {
 	 * @return Returns name of input file.
 	 */
 	public String getFileName() {
-		return "data/"+this.fileName;
+		String path = System.getProperty("user.dir").concat(fileName);
+		// Editing path because of JAR location
+		return path.replace("dest", "data\\");
+		//return "data/"+this.fileName;
 		//return this.fileName;
 	}
 	
@@ -83,7 +86,7 @@ public class Reader {
 		      readFile.close();
 		 } 
 		 catch (FileNotFoundException x) {
-		      System.out.println("Error! File not found, shutting down.");
+		      System.out.println("Error! File for reading not found, shutting down.");
 		      System.exit(-1);
 		 }
 	}
