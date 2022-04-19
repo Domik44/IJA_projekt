@@ -1,0 +1,6 @@
+Java nápady:
+- Reader by mel metodu na spocitani seq_filu na zacatku cteni, po vytvoreni noveho by se toto cislo zvetsilo, Writer by 
+to pak kontroloval a při vytvoŘení nového by vytvořil nový file a napsal jej
+- Pri ukladani je zapotrebi prepsat file (mozna)
+- Kdyz by probehla zmena v jiz existujicich prvcich diagramu -> override (false)
+- Kdyz by neprobehla takova zmena, ale jen by se pridavali nove prvky -> append (true)
