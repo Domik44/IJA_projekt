@@ -1,7 +1,7 @@
 package uml.relations;
 
-import uml.UMLInterface;
-import uml.UMLRelation;
+import uml.classDiagram.UMLInterface;
+import uml.classDiagram.UMLRelation;
 import uml.pos.Position;
 
 /**
@@ -35,6 +35,14 @@ public class RelAggregation extends UMLRelation {
 	 */
 	public void setCardinality(String left, String right) {
 		this.leftCardinality = left;
+		this.rightCardinality = right;
+	}
+	
+	public void setLeftCardinality(String left) {
+		this.leftCardinality = left;
+	}
+	
+	public void setRightCardinality(String right) {
 		this.rightCardinality = right;
 	}
 	

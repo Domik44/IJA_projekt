@@ -1,9 +1,8 @@
 package uml.relations;
 
-import uml.UMLInterface;
-import java.util.List;
-import java.util.ArrayList;
-import uml.UMLRelation;
+import uml.classDiagram.UMLInterface;
+import uml.classDiagram.UMLRelation;
+
 
 /**
 * RelGeneralization class represents generalization
@@ -14,8 +13,6 @@ import uml.UMLRelation;
 * @since   2022-03-23 
 */
 public class RelGeneralization extends UMLRelation {
-	private List<UMLInterface> childClasses = new ArrayList<UMLInterface>();
-	
 	/**
 	 * Constructor for generalization relation.
 	 * @param parent Contains parent class/interface.
@@ -24,14 +21,5 @@ public class RelGeneralization extends UMLRelation {
 	 */
 	public RelGeneralization(UMLInterface parent, UMLInterface child, String type) {
 		super(parent, child, type);
-	}
-	
-	/**
-	 * Getter for children list.
-	 * @return Returns unmodifiable list of children classes.
-	 */
-	public List<UMLInterface> getChildren(){
-		List<UMLInterface> copy = List.copyOf(this.childClasses);
-		return copy;
 	}
 }

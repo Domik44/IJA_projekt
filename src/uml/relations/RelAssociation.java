@@ -1,6 +1,6 @@
 package uml.relations;
 
-import uml.UMLInterface;
+import uml.classDiagram.UMLInterface;
 
 /**
 * RelAssociation class represents association
@@ -39,4 +39,11 @@ public class RelAssociation extends RelAggregation {
 	public UMLInterface getAssociationClass() {
 		return this.asociationClass;
 	}
+	
+	public void deleteAssociationClass(UMLInterface delete) {
+		if(this.asociationClass.equals(delete)) {
+			this.asociationClass = null;
+		}
+	}
+	
 }
