@@ -4,15 +4,19 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import uml.ClassDiagram;
-import uml.UMLAttribute;
-import uml.UMLClass;
-import uml.UMLInterface;
-import uml.UMLOperation;
+import uml.classDiagram.ClassDiagram;
+import uml.classDiagram.UMLAttribute;
+import uml.classDiagram.UMLClass;
+import uml.classDiagram.UMLInterface;
+import uml.classDiagram.UMLOperation;
 import uml.pos.Position;
 import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
+import uml.sequenceDiagram.SequenceDiagram;
+import uml.sequenceDiagram.UMLActivationBox;
+import uml.sequenceDiagram.UMLMessage;
+import uml.sequenceDiagram.UMLParticipant;
 
 /**
 * Writer program writes data to input files
@@ -68,6 +72,12 @@ public class Writer {
 			fileWriter.write(writer.writeAssociations(classDiagram));
 			fileWriter.write(writer.writeAggregations(classDiagram));
 			fileWriter.write(writer.writeGeneralizations(classDiagram));
+			
+			if(!classDiagram.getSequenceDiagrams().isEmpty()) {
+				for(SequenceDiagram seqDiagram : classDiagram.getSequenceDiagrams()) {
+					fileWriter.write(writer.writeSequenceDiagram(seqDiagram));
+				}
+			}
 			
 			
 			fileWriter.write("@enduml");
@@ -191,4 +201,59 @@ public class Writer {
 		
 		return returnString;
 	}
+	
+	public String writeSequenceDiagram(SequenceDiagram seqDiagram) {
+		String returnString = new String();
+		returnString = "@startSequence \n\n";
+		
+		returnString = returnString + this.writeParticipant(seqDiagram);
+		returnString = returnString + this.writeMessage(seqDiagram);
+		returnString = returnString + this.writeActivationBox(seqDiagram);
+		
+		returnString = returnString + "@endSequence\n\n";
+		return returnString;
+	}
+	
+	public String writeParticipant(SequenceDiagram seqDiagram) {
+		String returnString = new String();
+		for(UMLParticipant par : seqDiagram.getParticipants()) {
+			String temporaryString = "Participant " + par.getName() + " " + par.getInstanceOf().getName() + " {\n";
+			temporaryString = temporaryString + "  startPos " + par.getStartPosition().getX() + " " + par.getStartPosition().getY();
+			temporaryString = temporaryString + "\n  endPos " + par.getEndPosition().getX() + " " + par.getEndPosition().getY();
+			temporaryString = temporaryString + "\n  lineStart " + par.getLineStartPosition().getX() + " " + par.getLineStartPosition().getY();
+			temporaryString = temporaryString + "\n  lineEnd " + par.getLineEndPosition().getX() + " " + par.getLineEndPosition().getY();
+			temporaryString = temporaryString + "\n}\n\n";
+			returnString = returnString + temporaryString;
+		}
+		return returnString;
+	}
+	
+	public String writeMessage(SequenceDiagram seqDiagram) {
+		String returnString = new String();
+		for(UMLMessage mes : seqDiagram.getMessages()) {
+			String temporaryString = "Message " + mes.getName() + " " + mes.getType() + " {\n";
+			for(Position pos : mes.getPoints()) {
+				temporaryString = temporaryString + "  position " + pos.getX() + " " + pos.getY() + "\n";
+			}
+			temporaryString = temporaryString + "  namePos " + mes.getPosition().getX() + " " + mes.getPosition().getY() + "\n";
+			temporaryString = temporaryString + "  startObject " + mes.getStartObject().getName() + "\n";
+			temporaryString = temporaryString + "  endObject " + mes.getEndObject().getName() + "\n";
+			temporaryString = temporaryString + "}\n\n";
+			returnString = returnString + temporaryString;
+		}
+		return returnString;
+	}
+	
+	public String writeActivationBox(SequenceDiagram seqDiagram) {
+		String returnString = new String();
+		for(UMLActivationBox act : seqDiagram.getActivationBoxes()) {
+			String temporaryString = "ActivationBox " + " {";
+			temporaryString = temporaryString + "\n  startPos " + act.getStartPosition().getX() + " " + act.getStartPosition().getY();
+			temporaryString = temporaryString + "\n  endPos " + act.getEndPosition().getX() + " " + act.getEndPosition().getY();
+			temporaryString = temporaryString + "\n}\n\n";
+			returnString = returnString + temporaryString;
+		}
+		return returnString;
+	}
+	
 }
