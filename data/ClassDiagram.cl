@@ -69,5 +69,30 @@ Relation Aggregation {
   rClass Auto
 }
 
+@startSequence
+
+Participant Auto:1 Auto {
+  startPos 10 20
+  endPos 10 40
+  lineStart 15 30
+  lineEnd 15 40
+}
+
+Participant Motorka:1 Motorka {
+  startPos 30 20
+  endPos 30 40
+  lineStart 35 30
+  lineEnd 35 40
+}
+
+Message jmenoMessage Synchronous {
+  position 10 35
+  position 30 35
+  namePos 20 33
+  startObject Auto:1
+  endObject Motorka:1
+}
+
+@endSequence
 
 @enduml

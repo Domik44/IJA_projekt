@@ -32,3 +32,34 @@ Interface 'name' {
   position x y	
   oper 'nazev' 'typ' 'atribbs:types' 
 }
+
+SEKVENCNI DIAGRAM:
+
+@startSequence
+@endSequence
+
+Participant 'name' instanceOf {
+  startPos x y
+  endPos x y
+  lineStart x y 
+  lineEnd x y
+  canCreate false/true
+}
+- instanceOf: 'name_interface/class'
+
+Message 'name' 'type' {
+  position x y
+  position x y
+  ...
+  namePos x y
+  startObject 'name'
+  endObject 'name'
+}
+
+ActivationBox 'participantName' {
+  startPos x y
+  endPos x y
+}
+
+- type: Synchronous, Asynchronous, Return, Creation, Destruction
+- start/endObject -> participanti
