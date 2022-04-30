@@ -1,6 +1,9 @@
-package uml;
+package uml.classDiagram;
 
 import java.util.List;
+import java.util.UUID;
+
+import uml.Element;
 import uml.pos.Position;
 
 /**
@@ -14,7 +17,7 @@ import uml.pos.Position;
 * @version 1.0
 * @since   2022-03-23 
 */
-public class UMLRelation{
+public class UMLRelation extends Element{
 	private UMLInterface leftClass;
 	private UMLInterface rightClass;
 	private String type;
@@ -27,10 +30,12 @@ public class UMLRelation{
 	 * @param type Contains type of relation.
 	 */
 	public UMLRelation(UMLInterface left, UMLInterface right, String type) {
+		super(UUID.randomUUID().toString());
 		this.type = type;
 		this.leftClass = left;
 		this.rightClass = right;
 	}
+	
 	
 	/**
 	 * Getter for left class/interface of relation.
@@ -62,6 +67,10 @@ public class UMLRelation{
 	 */
 	public void addPosition(Position pos) {
 		listPoints.add(pos);
+	}
+	
+	public void deletePosition(Position pos) {
+		listPoints.remove(pos);
 	}
 	
 	/**

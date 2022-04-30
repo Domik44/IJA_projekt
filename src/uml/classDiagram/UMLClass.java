@@ -1,4 +1,4 @@
-package uml;
+package uml.classDiagram;
 
 import java.util.List;
 

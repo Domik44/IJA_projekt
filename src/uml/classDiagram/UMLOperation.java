@@ -1,6 +1,8 @@
-package uml;
+package uml.classDiagram;
 
 import java.util.List;
+
+import workers.Converter;
 
 /**
 * UMLOperation class represents operation
@@ -36,6 +38,7 @@ public class UMLOperation extends UMLAttribute {
 	 * @return Returns reference to newly created operation.
 	 */
 	public static UMLOperation createOperation(java.lang.String name, UMLClassifier type, UMLClassifier visibility, UMLAttribute... args) {
+		name = Converter.converToCamelCase(name);
 		UMLOperation result = new UMLOperation(name, type, visibility);
 		for (UMLAttribute umlAttribute : args) {
 			result.arguments.add(umlAttribute);

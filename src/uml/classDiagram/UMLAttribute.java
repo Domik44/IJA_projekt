@@ -1,4 +1,6 @@
-package uml;
+package uml.classDiagram;
+
+import uml.Element;
 
 /**
 * UMLAttribute class represents attribute
@@ -39,11 +41,27 @@ public class UMLAttribute extends Element {
 	
 	// Methods
 	/**
+	 * Setter for type of attribute.
+	 * @param newType New type to be set.
+	 */
+	public void setType(UMLClassifier newType) {
+		this.type = newType;
+	}
+	
+	/**
 	 * Getter for type of attribute.
 	 * @return Method returns reference to type of attribute.
 	 */
 	public UMLClassifier getType() {
 		return this.type;
+	}
+	
+	/**
+	 * Setter for visibility of attribute.
+	 * @param newVisibility New visibility to be set.
+	 */
+	public void setVisibility(UMLClassifier newVisibility) {
+		this.visibility = newVisibility;
 	}
 	
 	/**

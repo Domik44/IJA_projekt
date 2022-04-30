@@ -1,4 +1,6 @@
-package uml;
+package uml.classDiagram;
+
+import uml.Element;
 
 /**
 * UMLAttribute class represents classifier

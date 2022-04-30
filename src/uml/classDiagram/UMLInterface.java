@@ -1,7 +1,9 @@
-package uml;
+package uml.classDiagram;
 
+import java.util.ArrayList;
 import java.util.List;
 import uml.pos.Position;
+import workers.Converter;
 
 /**
 * UMLInterface class represents interface
@@ -12,9 +14,10 @@ import uml.pos.Position;
 * @since   2022-03-23 
 */
 public class UMLInterface extends UMLClassifier {
-	private List<UMLOperation> methods = new java.util.ArrayList<UMLOperation>();
-	//private int[] position = new int[]{0,0};
+	private List<UMLOperation> methods = new ArrayList<UMLOperation>();
 	private Position position = new Position(0, 0);
+	private List<UMLOperation> inheritedMethods = new ArrayList<UMLOperation>(); // TODO 
+	private List<UMLInterface> comunicatesWith = new ArrayList<UMLInterface>(); // TODO 
 	
 	// Constructors
 	/**
@@ -89,5 +92,43 @@ public class UMLInterface extends UMLClassifier {
 	public void setPosition(int x, int y) {
 		this.position.setX(x);
 		this.position.setY(y);
+	}
+	
+	public void addInheritedMethods (List<UMLOperation> inheritedMethods) {
+		this.inheritedMethods = inheritedMethods;
+	}
+	
+	public void removeInheritedMethod() { // TODO
+		
+	}
+	
+	public List<UMLOperation> getIneritedMethods(){
+		List<UMLOperation> copy = List.copyOf(this.inheritedMethods);
+		
+		return copy;
+	}
+	
+	public List<UMLOperation> getAllMethods(){
+		List<UMLOperation> allMethods = new ArrayList<UMLOperation>();
+		allMethods.addAll(this.methods);
+		if(!this.inheritedMethods.isEmpty()) {
+			allMethods.addAll(this.inheritedMethods);
+		}
+		
+		return List.copyOf(allMethods);
+	}
+	
+	public void addCommunaction(UMLInterface newCommunication) {
+		if(!this.comunicatesWith.contains(newCommunication)) {
+			this.comunicatesWith.add(newCommunication);
+		}
+	}
+	
+	public void removeCommunication() { // TODO
+		
+	}
+	
+	public List<UMLInterface> getCommunications(){
+		return List.copyOf(this.comunicatesWith);
 	}
 }
