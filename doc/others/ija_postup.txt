@@ -1,0 +1,71 @@
+Zpráva -> rozdelena na nekolik druhu
+	-> listPosition -> souřadnice
+	-> startObject, endObject -> objekty
+	-> labelPos
+	-> name
+	-> type
+
+Obejkt
+	-> instanceOfClass -> ci je to instance
+	-> startPos, endPos -> pozice levych hornich rohu startovaciho objektu a koncoveho
+	-> name
+	-> lineStartPos, lineEndPos
+
+Čára života
+	-> startPos, endPos
+	-> bude se bud vytvaret s objektem, nebo pomoci tomu urcenych zprav
+
+
+-> výber startParticipantu -> drop down ze listu participantu
+-> výber endPar -> drop down pouze z povolenych diagramem trid
+			-> podivam se na instancni tridu/rohrani
+			-> zjistim vsechny jeji vazby v diag. trid (i ty nadrid teto tridy)
+			-> z těhto vazeb vyberu všechny tridy/rozhrani
+			-> z těhto trid/rozhrani vyberu vsechny participanty
+
+-> vyber jmena zpravy -> drop down
+				-> podivam se na instanci tridu/rozhrani (i vsechny nadtridy) endPar
+				-> vyberu vsechny metody tehto trid/rozhrani (rekurzivne je ulozim do listu)
+				-> mam list vsech metod ze kterych se zprava muze tykat
+
+-> udelat create a delete ktere budou dedit od message
+-> s create automaticky vytvorit delete
+-> do create pridat lifeLine aby kdyz se smaze create smaze se i lifeLine (i delete)
+-> do Participant pridat taky lifeLine (konkretne asi list lifeLinu) aby kdyz se smaze part., tak se smaze i lifeLine
+-> lifeLine se muze vytvorit bud s Part. automaticky nebo pres message create
+
+JINAK
+- u kazde message je boolean create lifeLine a ukazatel na ni
+- message create a delete patri objektum (Participant)!!
+
+Pridat do trid/rozhrani list zdedenych metod (bude se nastavovat pri vytvareni vztahu)
+Pridat do trid/rozhrani list trid/rozhrani se kterymi komunikujeme (bude se nastavovat pri vytvareni vztahu)
+
+Udelat u createInterface a class throw exception kdyz se pridava neco co uz existuje (by name) 
+
+Pri editaci vazeb -> uprave trid na kterou se vaze redelat pozici na pozici tridy (estetickou upravu si udela pak user sam)
+
+Pri vytvareni tridy -> vytvorit pouze prazdnou tridu s jmenem -> atributy se pridavaji postupne (tlacitko add attribute a tabulka s textovymi poli)
+	-> operace se take pridavaji postupne, na pridavani atributu operace pouzit stejny postup jako u atributu tridy
+
+Vytvaret vazby je jen mozne na existujci tridy/rohrazni (menu se seznamem trid/rozhrani) a pouze pokud mame 2+ tridy/rozhrani
+Mazat vazby lze libovolne
+Pri mazani tridy -> vymazat s ni svazane vazby a participanty + message od ni odvozene -> vyhodit upozornujici messagebox!
+
+RICT ADAMOVI AT SI PRIDA DO SVYCH GUI TRID PRO VAZBY JMENA A NASTAVUJE JE -> NUTNE PRO EDITACI, MAZANI VAZEB V DIAGRAMU!!
+
+ASI BUDE ZAOPTREBI UDELAT ID OBJEKTŮ -> protoze k vazbam/zpravam/participantum se nemohu dostat pres jmena (mouho je mit stejna)
+
+TODO -> odebrat atribut u classy, odebrat operaci u classy/interfacu
+     -> 
+
+Aktivacni box muze byt vytvořen pri vytvoreni participantu (checkbox v gui) -> nastaveni boolean canCreateActivationBox na false (true kdyz neni vytvoren s participantem)
+Message muze vytvorit activacni box (checkbox ) při vytvoreni message pokud canCreate je true na svoji pozici
+Pokud je canCreate false checkbox tam nebude
+Message muze ukoncit na svoji pozici aktivacni box pokud je canCreate false
+Vytvareni activation boxu se musi delat MIMO createParticipant na zaklade checkBoxu!!
+Tudiz asi v Controleru pro CreateParticipateButton
+
+Udelat message create a delete na vytvareni/mazani participantu
+
+Pri editaci/mazani operaci tridy se tomu musi uzpusobit i message! -> to ale musi zaridit controler!
