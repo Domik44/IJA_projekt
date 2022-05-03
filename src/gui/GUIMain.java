@@ -19,10 +19,14 @@ import uml.pos.Position;
 import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
+import uml.sequenceDiagram.UMLMessage;
+import uml.sequenceDiagram.UMLParticipant;
 import workers.Reader;
 
 import java.io.IOException;
 import java.util.*;
+
+import controller.DeleteController;
 
 
 /**
@@ -36,6 +40,8 @@ public class GUIMain extends Application implements Observer {
     VBox vBox;
     Pane pane;
     List<Gclass> gClassList;
+    // TODO -> tady tohle je pro sekvencni
+    List<GParticipant> gParticipantList = new ArrayList<GParticipant>();
     Scene scene;
     Stage stage;
 
@@ -61,7 +67,63 @@ public class GUIMain extends Application implements Observer {
         }
         return null;
     }
+    
+    //TODO -> tohle je pro sekvencni diagram
+    public GParticipant getParticipantByName(String name){
+        for (GParticipant par : this.gParticipantList){
+            if (par.participantNameLabel.getText() == name)
+                return par;
+        }
+        return null;
+    }
 
+    // TODO -> tady tohle je pro sekvencni
+    public void setupParticipants(List<UMLParticipant> participants) {
+    	for (UMLParticipant par : participants) {
+    		GParticipant tmp = new GParticipant();
+    		tmp.name = par.getName();
+    		makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
+    		gParticipantList.add(tmp);
+    		tmp.getRoot().toBack();
+    		tmp.participantNameLabel.setText(par.toString());
+    		Position pos = par.getStartPosition();
+    		tmp.getRoot().setTranslateX(pos.getX());
+    		tmp.getRoot().setTranslateY(pos.getY());
+    		pane.getChildren().add(tmp.getRoot());
+    		
+    	}
+    }
+    
+    /**
+     * Setup all GGeneralization from diagram input
+     * @param generalizations list of generalization to be converted
+     */
+    public void setupMessage(List<UMLMessage> messages) {
+        for (UMLMessage mes : messages) {
+            List<Position> list = mes.getPoints();
+            int len = list.size();
+
+            //create anchors
+            MyNodeAnchor start = new MyNodeAnchor(list.get(0).getX(), list.get(0).getY(), false);
+            MyNodeAnchor end = new MyNodeAnchor(list.get(len -1).getX(), list.get(len -1).getY(), false);
+
+            //create Gclass list
+            List<MyNode> listNode = new ArrayList<>();
+            for ( int i = 1; i < len - 1; i++){
+                Position point = list.get(i);
+                listNode.add(new MyNode(point.getX(), point.getY(), true));
+            }
+            
+            GParticipant first = getParticipantByName(mes.getStartObject().getName());
+            GParticipant second = getParticipantByName(mes.getEndObject().getName());
+            GMessage message = new GMessage(first, second);
+            message.setFromList(listNode, start, end);
+//            start.polygonTriangle();
+//            start.polygonSetRotatoin(gClassList.get(0));
+            message.show(pane);
+        }
+    }
+    
     /**
      * Setup all GClasses from diagram input
      * @param classes list of UMLClass to be converted
@@ -70,6 +132,7 @@ public class GUIMain extends Application implements Observer {
         for (UMLClass c : classes) {
             //create Gclass object
             Gclass tmp = new Gclass(false);
+            tmp.name = c.getName();
             makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
             gClassList.add(tmp);
             tmp.getRoot().toBack();
@@ -192,7 +255,7 @@ public class GUIMain extends Application implements Observer {
      * Setup all GGeneralization from diagram input
      * @param generalizations list of generalization to be converted
      */
-    private void setupGeneralization(List<RelGeneralization> generalizations) {
+    public void setupGeneralization(List<RelGeneralization> generalizations) {
         for (RelGeneralization g : generalizations) {
             List<Position> list = g.getPoints();
             int len = list.size();
@@ -252,11 +315,6 @@ public class GUIMain extends Application implements Observer {
 
 
         stage = new Stage();
-        setupClasses(diagram.getClasses());
-        setupInterfaces(diagram.getInterfaces());
-        setupAssociation(diagram.getAssociations());
-        setupAggregation(diagram.getAggregations());
-        setupGeneralization(diagram.getGeneralizations());
 
 
         //create buttons and button bar
@@ -265,7 +323,7 @@ public class GUIMain extends Application implements Observer {
         buttonBar.getButtons().add(addClass);
 
         Button editClass = new Button("Edit Class");
-        editClass.setDisable(true);
+//        editClass.setDisable(true);
         buttonBar.getButtons().add(editClass);
 
         Button addAssociation = new Button("Add AssociationClass");
@@ -283,6 +341,16 @@ public class GUIMain extends Application implements Observer {
         Button deleteteRelation = new Button("Delete Relation");
         deleteteRelation.setDisable(true);
         buttonBar.getButtons().add(deleteteRelation);
+        
+//        setupClasses(diagram.getClasses());
+//        setupInterfaces(diagram.getInterfaces());
+//        setupAssociation(diagram.getAssociations());
+//        setupAggregation(diagram.getAggregations());
+//        setupGeneralization(diagram.getGeneralizations());
+        
+        // TODO -> tady tohle je pro sekvenci
+        setupParticipants(diagram.getSequenceDiagram("SequenceDiagram0").getParticipants());
+        setupMessage(diagram.getSequenceDiagram("SequenceDiagram0").getMessages());
 
         pane.setStyle("-fx-background-color: grey; -fx-border-color: black");
 
@@ -312,7 +380,15 @@ public class GUIMain extends Application implements Observer {
             }
         };
         addClass.addEventHandler(MouseEvent.MOUSE_CLICKED, eve);
-
+        
+        GUIMain gui = this;
+        
+        EventHandler<MouseEvent> event = new EventHandler<>(){
+            @Override public void handle(MouseEvent e) {
+            	DeleteController.DeleteInterface("OperaceVozidlo", gui, diagram);
+            }
+        };
+        editClass.addEventHandler(MouseEvent.MOUSE_CLICKED, event);
 
         stage.setScene(scene);
         stage.show();
@@ -357,7 +433,15 @@ public class GUIMain extends Application implements Observer {
             }
         });
     }
-
+    
+    public void clearView() {
+    	pane.getChildren().clear();
+    }
+    
+    public void upadeView() {
+    	stage.setScene(scene);
+        stage.show();
+    }
 }
 
 //        Label lwindowSize = new Label("LABEL");
