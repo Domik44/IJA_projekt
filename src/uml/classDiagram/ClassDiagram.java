@@ -8,6 +8,7 @@ import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
 import uml.sequenceDiagram.SequenceDiagram;
+import uml.sequenceDiagram.UMLParticipant;
 import workers.Converter;
 
 /**
@@ -206,6 +207,7 @@ public class ClassDiagram extends Element {
 		if(toBeDeleted != null) {
 			this.deleteRelationsWith(toBeDeleted);
 			this.classes.remove(toBeDeleted);
+			this.deleteParticipantsWith(toBeDeleted);
 			toBeDeleted = null;
 		}
 			
@@ -219,6 +221,12 @@ public class ClassDiagram extends Element {
 		this.relAggregation.removeIf(rel -> (rel.getLeftClass().equals(deleted) || rel.getRightClass().equals(deleted)));
 		this.relAssociation.removeIf(rel -> (rel.getLeftClass().equals(deleted) || rel.getRightClass().equals(deleted)));
 		this.relGeneralization.removeIf(rel -> (rel.getLeftClass().equals(deleted) || rel.getRightClass().equals(deleted)));
+	}
+	
+	public void deleteParticipantsWith(UMLInterface deleted) {
+		for(SequenceDiagram seq : this.sequenceDiagrams) {
+			seq.deleteParticipantsWith(deleted);
+		}
 	}
 
 	/**
@@ -339,6 +347,12 @@ public class ClassDiagram extends Element {
 		return copyList;
 	}
 	
+	/**
+	 * Gets aggregation from aggregations list by its name.
+	 * 
+	 * @param name Name of aggregation we want to get reference to.
+	 * @return Returns reference to aggregation relation.
+	 */
 	public RelAggregation getAggregation(String name) {
 		for(RelAggregation rel : this.getAggregations()) {
 			if(rel.getName().equals(name)) {
@@ -359,6 +373,12 @@ public class ClassDiagram extends Element {
 		return copyList;
 	}
 	
+	/**
+	 * Gets generalization from generalizations list by its name.
+	 * 
+	 * @param name Name of generalization we want to get reference to.
+	 * @return Returns reference to generalization relation.
+	 */
 	public RelGeneralization getGeneralization(String name) {
 		for(RelGeneralization rel : this.getGeneralizations()) {
 			if(rel.getName().equals(name)) {
@@ -379,6 +399,12 @@ public class ClassDiagram extends Element {
 		return copyList;
 	}
 	
+	/**
+	 * Gets association from associations list by its name.
+	 * 
+	 * @param name Name of association we want to get reference to.
+	 * @return Returns reference to association relation.
+	 */
 	public RelAssociation getAssociation(String name) {
 		for(RelAssociation rel : this.getAssociations()) {
 			if(rel.getName().equals(name)) {
@@ -402,12 +428,23 @@ public class ClassDiagram extends Element {
 		return newDiagram;
 	}
 
+	/**
+	 * Getter for list containing sequence diagrams.
+	 * 
+	 * @return Returns unmodifiable list of sequence diagrams.
+	 */
 	public List<SequenceDiagram> getSequenceDiagrams() {
 		List<SequenceDiagram> copy = List.copyOf(this.sequenceDiagrams);
 
 		return copy;
 	}
 	
+	/**
+	 * Finds sequence diagram by its name.
+	 * 
+	 * @param name Contains name of desired sequence diagram.
+	 * @return Returns reference to sequence diagram.
+	 */
 	public SequenceDiagram getSequenceDiagram(String name) {
 		for(SequenceDiagram seq : this.sequenceDiagrams) {
 			if(seq.getName().equals(name)) {
@@ -417,10 +454,20 @@ public class ClassDiagram extends Element {
 		return null;
 	}
 	
+	/**
+	 * Sets boolean value of diagram attribute.
+	 * 
+	 * @param value Contains value determaning if diagram is (not) saved.
+	 */
 	public void setIsSaved(boolean value) {
 		this.isSaved = value;
 	}
 	
+	/**
+	 * Getter for isSaved.
+	 * 
+	 * @return Returns if diagram is saved or not.
+	 */
 	public boolean getIsSaved() {
 		return this.isSaved;
 	}
