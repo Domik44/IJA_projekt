@@ -343,8 +343,10 @@ public class GUIMain extends Application implements Observer {
         Button addClass = new Button("Add Class");
         addClass.setOnAction(e ->{
             String name = CreateClassWindow.display();
-            diagram.createClass(name);
-            SetupFromDiagram(diagram);
+            if (name != null && !name.equals("")) {
+                diagram.createClass(name);
+                SetupFromDiagram(diagram);
+            }
         });
         buttonBar.getButtons().add(addClass);
 
