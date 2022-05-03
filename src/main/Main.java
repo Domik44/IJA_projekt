@@ -59,11 +59,17 @@ public class Main {
 	
 		
 //		SequenceDiagram seq = classDiagram.getSequenceDiagram("SequenceDiagram0");
+//		classDiagram.deleteClass("Auto");
+//		seq.deleteParticipant("Auto:1");
+		
+//		for(UMLParticipant par : seq.getParticipants()) {
+//			System.out.println(par.getName());
+//		}
 //		
 //		for(UMLMessage mes : seq.getMessages()) {
 //			System.out.println(mes.getStartObject().getName());
 //		}
-		
+//		
 //		UMLParticipant par = seq.getParticipant("Motorka: Motorka:1");
 //		for(UMLOperation mes : seq.getAvailableMessages(par.getName())) {
 //			if(mes.getName().equals("vypisKM")) {
