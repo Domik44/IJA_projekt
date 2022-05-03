@@ -12,8 +12,6 @@ public class UMLMessage extends Element {
 	private Position namePosition = new Position(0,0);
 	private UMLParticipant startObject;
 	private UMLParticipant endObject;
-	private boolean createActivationBox;
-	private UMLActivationBox activationBox;
 	private String uniqueID;
 	
 	public UMLMessage(String name, String type) {

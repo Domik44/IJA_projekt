@@ -1,10 +1,6 @@
 package uml.sequenceDiagram;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import uml.Element;
-import uml.classDiagram.ClassDiagram;
 import uml.classDiagram.UMLInterface;
 import uml.pos.Position;
 
