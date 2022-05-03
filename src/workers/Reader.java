@@ -55,9 +55,9 @@ public class Reader {
 	public String getFileName() {
 		String path = System.getProperty("user.dir").concat(fileName);
 		// Editing path because of JAR location
-		return path.replace("dest", "data\\");
-		//return "data/"+this.fileName;
-		//return this.fileName;
+//		return path.replace("dest", "data\\");
+		return "data/"+this.fileName;
+//		return this.fileName;
 	}
 	
 	/**

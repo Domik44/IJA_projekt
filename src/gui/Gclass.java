@@ -1,5 +1,6 @@
 package gui;
 
+import controller.DeleteController;
 import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.event.Event;
@@ -12,6 +13,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import uml.classDiagram.ClassDiagram;
+import uml.classDiagram.UMLRelation;
+import uml.pos.Position;
+import uml.relations.RelAssociation;
+import uml.relations.RelGeneralization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +29,20 @@ import java.util.Observable;
  * @author  Adam Hos
  * @version 1.0
  */
-public class Gclass extends Observable {
+public class Gclass{
     Group root;
     Rectangle border;
     Label classLabel;
-    List<Label> attrList;
+    List<Label> attrListLabel;
     List<Label> methodList;
     VBox classVB;
     List<MyNode> anchors;
     Rectangle separator1;
     Rectangle separator2;
-    Rectangle spacer;
+    boolean isinterface;
+
+    List<RelAssociation> relationList;
+    List<RelGeneralization> generalizationList;
 
     double eX;
     double eY;
@@ -42,9 +51,12 @@ public class Gclass extends Observable {
      * Constructor for Gclass. Set border, VBox, Labels(name, attributes, methods) and separators(rectangles)
      * @param dummy if dummy, fill GClass with dummy data
      */
-    public Gclass( boolean dummy) {
+    public Gclass(boolean isinterface, boolean dummy) {
         final int initialClassWidth = 250;
         int initialClassHeight = 80;
+        this.isinterface = isinterface;
+        relationList = new ArrayList<>();
+        generalizationList = new ArrayList<>();
 
         this.root = new Group();
         border = new Rectangle(initialClassWidth, initialClassHeight);
@@ -60,14 +72,14 @@ public class Gclass extends Observable {
         classVB.setTranslateY(10);
         classVB.setAlignment(Pos.CENTER);
 
-        attrList = new ArrayList<>();
+        attrListLabel = new ArrayList<>();
         methodList = new ArrayList<>();
         separator1 = new Rectangle(initialClassWidth - 20, 5);
         separator1.setFill(Color.BLACK);
         separator2 = new Rectangle(initialClassWidth - 20, 5);
         separator2.setFill(Color.BLACK);
-        spacer = new Rectangle(initialClassWidth - 20, 5);
-        spacer.setFill(Color.WHITE);
+//        spacer = new Rectangle(initialClassWidth - 20, 5);
+//        spacer.setFill(Color.WHITE);
 
         //create label for class name
         classLabel = new Label("'Class Name'");
@@ -81,14 +93,9 @@ public class Gclass extends Observable {
         //initial attributes if dummy
         if (dummy){
             for (int i = 1; i <= 3 ; i++) {
-                attrList.add(new Label("-atr" + i));
+                attrListLabel.add(new Label("-atr" + i));
             }
-            classVB.getChildren().addAll(attrList);
-
-            if (attrList.isEmpty()){ //add spacer if needed
-                classVB.getChildren().add(spacer);
-            }
-
+            classVB.getChildren().addAll(attrListLabel);
             //add separating line
             classVB.getChildren().add(separator2);
 
@@ -109,17 +116,17 @@ public class Gclass extends Observable {
 
         border.setOnMousePressed(Event::consume);
         border.setOnMouseDragged(Event::consume);
-        border.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                seteX(e.getX() + root.getTranslateX());
-                seteY(e.getY() + root.getTranslateY());
-//                System.out.printf("Root %f   %f\n",root.getTranslateX(), root.getTranslateY());
-
-                setChanged();
-                notifyObservers(e);
-            }
-        });
+//        border.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent e) {
+//                seteX(e.getX() + root.getTranslateX());
+//                seteY(e.getY() + root.getTranslateY());
+////                System.out.printf("Root %f   %f\n",root.getTranslateX(), root.getTranslateY());
+//
+//                setChanged();
+//                notifyObservers(e);
+//            }
+//        });
 
 //        border.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
 //            @Override
@@ -191,5 +198,31 @@ public class Gclass extends Observable {
      */
     public double getWidth(){
         return border.widthProperty().getValue();
+    }
+
+    /**
+     * Return name of Gclass
+     * @return name
+     */
+    public String getName() { return classLabel.getText();};
+
+    /**
+     * Ask if point with changed height is lower then border
+     * @param point point to be checked
+     * @param diff changed border height
+     * @return boolean
+     */
+    public boolean isPointOnBottom(Position point, int diff){
+        double borderHeight = getHeight();
+        if (point.getY() + diff < borderHeight)
+            return false;
+        return true;
+    }
+
+    public void delete(GUIMain gui, ClassDiagram diagram) {
+        if(isinterface)
+            DeleteController.DeleteInterface(this.getName(), gui, diagram);
+        else
+            DeleteController.DeleteClass(this.getName(), gui, diagram);
     }
 }

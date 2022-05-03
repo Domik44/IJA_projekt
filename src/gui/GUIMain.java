@@ -2,7 +2,6 @@ package gui;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
@@ -10,11 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import uml.*;
-import uml.classDiagram.ClassDiagram;
-import uml.classDiagram.UMLAttribute;
-import uml.classDiagram.UMLClass;
-import uml.classDiagram.UMLInterface;
+import uml.classDiagram.*;
 import uml.pos.Position;
 import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
@@ -41,9 +36,14 @@ public class GUIMain extends Application implements Observer {
     Pane pane;
     List<Gclass> gClassList;
     // TODO -> tady tohle je pro sekvencni
-    List<GParticipant> gParticipantList = new ArrayList<GParticipant>();
+    List<GParticipant> gParticipantList = new ArrayList<>();
     Scene scene;
     Stage stage;
+    ClassDiagram diagram;
+    Gclass selectedGclass;
+
+    Button editClass;
+    Button deleteClass;
 
     /**
      * Constructor for GUIMain. Allocate memory, set scene
@@ -67,7 +67,7 @@ public class GUIMain extends Application implements Observer {
         }
         return null;
     }
-    
+
     //TODO -> tohle je pro sekvencni diagram
     public GParticipant getParticipantByName(String name){
         for (GParticipant par : this.gParticipantList){
@@ -82,7 +82,7 @@ public class GUIMain extends Application implements Observer {
     	for (UMLParticipant par : participants) {
     		GParticipant tmp = new GParticipant();
     		tmp.name = par.getName();
-    		makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
+//    		makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
     		gParticipantList.add(tmp);
     		tmp.getRoot().toBack();
     		tmp.participantNameLabel.setText(par.toString());
@@ -90,13 +90,12 @@ public class GUIMain extends Application implements Observer {
     		tmp.getRoot().setTranslateX(pos.getX());
     		tmp.getRoot().setTranslateY(pos.getY());
     		pane.getChildren().add(tmp.getRoot());
-    		
+
     	}
     }
-    
+
     /**
      * Setup all GGeneralization from diagram input
-     * @param generalizations list of generalization to be converted
      */
     public void setupMessage(List<UMLMessage> messages) {
         for (UMLMessage mes : messages) {
@@ -113,7 +112,7 @@ public class GUIMain extends Application implements Observer {
                 Position point = list.get(i);
                 listNode.add(new MyNode(point.getX(), point.getY(), true));
             }
-            
+
             GParticipant first = getParticipantByName(mes.getStartObject().getName());
             GParticipant second = getParticipantByName(mes.getEndObject().getName());
             GMessage message = new GMessage(first, second);
@@ -123,7 +122,7 @@ public class GUIMain extends Application implements Observer {
             message.show(pane);
         }
     }
-    
+
     /**
      * Setup all GClasses from diagram input
      * @param classes list of UMLClass to be converted
@@ -131,11 +130,12 @@ public class GUIMain extends Application implements Observer {
     public void setupClasses(List<UMLClass> classes) {
         for (UMLClass c : classes) {
             //create Gclass object
-            Gclass tmp = new Gclass(false);
-            tmp.name = c.getName();
-            makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
+            Gclass tmp = new Gclass(false, false);
+            setGClassSelectEventHandler(tmp);
+            makeGClassDraggable(tmp, scene.getWidth(), scene.getHeight());
             gClassList.add(tmp);
             tmp.getRoot().toBack();
+
             //setup class data
             tmp.classLabel.setText(c.getName());
             Position pos = c.getPosition();
@@ -144,10 +144,9 @@ public class GUIMain extends Application implements Observer {
             pane.getChildren().add(tmp.getRoot());
 
             for (UMLAttribute attr : c.getAttributes()) {
-                tmp.attrList.add(new Label(attr.toString()));
+                tmp.attrListLabel.add(new Label(attr.toString()));
             }
-            tmp.classVB.getChildren().addAll(tmp.attrList);
-            tmp.classVB.getChildren().add(tmp.spacer);
+            tmp.classVB.getChildren().addAll(tmp.attrListLabel);
             tmp.classVB.getChildren().add(tmp.separator2);
 
             for (UMLAttribute opr : c.getOperations()) {
@@ -164,8 +163,9 @@ public class GUIMain extends Application implements Observer {
     public void setupInterfaces(List<UMLInterface> interfaces) {//TODO create separate list
         for (UMLInterface i : interfaces) {
             //create Gclass object
-            Gclass tmp = new Gclass(false);
-            makeDraggable(tmp.getRoot(), scene.getWidth(), scene.getHeight());
+            Gclass tmp = new Gclass(true, false);
+            setGClassSelectEventHandler(tmp);
+            makeGClassDraggable(tmp, scene.getWidth(), scene.getHeight());
             gClassList.add(tmp);
             tmp.getRoot().toBack();
             tmp.classVB.getChildren().add(0,new Label("<<interface>>"));
@@ -192,7 +192,6 @@ public class GUIMain extends Application implements Observer {
         for (RelAssociation a : associations) {
             List<Position> list = a.getPoints();
             int len = list.size();
-
             //create anchors
             MyNodeAnchor start = new MyNodeAnchor(list.get(0).getX(), list.get(0).getY(), false);
             MyNodeAnchor end = new MyNodeAnchor(list.get(len -1).getX(), list.get(len -1).getY(), false);
@@ -207,8 +206,11 @@ public class GUIMain extends Application implements Observer {
             //create association
             //select classes
             Gclass first = getClassByName(a.getLeftClass().getName());
+            first.relationList.add(a);
             Gclass second = getClassByName(a.getRightClass().getName());
+            second.relationList.add(a);
             GAssociation ass = new GAssociation(first, second);
+            ass.name = a.getName();
             ass.setFromList(listNode, start, end);
             ass.setLabels(a.getLeftCardinality(),a.getRightCardinality(), a.getLabel());
             ass.setLabelName(a.getLabel(), a.getLabelPosition());
@@ -244,9 +246,10 @@ public class GUIMain extends Application implements Observer {
             GAggregation aggr = new GAggregation(first, second);
             aggr.setFromList(listNode, start, end);
             aggr.setLabels(a.getLeftCardinality(),a.getRightCardinality());
-            aggr.showLabels(start, end); //TODO implement search by class name
+//            aggr.showLabels(start, end); //TODO implement search by class name
             start.polygonSquare();
             start.polygonSetRotatoin(first);
+
             aggr.show(pane);
         }
     }
@@ -273,7 +276,9 @@ public class GUIMain extends Application implements Observer {
             //create association
             //select classes
             Gclass first = getClassByName(g.getLeftClass().getName());
+            first.generalizationList.add(g);
             Gclass second = getClassByName(g.getRightClass().getName());
+            second.generalizationList.add(g);
             GGeneralization generalization = new GGeneralization(first, second);
             generalization.setFromList(listNode, start, end);
             start.polygonTriangle();
@@ -298,13 +303,24 @@ public class GUIMain extends Application implements Observer {
     public void Start(){
         launch();
     }
+
+    public void SetupFromDiagram(ClassDiagram diagram){
+        pane.getChildren().clear();
+        gClassList.clear();
+        pane.setStyle("-fx-background-color: grey; -fx-border-color: black");
+        pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); //TODO better size
+        setupClasses(diagram.getClasses());
+        setupInterfaces(diagram.getInterfaces());
+        setupAssociation(diagram.getAssociations());
+        setupAggregation(diagram.getAggregations());
+        setupGeneralization(diagram.getGeneralizations());
+    }
+
     /**
      * Application start
      */
     @Override
     public void start(Stage orig) throws IOException {
-        ClassDiagram diagram = new ClassDiagram("ClassDiagram");
-        Reader.startReading(diagram);
 
 
         //*****GUI START*****//
@@ -315,16 +331,53 @@ public class GUIMain extends Application implements Observer {
 
 
         stage = new Stage();
-
-
+        stage.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                editClass.setDisable(true);
+                deleteClass.setDisable(true);
+            }
+        });
         //create buttons and button bar
         ButtonBar buttonBar = new ButtonBar();
         Button addClass = new Button("Add Class");
+        addClass.setOnAction(e ->{
+            String name = CreateClassWindow.display();
+            diagram.createClass(name);
+            SetupFromDiagram(diagram);
+        });
         buttonBar.getButtons().add(addClass);
 
-        Button editClass = new Button("Edit Class");
-//        editClass.setDisable(true);
+        editClass = new Button("Edit Class");
+        editClass.setDisable(true);
+        editClass.setOnAction(e -> {
+            int GclassHeightdiff = 0;
+            if (selectedGclass.isinterface){
+                GclassHeightdiff = ECW.display(diagram.getInterface(selectedGclass.classLabel.getText()));
+            }
+            else {
+                GclassHeightdiff = ECW.display(diagram.getClass(selectedGclass.classLabel.getText()));
+            }
+            System.out.println(selectedGclass.generalizationList.size());
+            if (GclassHeightdiff != 0)
+                repairGclassBottomBorderRelations(selectedGclass, GclassHeightdiff);
+            SetupFromDiagram(diagram);
+            editClass.setDisable(true);
+            deleteClass.setDisable(true);
+        });
         buttonBar.getButtons().add(editClass);
+
+        deleteClass = new Button("Delete Class");
+        deleteClass.setDisable(false);
+        GUIMain gui = this;
+
+        deleteClass.addEventHandler(MouseEvent.MOUSE_CLICKED,  new EventHandler<>(){
+            @Override public void handle(MouseEvent e) {
+                selectedGclass.delete(gui,diagram);
+                SetupFromDiagram(diagram);
+            }
+        });
+        buttonBar.getButtons().add(deleteClass);
 
         Button addAssociation = new Button("Add AssociationClass");
         addAssociation.setDisable(true);
@@ -341,81 +394,83 @@ public class GUIMain extends Application implements Observer {
         Button deleteteRelation = new Button("Delete Relation");
         deleteteRelation.setDisable(true);
         buttonBar.getButtons().add(deleteteRelation);
-        
-//        setupClasses(diagram.getClasses());
-//        setupInterfaces(diagram.getInterfaces());
-//        setupAssociation(diagram.getAssociations());
-//        setupAggregation(diagram.getAggregations());
-//        setupGeneralization(diagram.getGeneralizations());
-        
-        // TODO -> tady tohle je pro sekvenci
-        setupParticipants(diagram.getSequenceDiagram("SequenceDiagram0").getParticipants());
-        setupMessage(diagram.getSequenceDiagram("SequenceDiagram0").getMessages());
 
-        pane.setStyle("-fx-background-color: grey; -fx-border-color: black");
+
+
 
         HBox hbox = new HBox();
         hbox.getChildren().addAll(buttonBar);
-        vBox.getChildren().addAll(hbox, pane);
+        vBox.getChildren().add(hbox);
+
+        ///READING FROM INPUT FILE
+        diagram = new ClassDiagram("ClassDiagram");
+        Reader.startReading(diagram);
+        SetupFromDiagram(diagram);
+        SetupFromDiagram(diagram);
+        vBox.getChildren().add(pane);
+        // TODO -> tady tohle je pro sekvenci
+//        setupParticipants(diagram.getSequenceDiagram("SequenceDiagram0").getParticipants());
+//        setupMessage(diagram.getSequenceDiagram("SequenceDiagram0").getMessages());
 
 
         vBox.prefWidthProperty().bind(stage.widthProperty().multiply(0.80));
 
-        pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE); //TODO better size
         VBox.setVgrow(pane, Priority.ALWAYS);
 
 
 
+        stage.setScene(scene);
+        stage.setTitle("Diagram");
+        stage.show();
+        SetupFromDiagram(diagram);
+        stage.setOnCloseRequest(e -> ClosingProgram());
+    }
 
-        //event handler for button create class
-        EventHandler<MouseEvent> eve = new EventHandler<>(){
-            @Override public void handle(MouseEvent e) {
-//                addClass.setEffect(null);
-                System.out.println("Created new Class");
-                Gclass tmpClass = new Gclass(true);
-                makeDraggable(tmpClass.getRoot(), scene.getWidth(), scene.getHeight());
-                gClassList.add(tmpClass);
-                pane.getChildren().add(0,tmpClass.getRoot());
+    private void repairGclassBottomBorderRelations(Gclass selectedGclass, int diff) {
+        for (var g : selectedGclass.generalizationList){
+            Position point;
+            var Points = g.getPoints();
+            if (g.getLeftClass().getName() == selectedGclass.getName())
+                point = Points.get(0); //get first point
+            else
+                point = Points.get(Points.size() - 1); //get last
+            if (selectedGclass.isPointOnBottom(point, diff))
+                point.setY(point.getY() + diff);
+        }
+    }
 
-            }
-        };
-        addClass.addEventHandler(MouseEvent.MOUSE_CLICKED, eve);
-        
-        GUIMain gui = this;
-        
-        EventHandler<MouseEvent> event = new EventHandler<>(){
-            @Override public void handle(MouseEvent e) {
-            	DeleteController.DeleteInterface("OperaceVozidlo", gui, diagram);
-            }
-        };
-        editClass.addEventHandler(MouseEvent.MOUSE_CLICKED, event);
+    private void ClosingProgram(){
+        System.out.println("Finished <- last function call\n");
+    }
+    public void clearView() {
+        pane.getChildren().clear();
+    }
 
+    public void upadeView() {
         stage.setScene(scene);
         stage.show();
     }
-
-
-
 
     private double startX;
     private  double startY;
     /**
      * Makes the Node draggable with movement restriction
-     * @param node Node to be made draggable
+     * @param gclass Gclass to be made draggable
      * @param maxH maximum height
      * @param maxW maximum width
      */
-    private void makeDraggable(Group node, double maxW, double maxH) {
+    private void makeGClassDraggable(Gclass gclass, double maxW, double maxH) {
 
-        node.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+        gclass.root.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                startX = e.getSceneX() - node.getTranslateX();
-                startY = e.getSceneY() - node.getTranslateY();
+                startX = e.getSceneX() - gclass.root.getTranslateX();
+                startY = e.getSceneY() - gclass.root.getTranslateY();
+
             }
         });
 
-        node.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+        gclass.root.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 double X = e.getSceneX() - startX;
@@ -428,30 +483,37 @@ public class GUIMain extends Application implements Observer {
                     Y = maxH - 10;
                 if (Y < 0)
                     Y = 0;
-                node.setTranslateX(X);
-                node.setTranslateY(Y);
+                gclass.root.setTranslateX(X);
+                gclass.root.setTranslateY(Y);
+            }
+        });
+
+        //released mouse drag, need to update UMLClass
+        gclass.root.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (!gclass.isinterface) {
+                    diagram.getClass(gclass.classLabel.getText()).setPosition(
+                            (int) gclass.root.getTranslateX(),
+                            (int) gclass.root.getTranslateY());
+                }
+                else{
+                    diagram.getInterface(gclass.classLabel.getText()).setPosition(
+                            (int) gclass.root.getTranslateX(),
+                            (int) gclass.root.getTranslateY());
+                }
             }
         });
     }
-    
-    public void clearView() {
-    	pane.getChildren().clear();
-    }
-    
-    public void upadeView() {
-    	stage.setScene(scene);
-        stage.show();
+    private void setGClassSelectEventHandler(Gclass gclass){
+        gclass.root.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                selectedGclass = gclass;
+                deleteClass.setDisable(false);
+                editClass.setDisable(false);
+                e.consume();
+            }
+        });
     }
 }
-
-//        Label lwindowSize = new Label("LABEL");
-//        lwindowSize.setTranslateX(600);
-//        pane.getChildren().add(lwindowSize);
-//        lwindowSize.textProperty().bind(Bindings.format(" Size: %.0f x %.0f", scene.widthProperty(), scene.heightProperty()));
-
-//        Label testingLabel = new Label("Testing LABEL");
-//        testingLabel.setTranslateX(600);
-//        testingLabel.setTranslateY(20);
-//        pane.getChildren().add(testingLabel);
-//        testingLabel.textProperty().bind(Bindings.format(" Test: %.0f x %.0f", c1.root.translateXProperty(), c1.root.translateYProperty()));
-//        double X = scene.widthProperty().getValue();

@@ -15,7 +15,7 @@ import java.util.Observable;
  * @author  Adam Hos
  * @version 1.0
  */
-public class MyNode extends Observable {
+public class MyNode {
     //Attributes
     Group g;
     Circle c;

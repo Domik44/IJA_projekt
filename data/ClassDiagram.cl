@@ -26,7 +26,7 @@ Interface OperaceVozidlo {
 Relation Generalization {
   lClass OperaceVozidlo
   rClass Auto
-  position 170 93
+  position 172 93
   position 470 250
   position 625 250
   position 125 0
