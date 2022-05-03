@@ -45,12 +45,28 @@ public class UMLClass extends UMLInterface {
 	
 	// Attribute methods
 	/**
-	 * Methods adds attribute to attributes list of class.
+	 * Methods adds attribute to attributes list of class. 
+	 * If that list contains attribute with same name, new attribute won't be added.
+	 * 
 	 * @param attr Contains reference to attribute object.
-	 * @return Returns true if attribute was added to list.
+	 * @return Returns true if attribute was added to list, false if not.
 	 */
 	public boolean addAttribute(UMLAttribute attr) {
+		for(UMLAttribute attribute : this.getAttributes()) {
+			if(attribute.getName().equals(attr.getName())) {
+				return false;
+			}
+		}
 		return this.attributes.add(attr);
+	}
+	
+	/**
+	 * Deletes attribute from attributes list by name.
+	 * 
+	 * @param name Contains name of attribute to be deleted.
+	 */
+	public void deleteAttribute(String name) {
+		this.attributes.removeIf(attr -> (attr.getName().equals(name)));
 	}
 	
 	/**
@@ -87,5 +103,21 @@ public class UMLClass extends UMLInterface {
 		List<UMLAttribute> copy = List.copyOf(this.attributes);
 		
 		return copy;
+	}
+	
+	/**
+	 * Gets reference to attribute by its name.
+	 * 
+	 * @param name Contains name of attribute.
+	 * @return Returns reference to attribute, if it was found.
+	 */
+	public UMLAttribute getAttribute(String name) {
+		for(UMLAttribute attr : this.attributes) {
+			if(attr.getName().equals(name)) {
+				return attr;
+			}
+		}
+		
+		return null;
 	}
 }

@@ -58,6 +58,15 @@ public class UMLOperation extends UMLAttribute {
 	}
 	
 	/**
+	 * Deletes argument from arguments list by name.
+	 * 
+	 * @param name Contains name of argument to be deleted.
+	 */
+	public void deleteArgument(String name) {
+		this.arguments.removeIf(attr -> (attr.getName().equals(name)));
+	}
+	
+	/**
 	 * Getter for arguments list.
 	 * @return Returns unmodifiable list of arguments of operation.
 	 */
@@ -65,6 +74,22 @@ public class UMLOperation extends UMLAttribute {
 		List<UMLAttribute> copy = List.copyOf(this.arguments);
 		
 		return copy;
+	}
+	
+	/**
+	 * Gets reference to attribute by its name.
+	 * 
+	 * @param name Contains name of attribute.
+	 * @return Returns reference to attribute, if it was found.
+	 */
+	public UMLAttribute getArgument(String name) {
+		for(UMLAttribute attr : this.arguments) {
+			if(attr.getName().equals(name)) {
+				return attr;
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
