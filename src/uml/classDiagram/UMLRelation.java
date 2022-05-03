@@ -30,7 +30,7 @@ public class UMLRelation extends Element{
 	 * @param type Contains type of relation.
 	 */
 	public UMLRelation(UMLInterface left, UMLInterface right, String type) {
-		super(UUID.randomUUID().toString());
+		super(UUID.randomUUID().toString()); // represents unique id
 		this.type = type;
 		this.leftClass = left;
 		this.rightClass = right;
