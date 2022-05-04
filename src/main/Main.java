@@ -16,6 +16,7 @@ import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
 import uml.sequenceDiagram.SequenceDiagram;
+import uml.sequenceDiagram.UMLActivationBox;
 import uml.sequenceDiagram.UMLMessage;
 import uml.sequenceDiagram.UMLParticipant;
 import workers.Writer;
@@ -43,7 +44,7 @@ public class Main {
 		// TODO -> vratit zpatky mazani v pom.xml ze zalohy (v others)
 //		ClassDiagram classDiagram = new ClassDiagram("diagram");
 //		Reader.startReading(classDiagram);
-	
+//	
 		
 //		UMLClass newClass = classDiagram.createClass("Nakladni automobil");
 //		newClass.addAttribute(new UMLAttribute("znakca", classDiagram.classifierForName("int"), classDiagram.classifierForName("+")));
@@ -82,7 +83,11 @@ public class Main {
 //		for(UMLParticipant op : seq.getAvailableParticipents("Auto: Auto:1")) {
 //			System.out.println(op.getName());
 //		}
-		
+//		for(UMLParticipant par : seq.getParticipants()) {
+//			for(UMLActivationBox box : par.getBoxes()) {
+//				System.out.println(box.getID());
+//			}
+//		}
 		
 //		Writer.startWriting(classDiagram);
 

@@ -17,6 +17,7 @@ import uml.relations.RelGeneralization;
 import uml.sequenceDiagram.UMLMessage;
 import uml.sequenceDiagram.UMLParticipant;
 import workers.Reader;
+import workers.Writer;
 
 import java.io.IOException;
 import java.util.*;
@@ -364,7 +365,9 @@ public class GUIMain extends Application implements Observer {
         editClass.setOnAction(e -> {
             int GclassHeightdiff = 0;
             if (selectedGclass.isinterface){
-                GclassHeightdiff = ECW.display(diagram.getInterface(selectedGclass.classLabel.getText()));
+//                GclassHeightdiff = ECW.display(diagram.getInterface(selectedGclass.classLabel.getText()));
+                var action = this.editControl.new EditInterface(this, diagram, selectedGclass.classLabel.getText());
+          	  	run(action);
             }
             else {
             	var action = this.editControl.new EditClass(this, diagram, selectedGclass.classLabel.getText());
@@ -372,9 +375,9 @@ public class GUIMain extends Application implements Observer {
 //                GclassHeightdiff = ECW.display(diagram.getClass(selectedGclass.classLabel.getText()));
             }
 
-            if (GclassHeightdiff != 0)
-                repairGclassBottomBorderRelations(selectedGclass, GclassHeightdiff);
-            SetupFromDiagram(diagram);
+//            if (GclassHeightdiff != 0)
+//                repairGclassBottomBorderRelations(selectedGclass, GclassHeightdiff);
+//            SetupFromDiagram(diagram);
             editClass.setDisable(true);
             deleteClass.setDisable(true);
         });
@@ -446,6 +449,7 @@ public class GUIMain extends Application implements Observer {
         stage.setTitle("Diagram");
         stage.show();
         SetupFromDiagram(diagram);
+        Writer.startWriting(diagram);
         stage.setOnCloseRequest(e -> ClosingProgram());
     }
 
