@@ -139,19 +139,19 @@ public class DeleteController {
 	public class DeleteGeneralization implements UIAction {
 		public GUIMain view;
 		public ClassDiagram model;
-		public String name;
+		public String ID;
 		public RelGeneralization deletedGeneralization;
 		
 		public DeleteGeneralization(GUIMain view, ClassDiagram model, String name) {
 			this.view = view;
 			this.model = model;
-			this.name = name;
+			this.ID = name;
 		}
 		
 		@Override
 		public void run() {
-			this.deletedGeneralization = this.model.getGeneralization(name);
-			this.model.deleteGeneralization(name);
+			this.deletedGeneralization = this.model.getGeneralization(ID);
+			this.model.deleteGeneralization(ID);
 			this.view.SetupFromDiagram(model);
 		}
 		

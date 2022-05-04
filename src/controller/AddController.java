@@ -3,6 +3,10 @@ package controller;
 import gui.GUIMain;
 import uml.classDiagram.ClassDiagram;
 import uml.pos.Position;
+import uml.relations.RelAggregation;
+import uml.relations.RelAssociation;
+import uml.relations.RelGeneralization;
+import uml.sequenceDiagram.SequenceDiagram;
 import uml.sequenceDiagram.UMLParticipant;
 
 public class AddController {
@@ -75,8 +79,9 @@ public class AddController {
 		
 		@Override
 		public void run() {
-			//TODO
-			this.ID =  this.model.createGeneralization(this.parent, this.child, this.type).getName();
+			RelGeneralization newGeneralization =  this.model.createGeneralization(this.parent, this.child, this.type);
+			this.ID =  newGeneralization.getName();
+			//TODO -> dodelat predani + nastaveni pozic, na kterych ma realce být!!
 			this.view.SetupFromDiagram(model);
 		}
 		
@@ -110,8 +115,9 @@ public class AddController {
 			
 			@Override
 			public void run() {
-				//TODO
-				this.ID =  this.model.createAggregation(this.parent, this.child, this.type).getName();
+				RelAggregation newAggregation = this.model.createAggregation(this.parent, this.child, this.type);
+				this.ID =  newAggregation.getName();
+				// TODO -> predat pozice a nastavit ji, predat label a nastavit ho + jeho pozice, predat kardinality a nastavit je
 				this.view.SetupFromDiagram(model);
 			}
 			
@@ -145,8 +151,9 @@ public class AddController {
 		
 		@Override
 		public void run() {
-			//TODO
-			this.ID =  this.model.createAssociation(this.parent, this.child, this.type).getName();
+			RelAssociation newAssociation = this.model.createAssociation(this.parent, this.child, this.type);
+			this.ID =  newAssociation.getName();
+			// TODO -> predat pozice a nastavit ji, predat label a nastavit ho + jeho pozice, predat kardinality a nastavit je + asoci trida ? (jestli ji vubec budeme implementovat)
 			this.view.SetupFromDiagram(model);
 		}
 		
@@ -154,6 +161,69 @@ public class AddController {
 		public void undo() {
 			this.model.deleteAssociation(ID);
 			this.view.SetupFromDiagram(model);
+		}
+	}
+	
+	public class AddParticipant implements UIAction{
+		
+		public GUIMain view;
+		public SequenceDiagram model;
+		
+		public AddParticipant(GUIMain view, SequenceDiagram model) {
+			this.view = view;
+			this.model = model;
+		}
+		
+		@Override
+		public void run() {
+
+		}
+		
+		@Override
+		public void undo() {
+
+		}
+	}
+	
+	public class AddMessage implements UIAction{
+		
+		public GUIMain view;
+		public SequenceDiagram model;
+		
+		public AddMessage(GUIMain view, SequenceDiagram model) {
+			this.view = view;
+			this.model = model;
+		}
+		
+		@Override
+		public void run() {
+
+		}
+		
+		@Override
+		public void undo() {
+
+		}
+	}
+	
+	public class AddActionBox implements UIAction{
+		
+		public GUIMain view;
+		public SequenceDiagram model;
+		
+		public AddActionBox(GUIMain view, SequenceDiagram model) {
+			this.view = view;
+			this.model = model;
+		}
+		
+		@Override
+		public void run() {
+
+		}
+		
+		@Override
+		public void undo() {
+
 		}
 	}
 }
