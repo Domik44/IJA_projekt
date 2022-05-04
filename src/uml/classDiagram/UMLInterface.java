@@ -108,7 +108,8 @@ public class UMLInterface extends UMLClassifier {
 	}
 	
 	public void addInheritedMethods (List<UMLOperation> inheritedMethods) {
-		this.inheritedMethods = inheritedMethods;
+//		this.inheritedMethods = inheritedMethods;
+		this.inheritedMethods.addAll(inheritedMethods);
 	}
 	
 	public void removeInheritedMethod() { // TODO
@@ -143,5 +144,30 @@ public class UMLInterface extends UMLClassifier {
 	
 	public List<UMLInterface> getCommunications(){
 		return List.copyOf(this.comunicatesWith);
+	}
+	
+	public void removeAllOperations() {
+		this.methods.clear();
+	}
+	
+	public void removeAllInherited() {
+		this.inheritedMethods.clear();
+	}
+	
+	public void removeAllCommuniactions() {
+		this.comunicatesWith.clear();
+	}
+	
+	public void clean() {
+		this.removeAllCommuniactions();
+		this.removeAllInherited();
+		this.removeAllOperations();
+	}
+	
+	public void copy(UMLInterface edited) {
+		this.setPosition(edited.getPosition().getX(), edited.getPosition().getY());
+		this.methods.addAll(edited.methods);
+		this.inheritedMethods.addAll(edited.inheritedMethods);
+		this.comunicatesWith.addAll(edited.comunicatesWith);
 	}
 }

@@ -124,4 +124,19 @@ public class UMLClass extends UMLInterface {
 		
 		return null;
 	}
+	
+	public void removeAllAttributes() {
+		this.attributes.clear();
+	}
+	
+	public void clean() {
+		super.clean();
+		this.removeAllAttributes();
+	}
+	
+	public void copy(UMLClass edited) {
+		super.copy(edited);
+		this.setAbstract(edited.isAbstract());
+		this.attributes.addAll(edited.attributes);
+	}
 }
