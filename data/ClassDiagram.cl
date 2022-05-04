@@ -44,10 +44,10 @@ Relation Generalization {
 Relation Generalization {
   lClass Auto
   rClass Motorka
-  position 125 171
+  position 125 165
   position 625 520
   position 225 520
-  position 125 86
+  position 125 80
 }
 
 Relation Association {
@@ -71,26 +71,71 @@ Relation Aggregation {
 
 @startSequence
 
-Participant Auto:1 Auto {
-  startPos 100 20
-  endPos 10 40
+Participant OperaceVozidlo:1 OperaceVozidlo {
+  startPos 700 0
+  endPos 0 0
   lineStart 15 30
   lineEnd 15 40
 }
 
-Participant Motorka:1 Motorka {
-  startPos 400 20
-  endPos 30 40
+Participant Auto:1 Auto {
+  startPos 100 0
+  endPos 0 0
   lineStart 35 30
   lineEnd 35 40
 }
 
-Message Ejoooooo Synchronous {
-  position 10 35
-  position 30 35
+Participant Motorka:1 Motorka {
+  startPos 400 0
+  endPos 0 0
+  lineStart 55 30
+  lineEnd 45 40
+}
+
+Message postavitNaZadni Synchronous {
+  position 0 100
+  position 0 0
   namePos 20 33
   startObject Auto:1
   endObject Motorka:1
+}
+
+Message vypisInfo Asynchronous {
+  position 0 150
+  position 0 0
+  namePos 20 36
+  startObject Motorka:1
+  endObject Auto:1
+}
+
+Message <<return>> Return {
+  position 0 200
+  position 0 0
+  namePos 20 36
+  startObject Motorka:1
+  endObject Auto:1
+}
+
+Message <<create>> Create {
+  position 0 250
+  position 0 0
+  namePos 20 36
+  startObject OperaceVozidlo:1
+  endObject Auto:1
+}
+
+Message <<delete>> Delete {
+  position 0 300
+  position 0 0
+  namePos 20 36
+  startObject OperaceVozidlo:1
+  endObject Auto:1
+}
+
+
+ActivationBox Auto:1 {
+  startPos 0 50
+  endPos 0 400
 }
 
 @endSequence

@@ -97,9 +97,9 @@ public class UMLMessage extends Element {
 	public UMLParticipant getEndObject() {
 		return this.endObject;
 	}
-	
+
 	@Override
 	public String toString() {
-		return this.getName() + "()";
+		return "<<" + this.getName() + ">>";
 	}
 }

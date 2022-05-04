@@ -19,8 +19,6 @@ public class MyNode {
     //Attributes
     Group g;
     Circle c;
-    ObservableDoubleValue x;
-    ObservableDoubleValue y;
 
     /**
      * Constructor for attribute object. Class constructor of super class Element and sets type of attribute.

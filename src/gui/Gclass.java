@@ -36,7 +36,6 @@ public class Gclass{
     List<Label> attrListLabel;
     List<Label> methodList;
     VBox classVB;
-    List<MyNode> anchors;
     Rectangle separator1;
     Rectangle separator2;
     boolean isinterface;
@@ -63,7 +62,6 @@ public class Gclass{
         border.setFill(Color.BLUEVIOLET);
         root.getChildren().addAll(border);
 
-        anchors = new ArrayList<>();
 
         classVB = new VBox();
         classVB.setPrefSize(initialClassWidth - 20, initialClassHeight - 20);

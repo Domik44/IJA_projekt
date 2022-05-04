@@ -43,13 +43,19 @@ public class GActivationBox {
         int initialClassHeight = 100;
 
         start = new MyNode(0, y1, false);
+        start.c.setFill(Color.GREEN);
+        start.c.setRadius(10);
         end   = new MyNode(0, y2, false);
+        end.c.setFill(Color.GREEN);
+        end.c.setRadius(10);
+
 
         this.root = new Group();
         rectangle = new Rectangle(initialClassWidth, initialClassHeight);
         rectangle.heightProperty().bind(end.g.translateYProperty().subtract(start.g.translateYProperty()));
         rectangle.setTranslateX(-5);
         rectangle.setFill(Color.LIGHTGREEN);
+        rectangle.setOnMouseDragged(Event::consume);
 
         start.g.getChildren().add(rectangle);
         makeDraggableVerticalyTOP(start.g);

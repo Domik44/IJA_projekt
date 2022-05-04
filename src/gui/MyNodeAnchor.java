@@ -35,11 +35,27 @@ public class MyNodeAnchor extends MyNode{
      * Create new triangle and give it to this.polygon
      */
     public void polygonTriangle(){
-        double size = 20.0;
+        double size = 15.0;
         polygon = new Polygon(
                 0.0,0.0,
-                -size, size,
-                size, size);
+                -size, size*1.5,
+                size, size*1.5);
+
+        polygon.setStroke(Color.BLACK);
+        polygon.setStrokeWidth(3);
+        polygon.setFill(Color.WHITE);
+        polygon.setStrokeLineCap(StrokeLineCap.ROUND);
+        g.getChildren().add(polygon);
+    }
+    /**
+     * Create new small triangle and give it to this.polygon
+     */
+    public void polygonTriangleSmall(){
+        double size = 10.0;
+        polygon = new Polygon(
+                0.0,0.0,
+                -size, size*1.5,
+                size, size*1.5);
 
         polygon.setStroke(Color.BLACK);
         polygon.setStrokeWidth(3);
@@ -48,6 +64,23 @@ public class MyNodeAnchor extends MyNode{
         g.getChildren().add(polygon);
     }
 
+    /**
+     * Create new small triangle and give it to this.polygon
+     */
+    public void polygonArrow(){
+        double size = 10.0;
+        polygon = new Polygon(
+                0.0,0.0,
+                -size, size*1.5,
+                0.0,0.0,
+                size, size*1.5);
+
+        polygon.setStroke(Color.BLACK);
+        polygon.setStrokeWidth(3);
+        polygon.setFill(Color.WHITE);
+        polygon.setStrokeLineCap(StrokeLineCap.ROUND);
+        g.getChildren().add(polygon);
+    }
     /**
      * Create new square and give it to this.polygon
      */
@@ -90,5 +123,16 @@ public class MyNodeAnchor extends MyNode{
             }
             polygon.getTransforms().add(rotation);
         });
+    }
+
+    public void polygonSetRotatoinLR(boolean pointingLeft) {
+        polygon.getTransforms().clear();
+        rotation.setPivotX(0);
+        rotation.setPivotY(0);
+        if (pointingLeft)
+            rotation.setAngle(90);
+        else
+            rotation.setAngle(-90);
+        polygon.getTransforms().add(rotation);
     }
 }

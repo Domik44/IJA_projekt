@@ -15,11 +15,8 @@ import java.util.List;
  * @author  Adam Hos
  * @version 1.0
  */
-public class GAssociation {
+public class GAssociation extends GRelationAbstract {
     String name;
-    Gclass parent;
-    Gclass child;
-    GConnection connection;
     Label pLabel;   //label near parent
     Label cLabel;   //label near child
     Label rLabel;   //label for association name
@@ -31,9 +28,7 @@ public class GAssociation {
      * @param child child GClass
      */
     public GAssociation(Gclass parent, Gclass child) {
-        this.parent = parent;
-        this.child = child;
-        connection = new GConnection();
+        super(parent, child);
         pLabel = new Label();
         cLabel = new Label();
         rLabel = new Label();

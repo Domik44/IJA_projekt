@@ -20,13 +20,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-public class GParticipant extends Observable {
+public class GParticipant{
 	String name;
 	Group root;
 	Rectangle border;
 	Label participantNameLabel;
 	VBox participantVB;
-	List<MyNode> anchors;
     Group dashedStart;
 	Line dashed;
 
@@ -34,7 +33,7 @@ public class GParticipant extends Observable {
 	double eY;
 	
 	public GParticipant() {
-		final int initialParticipantWidth = 150;
+		final int initialParticipantWidth = 200; //TODO change width during runtime if needed?
 		final int initialParticipantHeight = 30;
 		
 		this.root = new Group();
@@ -92,13 +91,10 @@ public class GParticipant extends Observable {
      */
     public void addAnchor(MyNodeAnchor node){
         double origX = node.getXprop().doubleValue();
-        double origY = node.getYprop().doubleValue();
 
-        DoubleBinding resultX = root.translateXProperty().add(origX);
-        DoubleBinding resultY = root.translateYProperty().add(origY);
+        DoubleBinding resultX = root.translateXProperty().add(origX).add(dashedStart.getTranslateX());
 
         node.getXprop().bind(resultX);
-        node.getYprop().bind(resultY);
     }
     
     /**
@@ -108,7 +104,4 @@ public class GParticipant extends Observable {
     public Group getRoot(){
         return this.root;
     }
-    
-
-      
 }
