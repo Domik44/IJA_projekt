@@ -287,7 +287,7 @@ public class Reader {
 				this.readMessage(readFile, name, type, seqDiagram);
 			}
 			else if(lineParsed[0].equals("ActivationBox")) {
-				this.readActivationBox(readFile, seqDiagram);
+				this.readActivationBox(readFile, seqDiagram, lineParsed[1]);
 			}
 		}
 	}
@@ -367,8 +367,9 @@ public class Reader {
 		}
 	}
 	
-	public void readActivationBox (Scanner readFile, SequenceDiagram seqDiagram) {
-		UMLActivationBox newActivationBox = seqDiagram.createActivationBox();
+	public void readActivationBox (Scanner readFile, SequenceDiagram seqDiagram, String pacticipantName) {
+		UMLActivationBox newActivationBox = seqDiagram.createActivationBox(pacticipantName);
+		newActivationBox.setBelongsTo(seqDiagram.getParticipant(pacticipantName));
 		int x = 0;
 		int y = 0;
 		while(readFile.hasNextLine()) {
@@ -389,6 +390,10 @@ public class Reader {
 				y = Integer.parseInt(lineParsed[2]);
 				newActivationBox.setEndPosition(x, y);
 			}
+//			else if(lineParsed[0].equals("participant")) {
+//				UMLParticipant par = seqDiagram.getParticipant(lineParsed[1]);
+//				par.addBox(newActivationBox);
+//			}
 		}
 	}
 	
