@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.*;
 import javafx.scene.*;
+import uml.classDiagram.ClassDiagram;
 import uml.classDiagram.UMLAttribute;
 import uml.classDiagram.UMLClass;
 import uml.classDiagram.UMLClassifier;
@@ -36,7 +37,7 @@ public class ECW {
     static private final int labelHeight = 18;
     static int changeCnt;
 
-    public static int display( Object arg){
+    public static int display(Object arg, ClassDiagram model){
         if (!(arg instanceof UMLInterface))
             return 0;
 
@@ -78,8 +79,13 @@ public class ECW {
         editClassName.setOnAction(e -> {
             String tmp = ECWClassName.display();
             if (tmp != null && !tmp.equals("")){
-                Class.rename(tmp);
-                classNameLabel.setText(stringStart + Class.getName());
+            	if(model.getClass(tmp) == null && model.getInterface(tmp) == null) {
+            		Class.rename(tmp);
+            		classNameLabel.setText(stringStart + Class.getName());
+            	}
+            	else {
+            		// TODO -> error info, o tom ze nemuzou byt 2 classy/rozhrani se stejnym jmenem!
+            	}
             }
         });
 
