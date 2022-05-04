@@ -50,10 +50,10 @@ public class Writer {
 	 * @return Returns name of output file.
 	 */
 	public String getFileName() {
-		String path = System.getProperty("user.dir").concat(fileName);
+//		String path = System.getProperty("user.dir").concat(fileName);
 		// Editing path because of JAR location
-		return path.replace("dest", "data\\");
-		//return "data/"+this.fileName; // use this for testing in IDE! (same for reader)
+//		return path.replace("dest", "data\\");
+		return "data/"+this.fileName; // use this for testing in IDE! (same for reader)
 	}
 	
 	public static void startWriting(ClassDiagram classDiagram) {
@@ -247,7 +247,7 @@ public class Writer {
 	public String writeActivationBox(SequenceDiagram seqDiagram) {
 		String returnString = new String();
 		for(UMLActivationBox act : seqDiagram.getActivationBoxes()) {
-			String temporaryString = "ActivationBox " + " {";
+			String temporaryString = "ActivationBox " + act.getBelognsTo().getName() + " {"; // TODO
 			temporaryString = temporaryString + "\n  startPos " + act.getStartPosition().getX() + " " + act.getStartPosition().getY();
 			temporaryString = temporaryString + "\n  endPos " + act.getEndPosition().getX() + " " + act.getEndPosition().getY();
 			temporaryString = temporaryString + "\n}\n\n";
