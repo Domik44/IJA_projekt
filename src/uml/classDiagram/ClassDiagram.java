@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import uml.Element;
+import uml.pos.Position;
 import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
@@ -109,6 +110,10 @@ public class ClassDiagram extends Element {
 
 		return newInterface;
 	}
+	
+	public void addInterface(UMLInterface addedInterface) {
+		this.interfaces.add(addedInterface);
+	}
 
 	/**
 	 * Getter for list of interfaces.
@@ -169,6 +174,10 @@ public class ClassDiagram extends Element {
 
 		return newClass;
 	}
+	
+	public void addClass(UMLClass addedClass) {
+		this.classes.add(addedClass);
+	}
 
 	/**
 	 * Getter for list of classes.
@@ -207,8 +216,8 @@ public class ClassDiagram extends Element {
 		if(toBeDeleted != null) {
 			this.deleteRelationsWith(toBeDeleted);
 			this.classes.remove(toBeDeleted);
-			this.deleteParticipantsWith(toBeDeleted);
-			toBeDeleted = null;
+//			this.deleteParticipantsWith(toBeDeleted);
+//			toBeDeleted = null;
 		}
 			
 	}
@@ -253,6 +262,10 @@ public class ClassDiagram extends Element {
 
 		return newRelation;
 	}
+	
+	public void addGeneralization(RelGeneralization added) {
+		this.relGeneralization.add(added);
+	}
 
 	/**
 	 * Method deletes Generalization from Generalizations list.
@@ -284,6 +297,10 @@ public class ClassDiagram extends Element {
 		child.addCommunaction(parent);
 
 		return newRelation;
+	}
+	
+	public void addAggregation(RelAggregation added) {
+		this.relAggregation.add(added);
 	}
 	
 //	public RelAggregation createAggregation(UMLInterface parent, UMLInterface child, String type) {
@@ -324,6 +341,10 @@ public class ClassDiagram extends Element {
 		child.addCommunaction(parent);
 
 		return newRelation;
+	}
+	
+	public void addAssociation(RelAssociation added) {
+		this.relAssociation.add(added);
 	}
 
 	/**

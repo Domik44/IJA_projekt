@@ -22,6 +22,10 @@ import java.io.IOException;
 import java.util.*;
 
 import controller.DeleteController;
+import controller.EditController;
+import controller.AddController;
+import controller.AddController.AddClass;
+import controller.UIAction;
 
 
 /**
@@ -40,10 +44,15 @@ public class GUIMain extends Application implements Observer {
     Scene scene;
     Stage stage;
     ClassDiagram diagram;
-    Gclass selectedGclass;
+    public Gclass selectedGclass;
 
     Button editClass;
     Button deleteClass;
+    
+    ArrayDeque<UIAction> history = new ArrayDeque<>();
+    DeleteController delteControl = new DeleteController();
+    AddController addControl = new AddController();
+    EditController editControl = new EditController();
 
     /**
      * Constructor for GUIMain. Allocate memory, set scene
@@ -344,8 +353,8 @@ public class GUIMain extends Application implements Observer {
         addClass.setOnAction(e ->{
             String name = CreateClassWindow.display();
             if (name != null && !name.equals("")) {
-                diagram.createClass(name);
-                SetupFromDiagram(diagram);
+            	  var action = this.addControl.new AddClass(this, diagram, name);
+            	  run(action);
             }
         });
         buttonBar.getButtons().add(addClass);
@@ -358,9 +367,11 @@ public class GUIMain extends Application implements Observer {
                 GclassHeightdiff = ECW.display(diagram.getInterface(selectedGclass.classLabel.getText()));
             }
             else {
-                GclassHeightdiff = ECW.display(diagram.getClass(selectedGclass.classLabel.getText()));
+            	var action = this.editControl.new EditClass(this, diagram, selectedGclass.classLabel.getText());
+          	  	run(action);
+//                GclassHeightdiff = ECW.display(diagram.getClass(selectedGclass.classLabel.getText()));
             }
-            System.out.println(selectedGclass.generalizationList.size());
+
             if (GclassHeightdiff != 0)
                 repairGclassBottomBorderRelations(selectedGclass, GclassHeightdiff);
             SetupFromDiagram(diagram);
@@ -372,13 +383,18 @@ public class GUIMain extends Application implements Observer {
         deleteClass = new Button("Delete Class");
         deleteClass.setDisable(false);
         GUIMain gui = this;
-
-        deleteClass.addEventHandler(MouseEvent.MOUSE_CLICKED,  new EventHandler<>(){
-            @Override public void handle(MouseEvent e) {
-                selectedGclass.delete(gui,diagram);
-                SetupFromDiagram(diagram);
-            }
+        
+        deleteClass.setOnAction(e ->{
+        	if(selectedGclass.isinterface) {
+        		var action = this.delteControl.new DeleteInterface(this, diagram, selectedGclass.getName());
+        		run(action);
+        	}
+        	else {
+        		var action = this.delteControl.new DeleteClass(this, diagram, selectedGclass.getName());
+        		run(action);
+        	}
         });
+        
         buttonBar.getButtons().add(deleteClass);
 
         Button addAssociation = new Button("Add AssociationClass");
@@ -396,8 +412,13 @@ public class GUIMain extends Application implements Observer {
         Button deleteteRelation = new Button("Delete Relation");
         deleteteRelation.setDisable(true);
         buttonBar.getButtons().add(deleteteRelation);
+        
+        Button undoButton = new Button("Undo");
+        buttonBar.getButtons().add(undoButton);
 
-
+        undoButton.setOnAction(e ->{
+        	undo();
+        });
 
 
         HBox hbox = new HBox();
@@ -428,7 +449,7 @@ public class GUIMain extends Application implements Observer {
         stage.setOnCloseRequest(e -> ClosingProgram());
     }
 
-    private void repairGclassBottomBorderRelations(Gclass selectedGclass, int diff) {
+    public void repairGclassBottomBorderRelations(Gclass selectedGclass, int diff) {
         for (var g : selectedGclass.generalizationList){
             Position point;
             var Points = g.getPoints();
@@ -453,6 +474,20 @@ public class GUIMain extends Application implements Observer {
         stage.show();
     }
 
+    public void run(UIAction action) {
+    	history.addLast(action);
+    	
+    	action.run();
+    }
+    
+    public void undo() {
+    	if (history.isEmpty())
+            return;
+
+        var lastAction = history.removeLast();
+        lastAction.undo();
+    }
+    
     private double startX;
     private  double startY;
     /**

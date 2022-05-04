@@ -131,6 +131,10 @@ public class SequenceDiagram extends Element {
 		return newMessage;
 	}
 	
+	public void addMessage(UMLMessage added) {
+		this.messages.add(added);
+	}
+	
 	/**
 	 * Method deletes message with given ID.
 	 * 

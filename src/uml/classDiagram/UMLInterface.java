@@ -27,8 +27,21 @@ public class UMLInterface extends UMLClassifier {
 	public UMLInterface(String name) {
 		super(name);
 	}
+	
+	public Object clone() throws CloneNotSupportedException {
+	      return (UMLInterface)super.clone();
+	}
 		
 	// Operation methods
+	public void setCommunicatesWith(List<UMLInterface> com) {
+		this.comunicatesWith = com;
+	}
+	
+	public void setOperations(List<UMLOperation> operations, List<UMLOperation> inherited) {
+		this.methods = operations;
+		this.inheritedMethods = inherited;
+	}
+	
 	/**
 	 * Method for adding operation to operations list.
 	 * @param operation Contains reference to operation object.

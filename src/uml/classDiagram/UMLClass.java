@@ -44,6 +44,10 @@ public class UMLClass extends UMLInterface {
 	}
 	
 	// Attribute methods
+	public void setAttributes(List<UMLAttribute> attributes) {
+		this.attributes = attributes;
+	}
+	
 	/**
 	 * Methods adds attribute to attributes list of class. 
 	 * If that list contains attribute with same name, new attribute won't be added.

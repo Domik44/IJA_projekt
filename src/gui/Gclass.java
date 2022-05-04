@@ -219,10 +219,10 @@ public class Gclass{
         return true;
     }
 
-    public void delete(GUIMain gui, ClassDiagram diagram) {
-        if(isinterface)
-            DeleteController.DeleteInterface(this.getName(), gui, diagram);
-        else
-            DeleteController.DeleteClass(this.getName(), gui, diagram);
-    }
+//    public void delete(GUIMain gui, ClassDiagram diagram) {
+//        if(isinterface)
+//            DeleteController.DeleteInterface(this.getName(), gui, diagram);
+//        else
+//            DeleteController.DeleteClass(this.getName(), gui, diagram);
+//    }
 }
