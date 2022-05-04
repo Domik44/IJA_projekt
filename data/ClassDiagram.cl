@@ -72,20 +72,20 @@ Relation Aggregation {
 @startSequence
 
 Participant Auto:1 Auto {
-  startPos 10 20
+  startPos 100 20
   endPos 10 40
   lineStart 15 30
   lineEnd 15 40
 }
 
 Participant Motorka:1 Motorka {
-  startPos 30 20
+  startPos 400 20
   endPos 30 40
   lineStart 35 30
   lineEnd 35 40
 }
 
-Message jmenoMessage Synchronous {
+Message Ejoooooo Synchronous {
   position 10 35
   position 30 35
   namePos 20 33
