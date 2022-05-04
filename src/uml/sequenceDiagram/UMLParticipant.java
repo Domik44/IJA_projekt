@@ -1,5 +1,8 @@
 package uml.sequenceDiagram;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import uml.Element;
 import uml.classDiagram.UMLInterface;
 import uml.pos.Position;
@@ -11,6 +14,7 @@ public class UMLParticipant extends Element {
 	private Position lineStartPosition = new Position(0,0);
 	private Position lineEndPosition = new Position(0,0);
 	private UMLInterface instanceOf; // TODO
+	private List<UMLActivationBox> boxes = new ArrayList<UMLActivationBox>();
  
 	public UMLParticipant(String name) {
 		super(name);
@@ -65,20 +69,26 @@ public class UMLParticipant extends Element {
 		return this.instanceOf.getName() + ": " + this.getName();
 	}
 	
-//	public boolean getCanCreateActivationBox() {
-//		return this.canCreateActivationBox;
-//	}
+	public void addBox(UMLActivationBox box) {
+		this.boxes.add(box);
+	}
 //	
-//	public void setCanCreateActivationBox(boolean value) {
-//		this.canCreateActivationBox = value;
-//	}
-//	
-//	public void addBox(UMLActivationBox box) {
-//		this.listBoxes.add(box);
-//	}
-//	
-//	public void deleteBox(String ID) { //TODO 
-//		this.listBoxes.removeIf(box -> (box.getID().equals(ID)));
-//	}
+	public void deleteBox(String ID) { //TODO 
+		this.boxes.removeIf(box -> (box.getID().equals(ID)));
+	}
+	
+	public List<UMLActivationBox> getBoxes(){
+		return List.copyOf(this.boxes);
+	}
+	
+	public UMLActivationBox getBox(String ID) {
+		for(UMLActivationBox box : this.boxes) {
+			if(box.getID().equals(ID)) {
+				return box;
+			}
+		}
+		
+		return null;
+	}
 	
 }

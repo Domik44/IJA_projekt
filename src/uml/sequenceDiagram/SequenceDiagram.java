@@ -188,11 +188,11 @@ public class SequenceDiagram extends Element {
 	 * 
 	 * @return Returns reference to newly created activation box.
 	 */
-	public UMLActivationBox createActivationBox(){
-//		UMLParticipant participant = this.getParticipant(pacticipantName);
+	public UMLActivationBox createActivationBox(String pacticipantName){
+		UMLParticipant participant = this.getParticipant(pacticipantName);
 		UMLActivationBox newBox = new UMLActivationBox();
 		this.activationBoxes.add(newBox);
-//		participant.addBox(newBox);
+		participant.addBox(newBox);
 //		participant.setCanCreateActivationBox(false);
 		
 		return newBox;

@@ -100,6 +100,6 @@ public class UMLMessage extends Element {
 	
 	@Override
 	public String toString() {
-		return this.getName() + "()";
+		return "<<" + this.getName() + ">>";
 	}
 }
