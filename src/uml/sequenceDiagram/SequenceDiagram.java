@@ -87,9 +87,12 @@ public class SequenceDiagram extends Element {
 	public void deleteParticipantsWith(UMLInterface instanceClass) {
 		for(UMLParticipant par : this.participants) {
 			if(par.getInstanceOf() == instanceClass) {
-				this.deleteParticipant(par.getName());
+				this.deleteMessagesWith(par);
+//				this.deleteParticipant(par.getName());
 			}
 		}
+		
+		this.participants.removeIf(par -> (par.getInstanceOf() == instanceClass));
 	}
 	
 	/**
@@ -163,9 +166,9 @@ public class SequenceDiagram extends Element {
 	 * @param name Contains name of message we want to get.
 	 * @return Returns reference to wanted message.
 	 */
-	public UMLMessage getMessage(String name) {
+	public UMLMessage getMessage(String ID) {
 		for(UMLMessage mes : this.messages) {
-			if(mes.getName().equals(name)) {
+			if(mes.getID().equals(ID)) {
 				return mes;
 			}
 		}
@@ -189,6 +192,10 @@ public class SequenceDiagram extends Element {
 //		participant.setCanCreateActivationBox(false);
 		
 		return newBox;
+	}
+	
+	public void addActivationBox(UMLActivationBox added) {
+		this.activationBoxes.add(added);
 	}
 	
 	/**
