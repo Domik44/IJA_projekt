@@ -10,7 +10,8 @@ import java.util.List;
  * @author  Adam Hos
  * @version 1.0
  */
- public abstract class GRelationAbstract {
+ public class GRelationAbstract {
+    String name;
     Gclass parent;
     Gclass child;
     GConnection connection;
@@ -20,7 +21,8 @@ import java.util.List;
      * @param parent parent GClass
      * @param child child GClass
      */
-    public GRelationAbstract(Gclass parent, Gclass child) {
+    public GRelationAbstract(Gclass parent, Gclass child,String name) {
+        this.name = name;
         this.parent = parent;
         this.child = child;
         connection = new GConnection();

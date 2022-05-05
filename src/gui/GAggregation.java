@@ -20,8 +20,8 @@ public class GAggregation extends GRelationAbstract {
      * @param parent parent GClass
      * @param child child GClass
      */
-    public GAggregation(Gclass parent, Gclass child) {
-        super(parent, child);
+    public GAggregation(Gclass parent, Gclass child, String name) {
+        super(parent, child, name);
         pLabel = new Label();
         cLabel = new Label();
     }

@@ -19,8 +19,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import uml.pos.Position;
 
-public class GParticipant{
+public class GParticipant extends Observable{
 	String name;
 	Group root;
 	Rectangle border;
@@ -60,11 +61,13 @@ public class GParticipant{
         dashedStart.setTranslateX(initialParticipantWidth/2);
         dashedStart.setTranslateY(initialParticipantHeight);
         dashed = new Line(0, 10, 0, 1200);
-        dashed.getStrokeDashArray().addAll(25d, 15d);
-        dashed.setStrokeWidth(4);
+        dashed.getStrokeDashArray().addAll(25d, 20d);
+        dashed.setStrokeWidth(6);
         dashed.setStyle("-fx-stroke: white;");
         dashedStart.getChildren().add(dashed);
         root.getChildren().add(dashedStart);
+        border.toFront();
+        participantVB.toFront();
         dashed.toBack();
 
 	}
@@ -103,5 +106,10 @@ public class GParticipant{
      */
     public Group getRoot(){
         return this.root;
+    }
+
+    public void movedNotifyObservers(Position position){
+        setChanged();
+        notifyObservers(position);
     }
 }

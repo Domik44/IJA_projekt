@@ -44,16 +44,16 @@ public class GActivationBox {
 
         start = new MyNode(0, y1, false);
         start.c.setFill(Color.GREEN);
-        start.c.setRadius(10);
+        start.c.setRadius(initialClassWidth);
         end   = new MyNode(0, y2, false);
         end.c.setFill(Color.GREEN);
-        end.c.setRadius(10);
+        end.c.setRadius(initialClassWidth);
 
 
         this.root = new Group();
         rectangle = new Rectangle(initialClassWidth, initialClassHeight);
         rectangle.heightProperty().bind(end.g.translateYProperty().subtract(start.g.translateYProperty()));
-        rectangle.setTranslateX(-5);
+        rectangle.setTranslateX(-initialClassWidth/2);
         rectangle.setFill(Color.LIGHTGREEN);
         rectangle.setOnMouseDragged(Event::consume);
 
@@ -71,6 +71,8 @@ public class GActivationBox {
         node.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+                if (GUIMain.state != 0)
+                    return;
                 startY = e.getSceneY() - node.getTranslateY();
                 e.consume();
             }
@@ -79,6 +81,8 @@ public class GActivationBox {
         node.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+                if (GUIMain.state != 0)
+                    return;
                 double Y = e.getSceneY() - startY;
                 node.setTranslateY(Y);
                 e.consume();
@@ -104,6 +108,7 @@ public class GActivationBox {
         node.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+                VBox participantVB;
                 startY = e.getSceneY() - node.getTranslateY();
                 e.consume();
             }
@@ -112,6 +117,7 @@ public class GActivationBox {
         node.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+                VBox participantVB;
                 double Y = e.getSceneY() - startY;
                 node.setTranslateY(Y);
                 e.consume();

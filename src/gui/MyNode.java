@@ -73,6 +73,8 @@ public class MyNode {
         node.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+                if (GUIMain.state != 0)
+                    return;
                 double X = e.getSceneX() - startX;
                 double Y = e.getSceneY() - startY;
                 node.setTranslateX(X);

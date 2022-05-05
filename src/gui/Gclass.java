@@ -3,18 +3,14 @@ package gui;
 import controller.DeleteController;
 import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import uml.classDiagram.ClassDiagram;
-import uml.classDiagram.UMLRelation;
 import uml.pos.Position;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
@@ -29,7 +25,7 @@ import java.util.Observable;
  * @author  Adam Hos
  * @version 1.0
  */
-public class Gclass{
+public class Gclass extends Observable {
     Group root;
     Rectangle border;
     Label classLabel;
@@ -48,9 +44,8 @@ public class Gclass{
 
     /**
      * Constructor for Gclass. Set border, VBox, Labels(name, attributes, methods) and separators(rectangles)
-     * @param dummy if dummy, fill GClass with dummy data
      */
-    public Gclass(boolean isinterface, boolean dummy) {
+    public Gclass(boolean isinterface) {
         final int initialClassWidth = 250;
         int initialClassHeight = 80;
         this.isinterface = isinterface;
@@ -83,25 +78,8 @@ public class Gclass{
         classLabel = new Label("'Class Name'");
         classVB.getChildren().add(classLabel);
 
-
         //add separating line
         classVB.getChildren().add(separator1);
-
-
-        //initial attributes if dummy
-        if (dummy){
-            for (int i = 1; i <= 3 ; i++) {
-                attrListLabel.add(new Label("-atr" + i));
-            }
-            classVB.getChildren().addAll(attrListLabel);
-            //add separating line
-            classVB.getChildren().add(separator2);
-
-            for (int i = 1; i <= 2 ; i++) {
-                methodList.add(new Label("-method" + i + "()"));
-            }
-            classVB.getChildren().addAll(methodList);
-        }
 
         DoubleBinding result = classVB.heightProperty().add(20);
         border.heightProperty().bind(result);
@@ -112,8 +90,27 @@ public class Gclass{
 
         root.getChildren().add(classVB);
 
-        border.setOnMousePressed(Event::consume);
-        border.setOnMouseDragged(Event::consume);
+        border.setOnMouseClicked( e -> {
+            if (GUIMain.state == 0)
+                return;
+            else if (GUIMain.state == 1){
+                GUIMain.state++;
+                GUIMain.selectedGclass1 = this;
+                GUIMain.positionList.clear();
+                GUIMain.positionList.add(new Position((int)e.getX(),(int) e.getY()));
+                e.consume();
+            }
+            else if(GUIMain.state == 2){
+                GUIMain.state = 0;
+                GUIMain.selectedGclass2 = this;
+                GUIMain.positionList.add(new Position((int)e.getX(),(int) e.getY()));
+                NotifyThatRelationPathEnded();
+                GUIMain.AddRelationENDSetupButtons();
+                e.consume();
+            }
+
+        });
+
 //        border.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 //            @Override
 //            public void handle(MouseEvent e) {
@@ -222,5 +219,10 @@ public class Gclass{
             DeleteController.DeleteInterface(this.getName(), gui, diagram);
         else
             DeleteController.DeleteClass(this.getName(), gui, diagram);
+    }
+
+    public void NotifyThatRelationPathEnded(){
+        setChanged();
+        notifyObservers();
     }
 }

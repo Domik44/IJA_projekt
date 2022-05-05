@@ -81,11 +81,9 @@ public class GMessage{
      * @param name to be named
      * @param labelPosition position to be moved
      */
-    public void setLabelName(String name, Position labelPosition) {
+    public void setLabelName(String name) {
         this.messageName.setText(name);
         this.messageName.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
-        this.messageName.setTranslateX(labelPosition.getX());
-        this.messageName.setTranslateY(labelPosition.getY());
     }
 
     public void makeConnectionDraggableVerticaly( GConnection connection, double maxH) {

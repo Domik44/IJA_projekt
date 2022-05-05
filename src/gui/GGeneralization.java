@@ -7,7 +7,7 @@ package gui;
  * @version 1.0
  */
 public class GGeneralization extends GRelationAbstract {
-    public GGeneralization(Gclass parent, Gclass child) {
-        super(parent, child);
+    public GGeneralization(Gclass parent, Gclass child, String name) {
+        super(parent, child, name);
     }
 }
