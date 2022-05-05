@@ -81,8 +81,8 @@ public class GActivationBox {
         node.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                if (GUIMain.state != 0)
-                    return;
+//                if (GUIMain.state != 0)
+//                    return;
                 double Y = e.getSceneY() - startY;
                 node.setTranslateY(Y);
                 e.consume();
@@ -98,6 +98,7 @@ public class GActivationBox {
                 if (start.getYprop().getValue() > end.getYprop().getValue()){
                     node.setTranslateY(end.getYprop().getValue() - 50);
                 }
+                e.consume();
             }
         });
     }
@@ -130,6 +131,7 @@ public class GActivationBox {
                 if (start.getYprop().getValue() > end.getYprop().getValue()){
                     node.setTranslateY(start.getYprop().getValue() + 50);
                 }
+                e.consume();
             }
         });
     }

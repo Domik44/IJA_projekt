@@ -67,12 +67,18 @@ public class GUIMain extends Application implements Observer {
     //Fields for SequenceDiagram
     VBox vBoxSD;
     List<GParticipant> gParticipantList = new ArrayList<>();
-    private SequenceDiagram SD;
+    public static SequenceDiagram SD;
     private GParticipant selectedParticipant1;
     private GParticipant selectedParticipant2;
-    private Button addMessage;
-    private Button cancelSD;
     private Button returnButton;
+    private Button addParticipant;
+    private Button addSynchronous;
+    private Button addAsynchronous;
+    private Button addCreate;
+    private Button addReturn;
+    private Button addDelete;
+    private Button addBox;
+    private Button cancelSD;
     private String messageText;
     private String messageType;
     private Button deleteteRelation;
@@ -699,26 +705,41 @@ public class GUIMain extends Application implements Observer {
         stage.setOnCloseRequest(e -> ClosingProgram());
     }
 
-    private Position lineStart;
+    private Position starPoint;
     private void setDashedEvents(GParticipant gParticipant){
         gParticipant.root.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
             if(state == 0)
                 return;
+            //Create message events
             if(state == 1){
                 selectedParticipant1 = gParticipant;
                 state ++;
-                lineStart = new Position(0,(int) e.getY());
+                starPoint = new Position(0,(int) e.getY());
             }
             else if(state == 2){
+                state = 0;
+                AddMessageENDSetupButtons();
                 if (selectedParticipant1 == gParticipant) //selected the same GParticipant twice, invalid -> return
                     return;
                 selectedParticipant2 = gParticipant;
-                state = 0;
-                AddMessageENDSetupButtons();
-                messageText = "TestName()";
-                messageType = "Synchronous";
-                createGMessage(lineStart, messageText, messageType);
+                createGMessage(starPoint, messageText, messageType);
 
+            }
+            //Create Box events
+            else if(state == 5){
+                selectedParticipant1 = gParticipant;
+                state ++;
+                starPoint = new Position(0,(int) e.getY());
+            }
+            else if(state == 6){
+                if (selectedParticipant1 != gParticipant) //selected another GParticipant twice, invalid -> return
+                    return;
+                state = 0;
+                var endPoint = new Position(0,(int) e.getY());
+                //create new box
+                GActivationBox Gbox = new GActivationBox(starPoint.getY(),endPoint.getY());
+                selectedParticipant1.dashedStart.getChildren().add(Gbox.root);
+                AddMessageENDSetupButtons();
             }
             e.consume();
         });
@@ -758,13 +779,25 @@ public class GUIMain extends Application implements Observer {
 
     public void AddMessageSetupButtons(){
         returnButton.setDisable(true);
-        addMessage.setDisable(true);
+        addSynchronous.setDisable(true);
+        addAsynchronous.setDisable(true);
+        addCreate.setDisable(true);
+        addReturn.setDisable(true);
+        addDelete.setDisable(true);
+        addParticipant.setDisable(true);
+        addBox.setDisable(true);
         cancelSD.setDisable(false);
     }
 
     public void AddMessageENDSetupButtons(){
         returnButton.setDisable(false);
-        addMessage.setDisable(false);
+        addSynchronous.setDisable(false);
+        addAsynchronous.setDisable(false);
+        addCreate.setDisable(false);
+        addReturn.setDisable(false);
+        addDelete.setDisable(false);
+        addParticipant.setDisable(false);
+        addBox.setDisable(false);
         cancelSD.setDisable(true);
     }
     /**
@@ -778,15 +811,62 @@ public class GUIMain extends Application implements Observer {
         returnButton.setOnAction(e -> {
             SwitchToCDContext();
         });
-        addMessage = new Button("Add Message");
-        cancelSD = new Button("Cancel");
-        cancelSD.setDisable(true);
 
-        addMessage.setOnAction(e -> {
+        addParticipant = new Button("Add Participant");
+        addParticipant.setOnAction(e -> {
+            var retArr = CreateParticipantWindow.display(null);
+            SD.createParticipant(retArr[0], new UMLInterface(retArr[1])); //TODO domluvit se na implementaci
+            setupFromSEQDiagram(SD);
+        });
+
+        addBox = new Button("Add Box");
+        addBox.setOnAction(e -> {
+            state = 5;
+            AddMessageSetupButtons();
+        });
+
+        addSynchronous = new Button("Add Synchronous");
+        addSynchronous.setOnAction(e -> {
+            messageType = "Synchronous";
+            messageText = CreateMessageWindow.display(messageType);
             state = 1;
             AddMessageSetupButtons();
         });
 
+        addAsynchronous = new Button("Add Asynchronous");
+        addAsynchronous.setOnAction(e -> {
+            messageType = "Asynchronous";
+            messageText = CreateMessageWindow.display(messageType);
+            state = 1;
+            AddMessageSetupButtons();
+        });
+
+        addCreate = new Button("Add Create");
+        addCreate.setOnAction(e -> {
+            messageType = "Create";
+            messageText = CreateMessageWindow.display(messageType);
+            state = 1;
+            AddMessageSetupButtons();
+        });
+
+        addReturn = new Button("Add Return");
+        addReturn.setOnAction(e -> {
+            messageType = "Return";
+            messageText = CreateMessageWindow.display(messageType);
+            state = 1;
+            AddMessageSetupButtons();
+        });
+
+        addDelete = new Button("Add Delete");
+        addDelete.setOnAction(e -> {
+            messageType = "Delete";
+            messageText = CreateMessageWindow.display(messageType);
+            state = 1;
+            AddMessageSetupButtons();
+        });
+
+        cancelSD = new Button("Cancel");
+        cancelSD.setDisable(true);
         cancelSD.setOnAction(e -> {
             state = 0;
             AddMessageENDSetupButtons();
@@ -799,7 +879,7 @@ public class GUIMain extends Application implements Observer {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(20);
-        hBox.getChildren().addAll(returnButton, addMessage, cancelSD);
+        hBox.getChildren().addAll(returnButton,addParticipant,addBox ,addSynchronous, addAsynchronous, addCreate, addReturn,addDelete , cancelSD);
         vBoxSD.getChildren().add(hBox);
         vBoxSD.getChildren().add(pane);
         Scene x = new Scene(vBoxSD, 1000, 600);

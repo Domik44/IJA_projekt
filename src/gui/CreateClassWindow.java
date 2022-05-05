@@ -38,11 +38,6 @@ public class CreateClassWindow {
         grid.add(classNameLabel, 0, 0);
         grid.add(field, 1, 0, 2, 1);
 
-        CheckBox checkBoxInterface = new CheckBox("Is interface");
-        checkBoxInterface.setSelected(false);
-        checkBoxInterface.setOnAction(e -> {
-            checkboxOut = checkBoxInterface.isSelected();
-        });
 
         Button save = new Button("Save");
         save.setOnAction(e -> {
