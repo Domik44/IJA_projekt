@@ -90,7 +90,7 @@ public class Gclass extends Observable {
 
         root.getChildren().add(classVB);
 
-        border.setOnMouseClicked( e -> {
+        root.setOnMouseClicked( e -> {
             if (GUIMain.state == 0)
                 return;
             else if (GUIMain.state == 1){

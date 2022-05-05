@@ -14,7 +14,7 @@ Class Auto {
   attrib znacka str ~
   attrib barva str #
   oper vypisInfo str -
-  oper vypisKM int + najezd:int
+  oper vypisKM int + najezd:int pepa:int
 }
 
 Interface OperaceVozidlo {
@@ -51,9 +51,9 @@ Relation Generalization {
 }
 
 Relation Association {
-  position 250 50
+  position 250 80
+  position 800 380
   position 800 150
-  position 800 350
   position 250 50
   lClass Auto
   rClass OperaceVozidlo

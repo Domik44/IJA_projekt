@@ -24,7 +24,7 @@ public class CreateClassWindow {
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Create class/interface");
-        window.setMinWidth(250);
+        window.setMinWidth(300);
 
         Label classNameLabel = new Label();
         classNameLabel.setText("ClassName: ");

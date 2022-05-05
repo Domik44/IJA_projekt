@@ -33,6 +33,7 @@ import static java.lang.System.exit;
  */
 public class GUIMain extends Application implements Observer {
 
+
     //Fields for both diagrams
     Scene scene;
     Stage stage;
@@ -48,15 +49,18 @@ public class GUIMain extends Application implements Observer {
     static Object selectedRelation;
     HBox hboxCD;
     static Button addClass;
+    static Button addInterface;
     static Button editClass;
     static Button deleteClass;
     static Button addGeneralization;
+    static Button addAggregation;
+    static Button addAssociation;
     static Button cancelCD;;
     ComboBox<String> comboBoxSDSelection;
     Button goToSD;
     public static List<Position> positionList = new ArrayList<>();
     public static String relationType;
-    public static String lCardinality;
+    public static String LCardinality;
     public static String RCardinality;
     public static String relationName;
 
@@ -80,12 +84,18 @@ public class GUIMain extends Application implements Observer {
         vBoxCD = new VBox();
         pane = new Pane();
         gClassList = new ArrayList<>();
-        scene = new Scene(vBoxCD, 1200, 600);
+        scene = new Scene(vBoxCD, 1400, 600);
     }
 
     public void createRelation() {
         if (relationType == "Generalization"){
             createGeneralization();
+        }
+        else if (relationType == "Aggregation"){
+            createAggregation();
+        }
+        else if (relationType == "Association"){
+            createAssociation();
         }
     }
 
@@ -99,19 +109,59 @@ public class GUIMain extends Application implements Observer {
         setupFromDiagram(diagram);
     }
 
+    private void createAggregation() {
+        RelAggregation a = diagram.createAggregation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
+        fixBorderPoints();
+        for (var p : positionList){
+            a.addPosition(p);
+        }
+        a.rename(UUID.randomUUID().toString());
+        setupFromDiagram(diagram);
+    }
+
+    private void createAssociation() {
+        RelAssociation a = diagram.createAssociation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
+        fixBorderPoints();
+        for (var p : positionList){
+            a.addPosition(p);
+        }
+        a.rename(UUID.randomUUID().toString());
+        a.setCardinality(LCardinality, RCardinality);
+        a.setLabel(relationName);
+        //place label into midle of start and end nodes
+        a.setLabelPosition(50,50);
+        setupFromDiagram(diagram);
+    }
+
+    /**
+     * Calculate to witch part of Gclass border should the points snap to
+     */
     private void fixBorderPoints() {
         fixBorderPoint(selectedGclass1, positionList.get(0));
         fixBorderPoint(selectedGclass2, positionList.get(positionList.size()-1));
     }
 
+    /**
+     * Calculate to witch part of Gclass border should the point snap to
+     * @param gclass gclass that has point
+     * @param point point to be fixed
+     */
     private void fixBorderPoint(Gclass gclass, Position point) {
         int borderWidth = 10;
-        if ( point.getX() < borderWidth){
+        Double[] arr = {
+                0. + point.getX(),
+                gclass.getWidth() - point.getX(),
+                0. + point.getY(),
+                gclass.getHeight() - point.getY()
+        };
+
+        var min = Collections.min(Arrays.asList(arr));
+
+        if ( min == point.getX())
             point.setX(0);
-        }
-        else if(point.getY() < borderWidth)
+        else if(min == point.getY())
             point.setY(0);
-        else if(point.getX() > gclass.getWidth() - borderWidth)
+        else if(min ==  gclass.getWidth() - point.getX())
             point.setX((int)gclass.getWidth());
         else
             point.setY((int)gclass.getHeight());
@@ -229,7 +279,6 @@ public class GUIMain extends Application implements Observer {
                 Position point = list.get(i);
                 listNode.add(new MyNode(point.getX(), point.getY(), true));
             }
-            Collections.reverse(listNode);
             //create association
             //select classes
             Gclass first = getClassByName(a.getLeftClass().getName());
@@ -504,6 +553,15 @@ public class GUIMain extends Application implements Observer {
             }
         });
         buttonBar.getButtons().add(addClass);
+        addInterface = new Button("Add Interface");
+        addInterface.setOnAction(e ->{
+            String name = CreateClassWindow.display();
+            if (name != null && !name.equals("")) {
+                diagram.createInterface(name);
+                setupFromDiagram(diagram);
+            }
+        });
+        buttonBar.getButtons().add(addInterface);
 
         editClass = new Button("Edit Class");
         editClass.setDisable(true);
@@ -535,9 +593,19 @@ public class GUIMain extends Application implements Observer {
         });
         buttonBar.getButtons().add(deleteClass);
 
-        Button addAssociation = new Button("Add AssociationClass");
-        addAssociation.setDisable(true);
+        addAssociation = new Button("Add AssociationClass");
         buttonBar.getButtons().add(addAssociation);
+        addAssociation.setOnAction(e -> {
+            var retArr = AddAssociationWindow.display();
+            if (retArr != null) {
+                LCardinality = retArr[0];
+                relationName = retArr[1];
+                RCardinality = retArr[2];
+                AddRelationSetupButtons();
+                state = 1;
+                relationType = "Association";
+            }
+        });
 
         addGeneralization = new Button("Add Generalization");
         buttonBar.getButtons().add(addGeneralization);
@@ -547,9 +615,15 @@ public class GUIMain extends Application implements Observer {
             relationType = "Generalization";
         });
 
-        Button addAggregation = new Button("Add Aggregation");
-        addAggregation.setDisable(true);
+
+
+        addAggregation = new Button("Add Aggregation");
         buttonBar.getButtons().add(addAggregation);
+        addAggregation.setOnAction(e -> {
+            AddRelationSetupButtons();
+            state = 1;
+            relationType = "Aggregation";
+        });
 
         deleteteRelation = new Button("Delete Relation");
         deleteteRelation.setDisable(true);
@@ -663,16 +737,22 @@ public class GUIMain extends Application implements Observer {
 
     public static void AddRelationSetupButtons(){
         addClass.setDisable(true);
+        addInterface.setDisable(true);
         editClass.setDisable(true);
         deleteClass.setDisable(true);
         addGeneralization.setDisable(true);
+        addAggregation.setDisable(true);
+        addAssociation.setDisable(true);
         cancelCD.setDisable(false);
     }
     public static void AddRelationENDSetupButtons(){
         addClass.setDisable(false);
-        editClass.setDisable(false);
-        deleteClass.setDisable(false);
+        addInterface.setDisable(false);
+        editClass.setDisable(true);
+        deleteClass.setDisable(true);
         addGeneralization.setDisable(false);
+        addAggregation.setDisable(false);
+        addAssociation.setDisable(false);
         cancelCD.setDisable(true);
     }
 
