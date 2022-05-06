@@ -1,9 +1,11 @@
 package uml.sequenceDiagram;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import uml.Element;
+import uml.classDiagram.UMLAttribute;
 import uml.pos.Position;
 
 public class UMLMessage extends Element {
@@ -13,6 +15,7 @@ public class UMLMessage extends Element {
 	private UMLParticipant startObject;
 	private UMLParticipant endObject;
 	private String uniqueID;
+	private List<UMLAttribute> attributes = new ArrayList<UMLAttribute>();
 	
 	public UMLMessage(String name, String type) {
 		super(name);
