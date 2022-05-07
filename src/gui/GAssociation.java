@@ -1,8 +1,10 @@
 package gui;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import uml.pos.Position;
@@ -15,11 +17,8 @@ import java.util.List;
  * @author  Adam Hos
  * @version 1.0
  */
-public class GAssociation {
+public class GAssociation extends GRelationAbstract {
     String name;
-    Gclass parent;
-    Gclass child;
-    GConnection connection;
     Label pLabel;   //label near parent
     Label cLabel;   //label near child
     Label rLabel;   //label for association name
@@ -30,10 +29,8 @@ public class GAssociation {
      * @param parent parent GClass
      * @param child child GClass
      */
-    public GAssociation(Gclass parent, Gclass child) {
-        this.parent = parent;
-        this.child = child;
-        connection = new GConnection();
+    public GAssociation(Gclass parent, Gclass child, String name) {
+        super(parent, child, name);
         pLabel = new Label();
         cLabel = new Label();
         rLabel = new Label();
@@ -71,6 +68,9 @@ public class GAssociation {
         pLabel.setText(parent);
         cLabel.setText(child);
         rLabel.setText(relation);
+
+        //make name label draggable
+        makeDraggable(rLabel);
     }
 
     /**
@@ -91,7 +91,7 @@ public class GAssociation {
      * @param childNode anchor that will hold RCardinality label
      * @param parentNode anchor that will hold LCardinality label
      */
-    public void showLabels(MyNode childNode, MyNode parentNode){
+    public void showLabels(MyNode parentNode, MyNode childNode){
         showLabelsCardinality(parent, parentNode, pLabel);
         showLabelsCardinality(child, childNode, cLabel);
     }
@@ -105,23 +105,27 @@ public class GAssociation {
         Group tmpRoot = gclass.getRoot();
         node.g.getChildren().add(label);
         Platform.runLater(() ->{
+            System.out.println(label.getWidth());
             double xdiff = node.g.getTranslateX() - tmpRoot.getTranslateX();
             double ydiff = node.g.getTranslateY() - tmpRoot.getTranslateY();
+            int smalloffset = 10;
+            int bigoffset = 25;
+            label.setLayoutX(smalloffset);
             if (xdiff == 0) {
-                label.setLayoutX(-5 - label.getWidth());
-                label.setLayoutY(-25);
+                label.setLayoutX(-smalloffset - label.getWidth());
+                label.setLayoutY(-bigoffset);
             }
             else if (xdiff == parent.getWidth()){
-                label.setLayoutX(+5 + label.getWidth()); //TODO check this
-                label.setLayoutY(-25);
+                label.setLayoutX(+smalloffset + label.getWidth()); //TODO check this
+                label.setLayoutY(-bigoffset);
             }
             if (ydiff == 0) {
-                label.setLayoutX(5);
-                label.setLayoutY(-5 - label.getHeight());  //TODO check this
+                label.setLayoutX(smalloffset);
+                label.setLayoutY(-bigoffset - label.getHeight());  //TODO check this
             }
             else if (ydiff == parent.getWidth()){
-                label.setLayoutX(5);
-                label.setLayoutY(+5 + label.getHeight()); //TODO check this
+                label.setLayoutX(smalloffset);
+                label.setLayoutY(+bigoffset + label.getHeight()); //TODO check this
             }
         });
     }
@@ -134,5 +138,30 @@ public class GAssociation {
         rLabel.setText(name);
         rLabel.setTranslateX(labelPosition.getX());
         rLabel.setTranslateY(labelPosition.getY());
+    }
+
+    private double startX;
+    private  double startY;
+    private void makeDraggable(Label label) {
+
+        label.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                startX = e.getSceneX() - label.getTranslateX();
+                startY = e.getSceneY() - label.getTranslateY();
+            }
+        });
+
+        label.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (GUIMain.state != 0)
+                    return;
+                double X = e.getSceneX() - startX;
+                double Y = e.getSceneY() - startY;
+                label.setTranslateX(X);
+                label.setTranslateY(Y);
+            }
+        });
     }
 }

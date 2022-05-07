@@ -1,13 +1,22 @@
 package gui;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.List;
 import java.util.Observable;
 
+import javafx.scene.text.FontWeight;
 import uml.pos.Position;
+import uml.sequenceDiagram.UMLMessage;
 
 /**
  * This class represents message in GUI.
@@ -15,7 +24,8 @@ import uml.pos.Position;
  * @author Dominik Pop
  *
  */
-public class GMessage extends Observable {
+public class GMessage{
+    String ID;
 	GParticipant startParticipant;
 	GParticipant endParticipant;
 	GConnection connection;
@@ -29,7 +39,7 @@ public class GMessage extends Observable {
      * @param start Contains reference to start participant.
      * @param end Contains reference to end participant.
      */
-    public GMessage(GParticipant start, GParticipant end) {
+    public GMessage(String ID, GParticipant start, GParticipant end) {
         this.startParticipant = start;
         this.endParticipant = end;
         this.connection = new GConnection();
@@ -42,19 +52,15 @@ public class GMessage extends Observable {
      * 
      * @param start parent Anchor
      * @param end   child Anchor
-     * @param list  list of connecting MyNodes
      */
-    public void setFromList(List<MyNode> list, MyNodeAnchor start, MyNodeAnchor end){
+    public void setFromNodes(MyNodeAnchor start, MyNodeAnchor end){
         this.connection.setStart(start);
         this.connection.setEnd(end);
-        if (list.size() > 0){
-            this.connection.setBetween(list);
-        }
         this.connection.setBind();
         this.connection.connect();
 
-        this.startParticipant.addAnchor(connection.start);
-        this.endParticipant.addAnchor(connection.end);
+        this.startParticipant.addAnchor(start);
+        this.endParticipant.addAnchor(end);
     }
 	
 	 /**
@@ -66,10 +72,7 @@ public class GMessage extends Observable {
         pane.getChildren().add(connection.path);
         pane.getChildren().add(connection.start.g);
         pane.getChildren().add(connection.end.g);
-        for (MyNode node: connection.between) {
-            pane.getChildren().add(node.g);
-            node.g.toFront();
-        }
+        pane.getChildren().add(messageName);
     }
 	
 	/**
@@ -78,9 +81,48 @@ public class GMessage extends Observable {
      * @param name to be named
      * @param labelPosition position to be moved
      */
-    public void setLabelName(String name, Position labelPosition) {
+    public void setLabelName(String name) {
         this.messageName.setText(name);
-        this.messageName.setTranslateX(labelPosition.getX());
-        this.messageName.setTranslateY(labelPosition.getY());
+        this.messageName.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    public void makeConnectionDraggableVerticaly( GConnection connection, double maxH) {
+        connection.end.g.translateYProperty().bind(connection.start.g.translateYProperty());
+
+        connection.start.g.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                double Y = e.getSceneY();
+                connection.start.g.setTranslateY(Y - 22);
+            }
+        });
+    }
+
+    public void setEndRotation(){
+        if(startParticipant.getRoot().getTranslateX() < endParticipant.getRoot().getTranslateX())
+            this.connection.end.polygonSetRotatoinLR(true);
+        else
+            this.connection.end.polygonSetRotatoinLR(false);
+    }
+    /**
+     * Set style based on message type
+     * @param m UMLMessage
+     */
+    public void setStyle(UMLMessage m) {
+        String type = m.getType();
+        if (type.equals("Synchronous") || type.equals("Create") || type.equals("Delete")) {
+            this.connection.end.polygonTriangleSmall();
+            this.setEndRotation();
+        }
+        else if(type.equals("Asynchronous")){
+            connection.path.getStrokeDashArray().addAll(20d, 10d);
+            this.connection.end.polygonArrow();
+            this.setEndRotation();
+        }
+        else if(type.equals("Return")){
+            connection.path.getStrokeDashArray().addAll(20d, 10d);
+            this.connection.end.polygonTriangleSmall();
+            this.setEndRotation();
+        }
     }
 }

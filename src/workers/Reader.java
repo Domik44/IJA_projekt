@@ -57,7 +57,6 @@ public class Reader {
 		// Editing path because of JAR location
 //		return path.replace("dest", "data\\");
 		return "data/"+this.fileName;
-//		return this.fileName;
 	}
 	
 	/**

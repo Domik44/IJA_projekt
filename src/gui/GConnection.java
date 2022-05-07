@@ -63,11 +63,13 @@ public class GConnection {
         pStart.xProperty().bind(start.getXprop());
         pStart.yProperty().bind(start.getYprop());
 
-        for (MyNode node: between){
-            LineTo l = new LineTo();
-            l.xProperty().bind(node.getXprop());
-            l.yProperty().bind(node.getYprop());
-            plines.add(l);
+        if (between.size() != 0) {
+            for (MyNode node : between) {
+                LineTo l = new LineTo();
+                l.xProperty().bind(node.getXprop());
+                l.yProperty().bind(node.getYprop());
+                plines.add(l);
+            }
         }
 
         LineTo l = new LineTo();

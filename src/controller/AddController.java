@@ -25,13 +25,13 @@ public class AddController {
 		@Override
 		public void run() {
 			this.model.createInterface(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.model.deleteInterface(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	
@@ -49,13 +49,13 @@ public class AddController {
 		@Override
 		public void run() {
 			this.model.createClass(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.model.deleteClass(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	
@@ -82,13 +82,13 @@ public class AddController {
 			RelGeneralization newGeneralization =  this.model.createGeneralization(this.parent, this.child, this.type);
 			this.ID =  newGeneralization.getName();
 			//TODO -> dodelat predani + nastaveni pozic, na kterych ma realce být!!
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.model.deleteGeneralization(ID);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	
@@ -118,13 +118,13 @@ public class AddController {
 				RelAggregation newAggregation = this.model.createAggregation(this.parent, this.child, this.type);
 				this.ID =  newAggregation.getName();
 				// TODO -> predat pozice a nastavit ji, predat label a nastavit ho + jeho pozice, predat kardinality a nastavit je
-				this.view.SetupFromDiagram(model);
+				this.view.setupFromDiagram(model);
 			}
 			
 			@Override
 			public void undo() {
 				this.model.deleteAggregation(ID);
-				this.view.SetupFromDiagram(model);
+				this.view.setupFromDiagram(model);
 			}
 		}
 	
@@ -154,13 +154,13 @@ public class AddController {
 			RelAssociation newAssociation = this.model.createAssociation(this.parent, this.child, this.type);
 			this.ID =  newAssociation.getName();
 			// TODO -> predat pozice a nastavit ji, predat label a nastavit ho + jeho pozice, predat kardinality a nastavit je + asoci trida ? (jestli ji vubec budeme implementovat)
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.model.deleteAssociation(ID);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	

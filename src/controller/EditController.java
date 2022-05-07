@@ -31,9 +31,9 @@ public class EditController {
 			GclassHeightdiff = ECW.display(editedInterface, this.model);
 			
 			if (GclassHeightdiff != 0)
-                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass, GclassHeightdiff);
+                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass1, GclassHeightdiff);
 			
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 			this.name = editedInterface.getName();
 			this.HeightDiff = -GclassHeightdiff;
 		}
@@ -47,9 +47,9 @@ public class EditController {
 			restoreInterface.copy(this.originalInterface);
 			
 			if (this.HeightDiff != 0)
-                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass, this.HeightDiff);
+                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass1, this.HeightDiff);
 			
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	
@@ -76,9 +76,9 @@ public class EditController {
 			GclassHeightdiff = ECW.display(editedClass, this.model);
 			
 			if (GclassHeightdiff != 0)
-                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass, GclassHeightdiff);
+                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass1, GclassHeightdiff);
 			
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 			this.name = editedClass.getName();
 			this.HeightDiff = -GclassHeightdiff;
 		}
@@ -92,9 +92,9 @@ public class EditController {
 			restoreClass.copy(this.originalClass);
 			
 			if (this.HeightDiff != 0)
-                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass, this.HeightDiff);
+                this.view.repairGclassBottomBorderRelations(this.view.selectedGclass1, this.HeightDiff);
 			
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	

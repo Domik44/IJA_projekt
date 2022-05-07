@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -18,22 +19,23 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import uml.pos.Position;
 
-public class GParticipant extends Observable {
-	// TODO -> make it private and create setters/getters
+public class GParticipant extends Observable{
 	String name;
 	Group root;
 	Rectangle border;
 	Label participantNameLabel;
 	VBox participantVB;
-	List<MyNode> anchors;
-	
+    Group dashedStart;
+	Line dashed;
+
 	double eX;
 	double eY;
 	
 	public GParticipant() {
-		final int initialParticipantWidth = 150;
-		int initialParticipantHeight = 30;
+		final int initialParticipantWidth = 200; //TODO change width during runtime if needed?
+		final int initialParticipantHeight = 30;
 		
 		this.root = new Group();
 		this.border = new Rectangle(initialParticipantWidth, initialParticipantHeight);
@@ -49,27 +51,25 @@ public class GParticipant extends Observable {
         
         this.participantNameLabel = new Label("name");
         this.participantVB.getChildren().add(this.participantNameLabel);
-        
-        DoubleBinding result = this.participantVB.heightProperty().add(10);
-        this.border.heightProperty().bind(result);
-        Platform.runLater(()->{
-        	// TODO
-        });
+
+        this.border.heightProperty().bind(this.participantVB.heightProperty().add(10));
         
         this.root.getChildren().add(this.participantVB);
-        
-        this.border.setOnMousePressed(Event::consume);
-        this.border.setOnMouseDragged(Event::consume);
-        this.border.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                seteX(e.getX() + root.getTranslateX());
-                seteY(e.getY() + root.getTranslateY());
 
-                setChanged();
-                notifyObservers(e);
-            }
-        });
+
+        dashedStart = new Group();
+        dashedStart.setTranslateX(initialParticipantWidth/2);
+        dashedStart.setTranslateY(initialParticipantHeight);
+        dashed = new Line(0, 10, 0, 1200);
+        dashed.getStrokeDashArray().addAll(25d, 20d);
+        dashed.setStrokeWidth(6);
+        dashed.setStyle("-fx-stroke: white;");
+        dashedStart.getChildren().add(dashed);
+        root.getChildren().add(dashedStart);
+        border.toFront();
+        participantVB.toFront();
+        dashed.toBack();
+
 	}
 	
 	/**
@@ -94,13 +94,10 @@ public class GParticipant extends Observable {
      */
     public void addAnchor(MyNodeAnchor node){
         double origX = node.getXprop().doubleValue();
-        double origY = node.getYprop().doubleValue();
 
-        DoubleBinding resultX = root.translateXProperty().add(origX);
-        DoubleBinding resultY = root.translateYProperty().add(origY);
+        DoubleBinding resultX = root.translateXProperty().add(origX).add(dashedStart.getTranslateX());
 
         node.getXprop().bind(resultX);
-        node.getYprop().bind(resultY);
     }
     
     /**
@@ -110,21 +107,9 @@ public class GParticipant extends Observable {
     public Group getRoot(){
         return this.root;
     }
-    
-    /**
-     * Getter for value of border height Property
-     * @return border height
-     */
-    public double getHeight(){
-        return border.heightProperty().getValue();
+
+    public void movedNotifyObservers(Position position){
+        setChanged();
+        notifyObservers(position);
     }
-    
-    /**
-     * Getter for value of border width Property
-     * @return border width
-     */
-    public double getWidth(){
-        return border.widthProperty().getValue();
-    }
-      
 }

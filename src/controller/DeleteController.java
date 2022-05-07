@@ -55,7 +55,7 @@ public class DeleteController {
 			}
 			
 			this.model.deleteInterface(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
@@ -72,7 +72,7 @@ public class DeleteController {
 			for(RelAggregation rel : this.deletedAggregations) {
 				this.model.addAggregation(rel);				
 			}
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 			// TODO -> dodelat vraceni vztahu, participantu i messagu!!!
 		}
 	}
@@ -114,7 +114,7 @@ public class DeleteController {
 			}
 			
 			this.model.deleteClass(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
@@ -131,7 +131,7 @@ public class DeleteController {
 			for(RelAggregation rel : this.deletedAggregations) {
 				this.model.addAggregation(rel);				
 			}
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 			// TODO -> dodelat vraceni vztahu, participantu i messagu!!!
 		}
 	}
@@ -152,13 +152,13 @@ public class DeleteController {
 		public void run() {
 			this.deletedGeneralization = this.model.getGeneralization(ID);
 			this.model.deleteGeneralization(ID);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.model.addGeneralization(this.deletedGeneralization);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	
@@ -178,13 +178,13 @@ public class DeleteController {
 		public void run() {
 			this.deletedAssociation = this.model.getAssociation(name);
 			this.model.deleteAssociation(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.model.addAssociation(this.deletedAssociation);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	
@@ -204,13 +204,13 @@ public class DeleteController {
 		public void run() {
 			this.deletedAggregation = this.model.getAggregation(name);
 			this.model.deleteAssociation(name);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.model.addAggregation(this.deletedAggregation);
-			this.view.SetupFromDiagram(model);
+			this.view.setupFromDiagram(model);
 		}
 	}
 	

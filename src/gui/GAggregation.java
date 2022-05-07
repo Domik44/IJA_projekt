@@ -3,10 +3,7 @@ package gui;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
-
-import java.util.List;
 
 /**
  * GAggregation represents GUI Aggregation
@@ -14,10 +11,7 @@ import java.util.List;
  * @author  Adam Hos
  * @version 1.0
  */
-public class GAggregation {
-    Gclass parent;
-    Gclass child;
-    GConnection connection;
+public class GAggregation extends GRelationAbstract {
     Label pLabel;   //label near parent
     Label cLabel;   //label near child
 
@@ -26,31 +20,10 @@ public class GAggregation {
      * @param parent parent GClass
      * @param child child GClass
      */
-    public GAggregation(Gclass parent, Gclass child) {
-        this.parent = parent;
-        this.child = child;
-        connection = new GConnection();
+    public GAggregation(Gclass parent, Gclass child, String name) {
+        super(parent, child, name);
         pLabel = new Label();
         cLabel = new Label();
-    }
-
-    /**
-     * Setup Aggregation from nodes (when reading from file)
-     * @param start parent Anchor
-     * @param end   child Anchor
-     * @param list  list of connecting MyNodes
-     */
-    public void setFromList(List<MyNode> list, MyNodeAnchor start, MyNodeAnchor end){
-        connection.setStart(start);
-        connection.setEnd(end);
-        if (list.size() > 0){
-            connection.setBetween(list);
-        }
-        connection.setBind();
-        connection.connect();
-
-        parent.addAnchor(connection.start);
-        child.addAnchor(connection.end);
     }
 
     /**
@@ -63,21 +36,6 @@ public class GAggregation {
         pLabel.setText(parent);
         cLabel.setFont(new Font("Arial", 30));
         cLabel.setText(child);
-    }
-
-    /**
-     * Add path, MyNodes and MyNodeAnchors to pane
-     * @param pane pane that will hold obects
-     */
-    public void show(Pane pane){
-        pane.getChildren().add(connection.path);
-        pane.getChildren().add(connection.start.g);
-        pane.getChildren().add(connection.end.g);
-        for (MyNode node: connection.between) {
-            pane.getChildren().add(node.g);
-            node.g.toFront();
-        }
-
     }
 
     /**
