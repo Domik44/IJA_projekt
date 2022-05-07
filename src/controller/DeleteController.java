@@ -142,16 +142,16 @@ public class DeleteController {
 		public String ID;
 		public RelGeneralization deletedGeneralization;
 		
-		public DeleteGeneralization(GUIMain view, ClassDiagram model, String name) {
+		public DeleteGeneralization(GUIMain view, ClassDiagram model, String ID) {
 			this.view = view;
 			this.model = model;
-			this.ID = name;
+			this.ID = ID;
 		}
 		
 		@Override
 		public void run() {
-			this.deletedGeneralization = this.model.getGeneralization(ID);
-			this.model.deleteGeneralization(ID);
+			this.deletedGeneralization = this.model.getGeneralization(this.ID);
+			this.model.deleteGeneralization(this.ID);
 			this.view.setupFromDiagram(model);
 		}
 		
@@ -165,19 +165,19 @@ public class DeleteController {
 	public class DeleteAssociation implements UIAction {
 		public GUIMain view;
 		public ClassDiagram model;
-		public String name;
+		public String ID;
 		public RelAssociation deletedAssociation;
 		
-		public DeleteAssociation(GUIMain view, ClassDiagram model, String name) {
+		public DeleteAssociation(GUIMain view, ClassDiagram model, String ID) {
 			this.view = view;
 			this.model = model;
-			this.name = name;
+			this.ID = ID;
 		}
 		
 		@Override
 		public void run() {
-			this.deletedAssociation = this.model.getAssociation(name);
-			this.model.deleteAssociation(name);
+			this.deletedAssociation = this.model.getAssociation(this.ID);
+			this.model.deleteAssociation(this.ID);
 			this.view.setupFromDiagram(model);
 		}
 		
@@ -191,19 +191,19 @@ public class DeleteController {
 	public class DeleteAggregation implements UIAction {
 		public GUIMain view;
 		public ClassDiagram model;
-		public String name;
+		public String ID;
 		public RelAggregation deletedAggregation;
 		
-		public DeleteAggregation(GUIMain view, ClassDiagram model, String name) {
+		public DeleteAggregation(GUIMain view, ClassDiagram model, String ID) {
 			this.view = view;
 			this.model = model;
-			this.name = name;
+			this.ID = ID;
 		}
 		
 		@Override
 		public void run() {
-			this.deletedAggregation = this.model.getAggregation(name);
-			this.model.deleteAssociation(name);
+			this.deletedAggregation = this.model.getAggregation(this.ID);
+			this.model.deleteAggregation(this.ID);
 			this.view.setupFromDiagram(model);
 		}
 		

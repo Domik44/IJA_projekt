@@ -59,28 +59,25 @@ public class AddController {
 		}
 	}
 	
-	// TODO -> pozice?
 	public class AddGeneralization implements UIAction{
 		public GUIMain view;
 		public ClassDiagram model;
 		public String ID;
-		public String parent;
-		public String child;
-		public String type;
-		public Position pos;
 		
-		public AddGeneralization(GUIMain view, ClassDiagram model, String parent, String child, String type) {
+		public AddGeneralization(GUIMain view, ClassDiagram model) {
 			this.view = view;
 			this.model = model;
-			this.parent = parent;
-			this.child = child;
-			this.type = type;
 		}
 		
 		@Override
 		public void run() {
-			RelGeneralization newGeneralization =  this.model.createGeneralization(this.parent, this.child, this.type);
+			RelGeneralization newGeneralization =  this.model.createGeneralization(this.view.selectedGclass1.getName(), this.view.selectedGclass2.getName(), this.view.relationType);
 			this.ID =  newGeneralization.getName();
+			
+			this.view.fixBorderPoints();
+			for( var p : this.view.positionList) {
+				newGeneralization.addPosition(p);
+			}
 			//TODO -> dodelat predani + nastaveni pozic, na kterych ma realce být!!
 			this.view.setupFromDiagram(model);
 		}
@@ -92,32 +89,26 @@ public class AddController {
 		}
 	}
 	
-	//TODO -> pozice, label, kardinalita, asoc.trida
 		public class AddAggregation implements UIAction{
 			public GUIMain view;
 			public ClassDiagram model;
 			public String ID;
-			public String parent;
-			public String child;
-			public String type;
-			public String label;
-			public String leftCard;
-			public String rightCard;
-			public Position pos;
 			
-			public AddAggregation(GUIMain view, ClassDiagram model, String parent, String child, String type) {
+			public AddAggregation(GUIMain view, ClassDiagram model) {
 				this.view = view;
 				this.model = model;
-				this.parent = parent;
-				this.child = child;
-				this.type = type;
 			}
 			
 			@Override
 			public void run() {
-				RelAggregation newAggregation = this.model.createAggregation(this.parent, this.child, this.type);
+				RelAggregation newAggregation = this.model.createAggregation(this.view.selectedGclass1.getName(), this.view.selectedGclass2.getName(), this.view.relationType);
 				this.ID =  newAggregation.getName();
-				// TODO -> predat pozice a nastavit ji, predat label a nastavit ho + jeho pozice, predat kardinality a nastavit je
+				
+				this.view.fixBorderPoints();
+				for(var p : this.view.positionList) {
+					newAggregation.addPosition(p);
+				}
+				
 				this.view.setupFromDiagram(model);
 			}
 			
@@ -128,32 +119,31 @@ public class AddController {
 			}
 		}
 	
-	//TODO -> pozice, label, kardinalita, asoc.trida
 	public class AddAssociation implements UIAction{
 		public GUIMain view;
 		public ClassDiagram model;
 		public String ID;
-		public String parent;
-		public String child;
-		public String type;
-		public String label;
-		public String leftCard;
-		public String rightCard;
-		public Position pos;
 		
-		public AddAssociation(GUIMain view, ClassDiagram model, String parent, String child, String type) {
+		public AddAssociation(GUIMain view, ClassDiagram model) {
 			this.view = view;
 			this.model = model;
-			this.parent = parent;
-			this.child = child;
-			this.type = type;
 		}
 		
 		@Override
 		public void run() {
-			RelAssociation newAssociation = this.model.createAssociation(this.parent, this.child, this.type);
+			RelAssociation newAssociation = this.model.createAssociation(this.view.selectedGclass1.getName(), this.view.selectedGclass2.getName(), this.view.relationType);
 			this.ID =  newAssociation.getName();
-			// TODO -> predat pozice a nastavit ji, predat label a nastavit ho + jeho pozice, predat kardinality a nastavit je + asoci trida ? (jestli ji vubec budeme implementovat)
+			
+			this.view.fixBorderPoints();
+			for(var p : this.view.positionList) {
+				newAssociation.addPosition(p);
+			}
+			
+			newAssociation.setCardinality(this.view.LCardinality, this.view.RCardinality);
+			newAssociation.setLabel(this.view.relationName);
+	    	// TODO -> label pozice moc nefunguje
+			newAssociation.setLabelPosition(50, 50);
+			
 			this.view.setupFromDiagram(model);
 		}
 		

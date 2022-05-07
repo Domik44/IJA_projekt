@@ -51,7 +51,7 @@ public class GUIMain extends Application implements Observer {
     List<Gclass> gClassList;
     static ClassDiagram diagram;
     public static Gclass selectedGclass1;
-    static Gclass selectedGclass2;
+    public static Gclass selectedGclass2;
     static Object selectedRelation;
     HBox hboxCD;
     static Button addClass;
@@ -90,7 +90,7 @@ public class GUIMain extends Application implements Observer {
     private Button deleteteRelation;
     
     ArrayDeque<UIAction> history = new ArrayDeque<>();
-    DeleteController delteControl = new DeleteController();
+    DeleteController deleteControl = new DeleteController();
     AddController addControl = new AddController();
     EditController editControl = new EditController();
     
@@ -117,44 +117,26 @@ public class GUIMain extends Application implements Observer {
         }
     }
 
-    private void createGeneralization() { // TODO -> predelat na aciton
-        RelGeneralization g = diagram.createGeneralization(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
-        fixBorderPoints();
-        for (var p : positionList){
-            g.addPosition(p);
-        }
-        g.rename(UUID.randomUUID().toString()); //TODO -> why rename??
-        setupFromDiagram(diagram);
+    private void createGeneralization() {
+    	var action = this.addControl.new AddGeneralization(this, diagram);
+    	run(action);
     }
 
-    private void createAggregation() { // TODO -> predelat na aciton
-        RelAggregation a = diagram.createAggregation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
-        fixBorderPoints();
-        for (var p : positionList){
-            a.addPosition(p);
-        }
-        a.rename(UUID.randomUUID().toString());
-        setupFromDiagram(diagram);
+    private void createAggregation() {
+    	var action = this.addControl.new AddAggregation(this, diagram);
+    	run(action);
+        // TODO -> agregace maji mit take kardinalitu a popisek stejne jako asociace!
     }
 
-    private void createAssociation() { // TODO -> predelat na aciton
-        RelAssociation a = diagram.createAssociation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
-        fixBorderPoints();
-        for (var p : positionList){
-            a.addPosition(p);
-        }
-        a.rename(UUID.randomUUID().toString());
-        a.setCardinality(LCardinality, RCardinality);
-        a.setLabel(relationName);
-        //place label into midle of start and end nodes
-        a.setLabelPosition(50,50);
-        setupFromDiagram(diagram);
+    private void createAssociation() {
+    	var action = this.addControl.new AddAssociation(this, diagram);
+    	run(action);
     }
 
     /**
      * Calculate to witch part of Gclass border should the points snap to
      */
-    private void fixBorderPoints() {
+    public void fixBorderPoints() {
         fixBorderPoint(selectedGclass1, positionList.get(0));
         fixBorderPoint(selectedGclass2, positionList.get(positionList.size()-1));
     }
@@ -605,11 +587,11 @@ public class GUIMain extends Application implements Observer {
 
         deleteClass.setOnAction(e ->{
         	if(selectedGclass1.isinterface) {
-        		var action = this.delteControl.new DeleteInterface(this, diagram, selectedGclass1.getName());
+        		var action = this.deleteControl.new DeleteInterface(this, diagram, selectedGclass1.getName());
         		run(action);
         	}
         	else {
-        		var action = this.delteControl.new DeleteClass(this, diagram, selectedGclass1.getName());
+        		var action = this.deleteControl.new DeleteClass(this, diagram, selectedGclass1.getName());
         		run(action);
         	}
         });
@@ -652,19 +634,19 @@ public class GUIMain extends Application implements Observer {
         buttonBar.getButtons().add(deleteteRelation);
         deleteteRelation.setOnAction(e -> { // TODO -> predelat na aciton
             if(selectedRelation instanceof GGeneralization){
-                diagram.deleteGeneralization(((GGeneralization)selectedRelation).name);
-                deleteteRelation.setDisable(true);
-                setupFromDiagram(diagram);
+            	var action = this.deleteControl.new DeleteGeneralization(this, diagram, ((GGeneralization)selectedRelation).name);
+                run(action);
+            	deleteteRelation.setDisable(true);
             }
             else if(selectedRelation instanceof GAssociation){
-                diagram.deleteAssociation(((GAssociation)selectedRelation).name);
+                var action = this.deleteControl.new DeleteAssociation(this, diagram, ((GAssociation)selectedRelation).name);
+                run(action);
                 deleteteRelation.setDisable(true);
-                setupFromDiagram(diagram);
             }
             else if(selectedRelation instanceof GAggregation){
-                diagram.deleteAggregation(((GAggregation)selectedRelation).name);
+            	var action = this.deleteControl.new DeleteAggregation(this, diagram, (((GAggregation)selectedRelation).name));
+                run(action);
                 deleteteRelation.setDisable(true);
-                setupFromDiagram(diagram);
             }
         });
 
