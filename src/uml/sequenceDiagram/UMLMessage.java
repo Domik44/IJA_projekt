@@ -44,6 +44,13 @@ public class UMLMessage extends Element {
 	public void addPosition(Position pos) {
 		listPoints.add(pos);
 	}
+
+	/**
+	 * Clear list.
+	 */
+	public void ClearList() { //TODO to jsem pridal ja, potrebuju ta na prepis listu (makeConnectionDraggableVerticaly v GMessage)
+		listPoints.clear();
+	}
 	
 	/**
 	 * Getter for points list.

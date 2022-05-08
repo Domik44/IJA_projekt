@@ -27,7 +27,7 @@ public class CreateClassWindow {
         window.setMinWidth(300);
 
         Label classNameLabel = new Label();
-        classNameLabel.setText("ClassName: ");
+        classNameLabel.setText("Name: ");
 
 
         GridPane grid = new GridPane();

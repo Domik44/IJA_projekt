@@ -67,6 +67,9 @@ Relation Aggregation {
   position 0 50
   lClass Motorka
   rClass Auto
+  lCard 1
+  rCard *
+  label je 400 310
 }
 
 @startSequence

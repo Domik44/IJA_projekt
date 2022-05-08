@@ -11,9 +11,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import uml.classDiagram.ClassDiagram;
+import uml.classDiagram.UMLRelation;
 import uml.pos.Position;
-import uml.relations.RelAssociation;
-import uml.relations.RelGeneralization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +35,7 @@ public class Gclass extends Observable {
     Rectangle separator2;
     boolean isinterface;
 
-    List<RelAssociation> relationList;
-    List<RelGeneralization> generalizationList;
+    List<UMLRelation> relationList;
 
     double eX;
     double eY;
@@ -50,7 +48,6 @@ public class Gclass extends Observable {
         int initialClassHeight = 80;
         this.isinterface = isinterface;
         relationList = new ArrayList<>();
-        generalizationList = new ArrayList<>();
 
         this.root = new Group();
         border = new Rectangle(initialClassWidth, initialClassHeight);

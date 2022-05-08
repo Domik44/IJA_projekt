@@ -31,6 +31,7 @@ import java.util.List;
  * @version 1.0
  */
 public class GActivationBox {
+    String ID;
     Group root;
     Rectangle rectangle;
     MyNode start;
@@ -38,7 +39,8 @@ public class GActivationBox {
     double eX;
     double eY;
 
-    public GActivationBox(double y1, double y2) {
+    public GActivationBox(double y1, double y2, String ID) {
+        this.ID = ID;
         final int initialClassWidth = 10;
         int initialClassHeight = 100;
 
@@ -99,6 +101,8 @@ public class GActivationBox {
                     node.setTranslateY(end.getYprop().getValue() - 50);
                 }
                 e.consume();
+                GUIMain.SD.getActivationBox(ID).setStartPosition(0, (int)start.g.getTranslateY());
+                GUIMain.SD.getActivationBox(ID).setEndPosition(0, (int)end.g.getTranslateY());
             }
         });
     }

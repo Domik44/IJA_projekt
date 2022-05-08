@@ -1,5 +1,8 @@
 package gui;
 
+import javafx.event.EventHandler;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 import java.util.List;

@@ -10,23 +10,22 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import uml.classDiagram.UMLAttribute;
 
 /**
  * Edit Class Window for attribute
  */
-public class AddAssociationWindow {
+public class AddRelationWithLabelsWindow {
     /**
      * Init window and setup values
      */
     static String[] retArray;
 
-    public static String[] display(){
+    public static String[] display(String windowName){
         Stage window = new Stage();
         retArray = new String[3];
 
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Add Association");
+        window.setTitle(windowName);
         window.setMinWidth(250);
 
         //Labels

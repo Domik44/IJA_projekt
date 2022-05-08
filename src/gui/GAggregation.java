@@ -11,10 +11,7 @@ import javafx.scene.text.Font;
  * @author  Adam Hos
  * @version 1.0
  */
-public class GAggregation extends GRelationAbstract {
-    Label pLabel;   //label near parent
-    Label cLabel;   //label near child
-
+public class GAggregation extends GRelationAbstractWithLabels {
     /**
      * Constructor for GAggregation. Allocate memory, set parent and child
      * @param parent parent GClass
@@ -22,59 +19,36 @@ public class GAggregation extends GRelationAbstract {
      */
     public GAggregation(Gclass parent, Gclass child, String name) {
         super(parent, child, name);
-        pLabel = new Label();
-        cLabel = new Label();
     }
 
-    /**
-     * Setup labels near classes
-     * @param parent string for parent label
-     * @param child string for child label
-     */
-    public void setLabels(String parent, String child){
-        pLabel.setFont(new Font("Arial", 30));
-        pLabel.setText(parent);
-        cLabel.setFont(new Font("Arial", 30));
-        cLabel.setText(child);
-    }
-
-    /**
-     * Add cardinality labels
-     * @param parentNode anchor that will hold LCardinality label
-     * @param childNode anchor that will hold RCardinality label
-     */
-    public void showLabels(MyNodeAnchor parentNode, MyNodeAnchor childNode){
-        showLabelsCardinality(parent, parentNode, pLabel);
-        showLabelsCardinality(child, childNode, cLabel);
-    }
-    /**
-     * Add label to anchor with calculated position
-     * @param gclass class near label
-     * @param node anchor
-     * @param label label o be added
-     */
-    public void showLabelsCardinality(Gclass gclass, MyNodeAnchor node, Label label){
-        Group tmpRoot =gclass.getRoot();
+    //need to override, need more space coz square
+    public void showLabelsCardinality(Gclass gclass, MyNode node, Label label){
+        Group tmpRoot = gclass.getRoot();
         node.g.getChildren().add(label);
         Platform.runLater(() ->{
+            System.out.println(label.getWidth());
             double xdiff = node.g.getTranslateX() - tmpRoot.getTranslateX();
             double ydiff = node.g.getTranslateY() - tmpRoot.getTranslateY();
+            int smalloffset = 5;
+            int bigoffset = 40;
+            label.setLayoutX(smalloffset);
             if (xdiff == 0) {
-                label.setLayoutX(-5 - label.getWidth());
-                label.setLayoutY(-25);
+                label.setLayoutX(-smalloffset - label.getWidth());
+                label.setLayoutY(-bigoffset);
             }
             else if (xdiff == parent.getWidth()){
-                label.setLayoutX(+5 + label.getWidth()); //TODO check this
-                label.setLayoutY(-25);
+                label.setLayoutX(+smalloffset); //TODO check this
+                label.setLayoutY(-bigoffset);
             }
             if (ydiff == 0) {
-                label.setLayoutX(5);
-                label.setLayoutY(-5 - label.getHeight());  //TODO check this
+                label.setLayoutX(smalloffset);
+                label.setLayoutY(-bigoffset - label.getHeight());  //TODO check this
             }
-            else if (ydiff == parent.getHeight()){
-                label.setLayoutX(5);
-                label.setLayoutY(+5 + label.getHeight()); //TODO check this
+            else if (ydiff == parent.getWidth()){
+                label.setLayoutX(smalloffset);
+                label.setLayoutY(+bigoffset); //TODO check this
             }
         });
     }
+
 }

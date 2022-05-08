@@ -27,7 +27,6 @@ import static java.lang.System.exit;
 import controller.DeleteController;
 import controller.EditController;
 import controller.AddController;
-import controller.AddController.AddClass;
 import controller.UIAction;
 
 
@@ -69,6 +68,7 @@ public class GUIMain extends Application implements Observer {
     public static String LCardinality;
     public static String RCardinality;
     public static String relationName;
+    private Button deleteteRelation;
 
     //Fields for SequenceDiagram
     VBox vBoxSD;
@@ -85,9 +85,10 @@ public class GUIMain extends Application implements Observer {
     private Button addDelete;
     private Button addBox;
     private Button cancelSD;
+    private Button delete;
+    private Object selectForDelete;
     private String messageText;
     private String messageType;
-    private Button deleteteRelation;
     
     ArrayDeque<UIAction> history = new ArrayDeque<>();
     DeleteController deleteControl = new DeleteController();
@@ -102,7 +103,7 @@ public class GUIMain extends Application implements Observer {
         vBoxCD = new VBox();
         pane = new Pane();
         gClassList = new ArrayList<>();
-        scene = new Scene(vBoxCD, 1400, 600);
+        scene = new Scene(vBoxCD, 1600, 860);
     }
 
     public void createRelation() {
@@ -121,16 +122,30 @@ public class GUIMain extends Application implements Observer {
     	var action = this.addControl.new AddGeneralization(this, diagram);
     	run(action);
     }
-
     private void createAggregation() {
-    	var action = this.addControl.new AddAggregation(this, diagram);
-    	run(action);
-        // TODO -> agregace maji mit take kardinalitu a popisek stejne jako asociace!
+        RelAggregation a = diagram.createAggregation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
+        fixBorderPoints();
+        for (var p : positionList){
+            a.addPosition(p);
+        }
+        a.setCardinality(LCardinality, RCardinality);
+        a.setLabel(relationName);
+        //place label into midle of start and end nodes
+        a.setLabelPosition(50,50);
+        setupFromDiagram(diagram);
     }
 
     private void createAssociation() {
-    	var action = this.addControl.new AddAssociation(this, diagram);
-    	run(action);
+        RelAssociation a = diagram.createAssociation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
+        fixBorderPoints();
+        for (var p : positionList){
+            a.addPosition(p);
+        }
+        a.setCardinality(LCardinality, RCardinality);
+        a.setLabel(relationName);
+        //place label into midle of start and end nodes
+        a.setLabelPosition(50,50);
+        setupFromDiagram(diagram);
     }
 
     /**
@@ -197,7 +212,7 @@ public class GUIMain extends Application implements Observer {
         for (UMLClass c : classes) {
             //create Gclass object
             Gclass tmp = new Gclass(false);
-            setGClassSelectEventHandler(tmp);
+            addGClassSelectedHandler(tmp);
             makeGClassDraggable(tmp, scene.getWidth()- 240, scene.getHeight());
             gClassList.add(tmp);
             tmp.getRoot().toBack();
@@ -236,7 +251,7 @@ public class GUIMain extends Application implements Observer {
         for (UMLInterface i : interfaces) {
             //create Gclass object
             Gclass tmp = new Gclass(true);
-            setGClassSelectEventHandler(tmp);
+            addGClassSelectedHandler(tmp);
             makeGClassDraggable(tmp, scene.getWidth() - 240, scene.getHeight());
             gClassList.add(tmp);
             tmp.getRoot().toBack();
@@ -286,7 +301,7 @@ public class GUIMain extends Application implements Observer {
             Gclass second = getClassByName(a.getRightClass().getName());
             second.relationList.add(a);
             GAssociation ass = new GAssociation(first, second, a.getName());
-            ass.name = a.getName();
+//            ass.name = a.getName();
             ass.setFromList(listNode, start, end);
             ass.setLabels(a.getLeftCardinality(),a.getRightCardinality(), a.getLabel());
             ass.setLabelName(a.getLabel(), a.getLabelPosition());
@@ -321,15 +336,21 @@ public class GUIMain extends Application implements Observer {
             //create association
             //select classes
             Gclass first = getClassByName(a.getLeftClass().getName());
+            first.relationList.add(a);
             Gclass second = getClassByName(a.getRightClass().getName());
+            second.relationList.add(a);
             GAggregation aggr = new GAggregation(first, second, a.getName());
+
             aggr.setFromList(listNode, start, end);
-            aggr.setLabels(a.getLeftCardinality(),a.getRightCardinality());
-            aggr.showLabels(start, end); //TODO this does nothing?
+            aggr.setLabels(a.getLeftCardinality(),a.getRightCardinality(), a.getLabel());
+            aggr.setLabelName(a.getLabel(), a.getLabelPosition());
+            pane.getChildren().add(aggr.rLabel);
+            aggr.showLabels(start, end);
+            addRelationSelectedHandler(aggr);
+
             start.polygonSquare();
             start.polygonSetRotatoin(first);
 
-            addRelationSelectedHandler(aggr);
 
             aggr.show(pane);
         }
@@ -357,9 +378,9 @@ public class GUIMain extends Application implements Observer {
             //create association
             //select classes
             Gclass first = getClassByName(g.getLeftClass().getName());
-            first.generalizationList.add(g);
+            first.relationList.add(g);
             Gclass second = getClassByName(g.getRightClass().getName());
-            second.generalizationList.add(g);
+            second.relationList.add(g);
             GGeneralization generalization = new GGeneralization(first, second, g.getName());
             generalization.setFromList(listNode, start, end);
             start.polygonTriangle();
@@ -375,25 +396,29 @@ public class GUIMain extends Application implements Observer {
         if( o instanceof GRelationAbstract){
             var casted = (GRelationAbstract)o;
             for( var node : casted.connection.between){
-                if (state == 0) {
-                    node.g.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                node.g.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
+                    if (state == 0) {
                         selectedRelation = o;
                         deleteteRelation.setDisable(false);
                         editClass.setDisable(true);
                         deleteClass.setDisable(true);
                         e.consume();
-                    });
-                }
+                    }
+                });
             }
             casted.connection.start.g.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
-                selectedRelation = o;
-                deleteteRelation.setDisable(false);
-                editClass.setDisable(true);
-                deleteClass.setDisable(true);
-                e.consume();
+                if (state == 0) {
+                    selectedRelation = o;
+                    deleteteRelation.setDisable(false);
+                    editClass.setDisable(true);
+                    deleteClass.setDisable(true);
+                    e.consume();
+                }
             });
         }
     }
+
+
 
     /**
      * Setup all Gparticipants from diagram input
@@ -402,7 +427,8 @@ public class GUIMain extends Application implements Observer {
     public void setupParticipants(List<UMLParticipant> participants) {
         for (UMLParticipant par : participants) {
             GParticipant tmp = new GParticipant();
-            makeGParticipantDraggable(tmp, scene.getWidth(), scene.getHeight());
+            //selected event handler
+            makeGParticipantDraggableAndSelected(tmp, scene.getWidth(), scene.getHeight());
             tmp.name = par.getName();
 
             gParticipantList.add(tmp);
@@ -415,8 +441,13 @@ public class GUIMain extends Application implements Observer {
 
             //setup ActivationBoxes
             for (var box : par.getBoxes()){
-                GActivationBox Gbox = new GActivationBox(box.getStartPosition().getY(),box.getEndPosition().getY());
+                GActivationBox Gbox = new GActivationBox(box.getStartPosition().getY(),box.getEndPosition().getY(), box.getID());
                 tmp.dashedStart.getChildren().add(Gbox.root);
+                Gbox.root.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
+                    selectForDelete = Gbox;
+                    delete.setDisable(false);
+                    e.consume();
+                });
             }
 
             tmp.addObserver((Observable o, Object arg) -> {
@@ -426,6 +457,7 @@ public class GUIMain extends Application implements Observer {
                     setupFromSEQDiagram(SD);
                 }
             });
+
             setDashedEvents(tmp);
         }
     }
@@ -459,6 +491,23 @@ public class GUIMain extends Application implements Observer {
                 });
 
                 Gm.setStyle(m);
+
+                //setup DELETE handlers
+                Gm.connection.start.g.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
+                    selectForDelete = Gm;
+                    delete.setDisable(false);
+                    e.consume();
+                });
+                Gm.connection.end.g.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
+                    selectForDelete = Gm;
+                    delete.setDisable(false);
+                    e.consume();
+                });
+                Gm.messageName.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->{
+                    selectForDelete = Gm;
+                    delete.setDisable(false);
+                    e.consume();
+                });
 
             }
             catch (Exception e){
@@ -527,10 +576,12 @@ public class GUIMain extends Application implements Observer {
         stage = new Stage();
         stage.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent mouseEvent) {
+            public void handle(MouseEvent e) {
                 editClass.setDisable(true);
                 deleteClass.setDisable(true);
                 deleteteRelation.setDisable(true);
+//                if (delete != null)
+//                    delete.setDisable(true);
             }
         });
         pane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -597,10 +648,10 @@ public class GUIMain extends Application implements Observer {
         });
         buttonBar.getButtons().add(deleteClass);
 
-        addAssociation = new Button("Add AssociationClass");
+        addAssociation = new Button("Add Association");
         buttonBar.getButtons().add(addAssociation);
         addAssociation.setOnAction(e -> {
-            var retArr = AddAssociationWindow.display();
+            var retArr = AddRelationWithLabelsWindow.display("Add Association");
             if (retArr != null) {
                 LCardinality = retArr[0];
                 relationName = retArr[1];
@@ -608,6 +659,20 @@ public class GUIMain extends Application implements Observer {
                 AddRelationSetupButtons();
                 state = 1;
                 relationType = "Association";
+            }
+        });
+
+        addAggregation = new Button("Add Aggregation");
+        buttonBar.getButtons().add(addAggregation);
+        addAggregation.setOnAction(e -> {
+            var retArr = AddRelationWithLabelsWindow.display("Add Aggregation");
+            if (retArr != null) {
+                LCardinality = retArr[0];
+                relationName = retArr[1];
+                RCardinality = retArr[2];
+                AddRelationSetupButtons();
+                state = 1;
+                relationType = "Aggregation";
             }
         });
 
@@ -621,13 +686,7 @@ public class GUIMain extends Application implements Observer {
 
 
 
-        addAggregation = new Button("Add Aggregation");
-        buttonBar.getButtons().add(addAggregation);
-        addAggregation.setOnAction(e -> {
-            AddRelationSetupButtons();
-            state = 1;
-            relationType = "Aggregation";
-        });
+
 
         deleteteRelation = new Button("Delete Relation");
         deleteteRelation.setDisable(true);
@@ -743,7 +802,10 @@ public class GUIMain extends Application implements Observer {
                 state = 0;
                 var endPoint = new Position(0,(int) e.getY());
                 //create new box
-                GActivationBox Gbox = new GActivationBox(starPoint.getY(),endPoint.getY());
+                var box = SD.createActivationBox(selectedParticipant1.name);
+                GActivationBox Gbox = new GActivationBox(starPoint.getY(),endPoint.getY(), box.getID());
+                box.setStartPosition(0, starPoint.getY());
+                box.setEndPosition(0, endPoint.getY());
                 selectedParticipant1.dashedStart.getChildren().add(Gbox.root);
                 AddMessageENDSetupButtons();
             }
@@ -793,6 +855,7 @@ public class GUIMain extends Application implements Observer {
         addParticipant.setDisable(true);
         addBox.setDisable(true);
         cancelSD.setDisable(false);
+        delete.setDisable(true);
     }
 
     public void AddMessageENDSetupButtons(){
@@ -805,6 +868,7 @@ public class GUIMain extends Application implements Observer {
         addParticipant.setDisable(false);
         addBox.setDisable(false);
         cancelSD.setDisable(true);
+        delete.setDisable(true);
     }
     /**
      * Switch to Sequence Diagram context
@@ -878,6 +942,31 @@ public class GUIMain extends Application implements Observer {
             AddMessageENDSetupButtons();
         });
 
+        delete = new Button("Delete");
+        delete.setDisable(true);
+        delete.setOnAction(e -> {
+            if (selectForDelete != null){
+                if (selectForDelete instanceof GParticipant){
+                    var casted = (GParticipant)selectForDelete;
+                    SD.deleteParticipant(casted.name);
+                    delete.setDisable(true);
+                    setupFromSEQDiagram(SD);
+                }
+                else if (selectForDelete instanceof GMessage){
+                    var casted = (GMessage)selectForDelete;
+                    SD.deleteMessage(casted.ID);
+                    delete.setDisable(true);
+                    setupFromSEQDiagram(SD);
+                }
+                else if (selectForDelete instanceof GActivationBox){
+                    var casted = (GActivationBox)selectForDelete;
+                    SD.deleteActivationBox(casted.ID);
+                    delete.setDisable(true);
+                    setupFromSEQDiagram(SD);
+                }
+            }
+        });
+
         ComboBox<String> addParticipantCB = new ComboBox<>();
         SD = diagram.getSequenceDiagram(SDname);
 
@@ -885,7 +974,7 @@ public class GUIMain extends Application implements Observer {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(20);
-        hBox.getChildren().addAll(returnButton,addParticipant,addBox ,addSynchronous, addAsynchronous, addCreate, addReturn,addDelete , cancelSD);
+        hBox.getChildren().addAll(returnButton,addParticipant,addBox ,addSynchronous, addAsynchronous, addCreate, addReturn,addDelete , cancelSD, delete);
         vBoxSD.getChildren().add(hBox);
         vBoxSD.getChildren().add(pane);
         Scene x = new Scene(vBoxSD, 1000, 600);
@@ -907,7 +996,7 @@ public class GUIMain extends Application implements Observer {
     }
 
     public void repairGclassBottomBorderRelations(Gclass selectedGclass, int diff) {
-        for (var g : selectedGclass.generalizationList){
+        for (var g : selectedGclass.relationList){
             Position point;
             var Points = g.getPoints();
             if (g.getLeftClass().getName() == selectedGclass.getName())
@@ -990,12 +1079,15 @@ public class GUIMain extends Application implements Observer {
         });
     }
 
-    private void makeGParticipantDraggable(GParticipant gParticipant, double maxW, double maxH) {
+    private void makeGParticipantDraggableAndSelected(GParticipant gParticipant, double maxW, double maxH) {
 
         gParticipant.root.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 startX = e.getSceneX() - gParticipant.root.getTranslateX();
+                selectForDelete = gParticipant;
+                delete.setDisable(false);
+                e.consume();
             }
         });
 
@@ -1010,6 +1102,7 @@ public class GUIMain extends Application implements Observer {
                 if (X < 0)
                     X = 0;
                 gParticipant.root.setTranslateX(X);
+                e.consume();
             }
         });
         gParticipant.root.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
@@ -1019,12 +1112,13 @@ public class GUIMain extends Application implements Observer {
                     return;
                 Position pos = new Position((int)gParticipant.root.getTranslateX(),0);
                 gParticipant.movedNotifyObservers(pos);
+                e.consume();
             }
         });
     }
 
 
-    private void setGClassSelectEventHandler(Gclass gclass){
+    private void addGClassSelectedHandler(Gclass gclass){
         gclass.root.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {

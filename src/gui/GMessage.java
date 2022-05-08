@@ -40,6 +40,7 @@ public class GMessage{
      * @param end Contains reference to end participant.
      */
     public GMessage(String ID, GParticipant start, GParticipant end) {
+        this.ID = ID;
         this.startParticipant = start;
         this.endParticipant = end;
         this.connection = new GConnection();
@@ -94,6 +95,15 @@ public class GMessage{
             public void handle(MouseEvent e) {
                 double Y = e.getSceneY();
                 connection.start.g.setTranslateY(Y - 22);
+            }
+        });
+
+        connection.start.g.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                GUIMain.SD.getMessage(ID).ClearList();
+                GUIMain.SD.getMessage(ID).addPosition(new Position(0,(int) connection.start.g.getTranslateY()));
+                GUIMain.SD.getMessage(ID).addPosition(new Position(0,(int) connection.start.g.getTranslateY()));
             }
         });
     }
