@@ -68,8 +68,6 @@ public class Gclass extends Observable {
         separator1.setFill(Color.BLACK);
         separator2 = new Rectangle(initialClassWidth - 20, 5);
         separator2.setFill(Color.BLACK);
-//        spacer = new Rectangle(initialClassWidth - 20, 5);
-//        spacer.setFill(Color.WHITE);
 
         //create label for class name
         classLabel = new Label("'Class Name'");

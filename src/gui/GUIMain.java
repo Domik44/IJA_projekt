@@ -43,6 +43,7 @@ public class GUIMain extends Application implements Observer {
     Scene scene;
     Stage stage;
     Pane pane;
+    ScrollPane scrollPane;
     public static int state;
 
     //Fields for ClassDiagram
@@ -53,13 +54,14 @@ public class GUIMain extends Application implements Observer {
     public static Gclass selectedGclass2;
     static Object selectedRelation;
     HBox hboxCD;
-    static Button addClass;
-    static Button addInterface;
-    static Button editClass;
-    static Button deleteClass;
-    static Button addGeneralization;
-    static Button addAggregation;
-    static Button addAssociation;
+    static MenuItem addClass;
+    static MenuItem addInterface;
+    static MenuItem editClass;
+    static MenuItem deleteClass;
+    static MenuItem addGeneralization;
+    static MenuItem addAggregation;
+    static MenuItem addAssociation;
+    private MenuItem deleteteRelation;
     static Button cancelCD;;
     ComboBox<String> comboBoxSDSelection;
     Button goToSD;
@@ -68,7 +70,6 @@ public class GUIMain extends Application implements Observer {
     public static String LCardinality;
     public static String RCardinality;
     public static String relationName;
-    private Button deleteteRelation;
 
     //Fields for SequenceDiagram
     VBox vBoxSD;
@@ -77,13 +78,13 @@ public class GUIMain extends Application implements Observer {
     private GParticipant selectedParticipant1;
     private GParticipant selectedParticipant2;
     private Button returnButton;
-    private Button addParticipant;
-    private Button addSynchronous;
-    private Button addAsynchronous;
-    private Button addCreate;
-    private Button addReturn;
-    private Button addDelete;
-    private Button addBox;
+    static MenuItem addParticipant;
+    static MenuItem addSynchronous;
+    static MenuItem addAsynchronous;
+    static MenuItem addCreate;
+    static MenuItem addReturn;
+    static MenuItem addDelete;
+    static MenuItem addBox;
     private Button cancelSD;
     private Button delete;
     private Object selectForDelete;
@@ -96,6 +97,8 @@ public class GUIMain extends Application implements Observer {
     EditController editControl = new EditController();
     
 
+    final int WindowX = 1400;
+    final int WindowY = 600;
     /**
      * Constructor for GUIMain. Allocate memory, set scene
      */
@@ -103,7 +106,7 @@ public class GUIMain extends Application implements Observer {
         vBoxCD = new VBox();
         pane = new Pane();
         gClassList = new ArrayList<>();
-        scene = new Scene(vBoxCD, 1600, 860);
+        scene = new Scene(vBoxCD, WindowX, WindowY);
     }
 
     public void createRelation() {
@@ -593,19 +596,36 @@ public class GUIMain extends Application implements Observer {
             }
         });
 
-        //create buttons and button bar
-        ButtonBar buttonBar = new ButtonBar();
-        addClass = new Button("Add Class");
+
+        //CREATING MENU BAR
+        MenuBar menuBar = new MenuBar();
+        menuBar.setStyle("-fx-font-size: 14" );
+        vBoxCD.getChildren().add(0, menuBar);
+
+        Menu fileMenu = new Menu("File");
+        menuBar.getMenus().add(fileMenu);
+        MenuItem fileMenuSave = new MenuItem("Save");
+        fileMenu.getItems().add(fileMenuSave);
+        fileMenuSave.setOnAction(e ->{
+            //TODO HERE IS SAVE FILE BUTTON
+        });
+
+        Menu classMenu = new Menu("Class");
+        menuBar.getMenus().add(classMenu);
+
+
+        addClass = new MenuItem("Add Class");
+        classMenu.getItems().add(addClass);
         addClass.setOnAction(e ->{
-        	String name = CreateClassWindow.display();
+            String name = CreateClassWindow.display();
             if (name != null && !name.equals("")) {
-            	  var action = this.addControl.new AddClass(this, diagram, name);
-            	  run(action);
+                var action = this.addControl.new AddClass(this, diagram, name);
+                run(action);
             }
         });
-        buttonBar.getButtons().add(addClass);
         
-        addInterface = new Button("Add Interface");
+        addInterface = new MenuItem("Add Interface");
+        classMenu.getItems().add(addInterface);
         addInterface.setOnAction(e ->{ // TODO predelat na action
             String name = CreateClassWindow.display();
             if (name != null && !name.equals("")) {
@@ -613,9 +633,9 @@ public class GUIMain extends Application implements Observer {
           	  run(action);
           }
         });
-        buttonBar.getButtons().add(addInterface);
 
-        editClass = new Button("Edit Class");
+        editClass = new MenuItem("Edit Class");
+        classMenu.getItems().add(editClass);
         editClass.setDisable(true);
         editClass.setOnAction(e -> {
             if (selectedGclass1.isinterface){
@@ -630,12 +650,10 @@ public class GUIMain extends Application implements Observer {
             editClass.setDisable(true);
             deleteClass.setDisable(true);
         });
-        buttonBar.getButtons().add(editClass);
 
-        deleteClass = new Button("Delete Class");
+        deleteClass = new MenuItem("Delete Class");
+        classMenu.getItems().add(deleteClass);
         deleteClass.setDisable(true);
-        GUIMain gui = this;
-
         deleteClass.setOnAction(e ->{
         	if(selectedGclass1.isinterface) {
         		var action = this.deleteControl.new DeleteInterface(this, diagram, selectedGclass1.getName());
@@ -646,10 +664,11 @@ public class GUIMain extends Application implements Observer {
         		run(action);
         	}
         });
-        buttonBar.getButtons().add(deleteClass);
 
-        addAssociation = new Button("Add Association");
-        buttonBar.getButtons().add(addAssociation);
+        Menu relationsMenu = new Menu("Relations");
+        menuBar.getMenus().add(relationsMenu);
+        addAssociation = new MenuItem("Add Association");
+        relationsMenu.getItems().add(addAssociation);
         addAssociation.setOnAction(e -> {
             var retArr = AddRelationWithLabelsWindow.display("Add Association");
             if (retArr != null) {
@@ -662,8 +681,8 @@ public class GUIMain extends Application implements Observer {
             }
         });
 
-        addAggregation = new Button("Add Aggregation");
-        buttonBar.getButtons().add(addAggregation);
+        addAggregation = new MenuItem("Add Aggregation");
+        relationsMenu.getItems().add(addAggregation);
         addAggregation.setOnAction(e -> {
             var retArr = AddRelationWithLabelsWindow.display("Add Aggregation");
             if (retArr != null) {
@@ -676,8 +695,8 @@ public class GUIMain extends Application implements Observer {
             }
         });
 
-        addGeneralization = new Button("Add Generalization");
-        buttonBar.getButtons().add(addGeneralization);
+        addGeneralization = new MenuItem("Add Generalization");
+        relationsMenu.getItems().add(addGeneralization);
         addGeneralization.setOnAction(e -> {
             AddRelationSetupButtons();
             state = 1;
@@ -688,9 +707,11 @@ public class GUIMain extends Application implements Observer {
 
 
 
-        deleteteRelation = new Button("Delete Relation");
+        //create buttons and button bar
+        ButtonBar buttonBar = new ButtonBar();
+        deleteteRelation = new MenuItem("Delete Relation");
         deleteteRelation.setDisable(true);
-        buttonBar.getButtons().add(deleteteRelation);
+        relationsMenu.getItems().add(deleteteRelation);
         deleteteRelation.setOnAction(e -> { // TODO -> predelat na aciton
             if(selectedRelation instanceof GGeneralization){
             	var action = this.deleteControl.new DeleteGeneralization(this, diagram, ((GGeneralization)selectedRelation).name);
@@ -752,9 +773,13 @@ public class GUIMain extends Application implements Observer {
         hboxCD = new HBox();
         hboxCD.getChildren().addAll(buttonBar, comboBoxSDSelection, goToSD);
         vBoxCD.getChildren().add(hboxCD);
+
+        pane.minWidth(2000);
+//        scrollPane = new ScrollPane(pane);
+//        scrollPane.
+
         vBoxCD.getChildren().add(pane);
-
-
+        vBoxCD.setMinWidth(600);
 
 
         vBoxCD.prefWidthProperty().bind(stage.widthProperty().multiply(0.80));
@@ -876,26 +901,36 @@ public class GUIMain extends Application implements Observer {
      */
     private void SwitchToSDContext(String SDname) {
         vBoxSD = new VBox();
-//        ButtonBar buttonBar = new ButtonBar();
-        returnButton = new Button("<- Return");
-        returnButton.setOnAction(e -> {
-            SwitchToCDContext();
-        });
 
-        addParticipant = new Button("Add Participant");
+        //CREATE MENU BAR
+        MenuBar menuBar = new MenuBar();
+        menuBar.setStyle("-fx-font-size: 14" );
+        vBoxSD.getChildren().add(0, menuBar);
+
+
+        Menu participantMenu = new Menu("Add Element");
+        Menu messageMenu = new Menu("Add Messages");
+        menuBar.getMenus().addAll(participantMenu, messageMenu);
+
+        addParticipant = new MenuItem("Add Participant");
+        participantMenu.getItems().add(addParticipant);
         addParticipant.setOnAction(e -> {
             var retArr = CreateParticipantWindow.display(null);
-            SD.createParticipant(retArr[0], new UMLInterface(retArr[1])); //TODO domluvit se na implementaci
-            setupFromSEQDiagram(SD);
+            if (retArr != null) {
+                SD.createParticipant(retArr[0], new UMLClass(retArr[1])); //TODO domluvit se na implementaci
+                setupFromSEQDiagram(SD);
+            }
         });
 
-        addBox = new Button("Add Box");
+        addBox = new MenuItem("Add Box");
+        participantMenu.getItems().add(addBox);
         addBox.setOnAction(e -> {
             state = 5;
             AddMessageSetupButtons();
         });
 
-        addSynchronous = new Button("Add Synchronous");
+        addSynchronous = new MenuItem("Add Synchronous");
+        messageMenu.getItems().add(addSynchronous);
         addSynchronous.setOnAction(e -> {
             messageType = "Synchronous";
             messageText = CreateMessageWindow.display(messageType);
@@ -903,7 +938,8 @@ public class GUIMain extends Application implements Observer {
             AddMessageSetupButtons();
         });
 
-        addAsynchronous = new Button("Add Asynchronous");
+        addAsynchronous = new MenuItem("Add Asynchronous");
+        messageMenu.getItems().add(addAsynchronous);
         addAsynchronous.setOnAction(e -> {
             messageType = "Asynchronous";
             messageText = CreateMessageWindow.display(messageType);
@@ -911,7 +947,8 @@ public class GUIMain extends Application implements Observer {
             AddMessageSetupButtons();
         });
 
-        addCreate = new Button("Add Create");
+        addCreate = new MenuItem("Add Create");
+        messageMenu.getItems().add(addCreate);
         addCreate.setOnAction(e -> {
             messageType = "Create";
             messageText = CreateMessageWindow.display(messageType);
@@ -919,7 +956,8 @@ public class GUIMain extends Application implements Observer {
             AddMessageSetupButtons();
         });
 
-        addReturn = new Button("Add Return");
+        addReturn = new MenuItem("Add Return");
+        messageMenu.getItems().add(addReturn);
         addReturn.setOnAction(e -> {
             messageType = "Return";
             messageText = CreateMessageWindow.display(messageType);
@@ -927,13 +965,18 @@ public class GUIMain extends Application implements Observer {
             AddMessageSetupButtons();
         });
 
-        addDelete = new Button("Add Delete");
+        addDelete = new MenuItem("Add Delete");
+        messageMenu.getItems().add(addDelete);
         addDelete.setOnAction(e -> {
             messageType = "Delete";
             messageText = CreateMessageWindow.display(messageType);
             state = 1;
             AddMessageSetupButtons();
         });
+
+
+
+
 
         cancelSD = new Button("Cancel");
         cancelSD.setDisable(true);
@@ -974,7 +1017,13 @@ public class GUIMain extends Application implements Observer {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(20);
-        hBox.getChildren().addAll(returnButton,addParticipant,addBox ,addSynchronous, addAsynchronous, addCreate, addReturn,addDelete , cancelSD, delete);
+//        hBox.getChildren().addAll(returnButton,addParticipant,addBox ,addSynchronous, addAsynchronous, addCreate, addReturn,addDelete , cancelSD, delete);
+
+        returnButton = new Button("<- Return");
+        returnButton.setOnAction(e -> {
+            SwitchToCDContext();
+        });
+        hBox.getChildren().addAll(returnButton, cancelSD, delete);
         vBoxSD.getChildren().add(hBox);
         vBoxSD.getChildren().add(pane);
         Scene x = new Scene(vBoxSD, 1000, 600);
