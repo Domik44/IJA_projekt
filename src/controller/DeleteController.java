@@ -273,58 +273,70 @@ public class DeleteController {
 	public class DeleteMessage implements UIAction{
 		
 		//TODO -> view pro sekvencni diagram
-		GUIMain view;
-		SequenceDiagram model;
+		public GUIMain view;
+		public SequenceDiagram seqModel;
+		public ClassDiagram clsModel;
 		UMLMessage deletedMessage;
 		String ID;
 		
-		public DeleteMessage(GUIMain view, SequenceDiagram model, String ID) {
+		public DeleteMessage(GUIMain view, SequenceDiagram seqModel, ClassDiagram clsModel, String ID) {
 			this.view = view;
-			this.model = model;
+			this.seqModel = seqModel;
+			this.clsModel = clsModel;
 			this.ID = ID;
 		}
 		
 		@Override
 		public void run() {
-			this.deletedMessage = this.model.getMessage(this.ID);
-			this.model.deleteMessage(this.ID);
-			// TODO -> setup from diagram pro sekvencni
-//			this.view
+			this.deletedMessage = this.seqModel.getMessage(this.ID);
+			this.seqModel.deleteMessage(this.ID);
+
+			this.view.delete.setDisable(true);
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 		
 		@Override
 		public void undo() {
-			this.model.addMessage(deletedMessage);
-			// TODO -> setup from diagram pro sekvencni
-//			this.view
+			this.seqModel.addMessage(deletedMessage);
+
+			this.view.delete.setDisable(true);
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 	}
 	
 	public class DeleteActivationBox implements UIAction{
 		
 		//TODO -> view pro sekvencni diagram
-		SequenceDiagram model;
-		GUIMain view;
+		public GUIMain view;
+		public SequenceDiagram seqModel;
+		public ClassDiagram clsModel;
 		String ID;
 		UMLActivationBox deletedActivationBox;
+		UMLParticipant deletedFrom;
 		
-		public DeleteActivationBox(SequenceDiagram model) {
-			this.model = model;
+		public DeleteActivationBox(GUIMain view, SequenceDiagram seqModel, ClassDiagram clsModel, String ID) {
+			this.view = view;
+			this.seqModel = seqModel;
+			this.clsModel = clsModel;
+			this.ID = ID;
 		}
 		
 		@Override
 		public void run() {
-			this.deletedActivationBox = this.model.getActivationBox(ID);
-			this.model.deleteActivationBox(this.ID);
-			// TODO -> setup from diagram pro sekvencni
-//			this.view.se
+			this.deletedActivationBox = this.seqModel.getActivationBox(ID);
+			this.deletedFrom = this.deletedActivationBox.getBelognsTo();
+			this.seqModel.deleteActivationBox(this.ID);
+			
+			this.view.delete.setDisable(true);
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 		
 		@Override
 		public void undo() {
-			this.model.addActivationBox(deletedActivationBox);
-			// TODO -> setup from diagram pro sekvencni
-//			this.view
+			this.seqModel.addActivationBox(deletedActivationBox);
+			this.deletedFrom.addBox(deletedActivationBox);
+			
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 	}
 	

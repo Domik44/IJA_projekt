@@ -999,15 +999,13 @@ public class GUIMain extends Application implements Observer {
                 }
                 else if (selectForDelete instanceof GMessage){
                     var casted = (GMessage)selectForDelete;
-                    SD.deleteMessage(casted.ID);
-                    delete.setDisable(true);
-                    setupFromSEQDiagram(SD);
+                    var action = this.deleteControl.new DeleteMessage(this, SD, diagram, casted.ID);
+                    run(action);
                 }
                 else if (selectForDelete instanceof GActivationBox){
                     var casted = (GActivationBox)selectForDelete;
-                    SD.deleteActivationBox(casted.ID);
-                    delete.setDisable(true);
-                    setupFromSEQDiagram(SD);
+                    var action = this.deleteControl.new DeleteActivationBox(this, SD, diagram, casted.ID);
+                    run(action);
                 }
             }
         });
