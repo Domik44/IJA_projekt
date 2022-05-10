@@ -56,6 +56,7 @@ public class DeleteController {
 			
 			this.deletedInterface.setIsInconsistent(true);
 			this.model.deleteInterface(name);
+//			this.model.addInconsistent((UMLClass)deletedInterface);
 			this.view.setupFromDiagram(model);
 		}
 		
@@ -75,7 +76,6 @@ public class DeleteController {
 				this.model.addAggregation(rel);				
 			}
 			this.view.setupFromDiagram(model);
-			// TODO -> dodelat vraceni vztahu, participantu i messagu!!!
 		}
 	}
 	
@@ -116,6 +116,7 @@ public class DeleteController {
 			}
 			
 			this.deletedClass.setIsInconsistent(true);
+			this.model.addInconsistent(deletedClass);
 			this.model.deleteClass(name);
 			this.view.setupFromDiagram(model);
 		}
@@ -135,8 +136,8 @@ public class DeleteController {
 			for(RelAggregation rel : this.deletedAggregations) {
 				this.model.addAggregation(rel);				
 			}
+			this.model.removeInconsistent(deletedClass);
 			this.view.setupFromDiagram(model);
-			// TODO -> dodelat vraceni vztahu, participantu i messagu!!!
 		}
 	}
 	
@@ -272,7 +273,6 @@ public class DeleteController {
 	
 	public class DeleteMessage implements UIAction{
 		
-		//TODO -> view pro sekvencni diagram
 		public GUIMain view;
 		public SequenceDiagram seqModel;
 		public ClassDiagram clsModel;
@@ -306,7 +306,6 @@ public class DeleteController {
 	
 	public class DeleteActivationBox implements UIAction{
 		
-		//TODO -> view pro sekvencni diagram
 		public GUIMain view;
 		public SequenceDiagram seqModel;
 		public ClassDiagram clsModel;

@@ -1,13 +1,17 @@
 package controller;
 
+import gui.GActivationBox;
 import gui.GUIMain;
 import uml.classDiagram.ClassDiagram;
+import uml.classDiagram.UMLClass;
 import uml.classDiagram.UMLInterface;
 import uml.pos.Position;
 import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
 import uml.sequenceDiagram.SequenceDiagram;
+import uml.sequenceDiagram.UMLActivationBox;
+import uml.sequenceDiagram.UMLMessage;
 import uml.sequenceDiagram.UMLParticipant;
 import workers.Converter;
 
@@ -80,7 +84,7 @@ public class AddController {
 			for( var p : this.view.positionList) {
 				newGeneralization.addPosition(p);
 			}
-			//TODO -> dodelat predani + nastaveni pozic, na kterych ma realce být!!
+			
 			this.view.setupFromDiagram(model);
 		}
 		
@@ -177,8 +181,8 @@ public class AddController {
 			UMLInterface instanceClass = this.clsModel.getInterface(instanceClassName) == null ?  this.clsModel.getClass(instanceClassName) : this.clsModel.getInterface(instanceClassName);
 			if(instanceClass == null) {
 				 name = Converter.converToCamelCase(name); // TODO -> mozna volat pred hledanim tridy?
-				 instanceClass = new UMLInterface(instanceClassName);
-				 this.clsModel.addInconsistent(instanceClass);
+				 instanceClass = new UMLClass(instanceClassName);
+				 this.clsModel.addInconsistent((UMLClass)instanceClass);
 				 instanceClass.setIsInconsistent(true);
 			}
 			
@@ -197,36 +201,56 @@ public class AddController {
 		
 		public GUIMain view;
 		public SequenceDiagram model;
+		public String messageText;
+		public String messageType;
+		public Position lineStart;
+		public String ID;
 		
-		public AddMessage(GUIMain view, SequenceDiagram model) {
+		public AddMessage(GUIMain view, SequenceDiagram model, Position lineStart, String messageText, String messageType) {
 			this.view = view;
 			this.model = model;
+			this.messageText = messageText;
+			this.messageType = messageType;
+			this.lineStart = lineStart;
 		}
 		
 		@Override
 		public void run() {
-
+			UMLMessage newMessage = this.model.createMessage(this.view.selectedParticipant1.name,
+					this.view.selectedParticipant2.name, messageText, messageType);
+			this.ID = newMessage.getID();
+			
+			if(lineStart.getY() < 50) {
+				lineStart.setY(50);
+			}
+			
+			newMessage.addPosition(lineStart);
+			this.view.setupFromSEQDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
-
+			this.model.deleteMessage(ID);
+			this.view.setupFromSEQDiagram(model);
 		}
 	}
 	
-	public class AddActionBox implements UIAction{
+	public class AddActivationBox implements UIAction{
 		
 		public GUIMain view;
 		public SequenceDiagram model;
+		public Position pos;
 		
-		public AddActionBox(GUIMain view, SequenceDiagram model) {
+		public AddActivationBox(GUIMain view, SequenceDiagram model, Position pos) {
 			this.view = view;
 			this.model = model;
+			this.pos = pos;
 		}
 		
 		@Override
 		public void run() {
-
+			UMLActivationBox box = this.model.createActivationBox(this.view.selectedParticipant1.name);
+//			GActivationBox Gbox = new 
 		}
 		
 		@Override
