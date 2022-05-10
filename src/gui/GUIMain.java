@@ -936,7 +936,7 @@ public class GUIMain extends Application implements Observer {
     private void createGMessage(Position lineStart, String messageText, String messageType, boolean messageInconsistent) {
         if (messageText == null)
             return;
-        var action = this.addControl.new AddMessage(this, SD, lineStart, messageText, messageType);
+        var action = this.addControl.new AddMessage(this, SD, lineStart, messageText, messageType, messageInconsistent);
         run(action);
     }
 

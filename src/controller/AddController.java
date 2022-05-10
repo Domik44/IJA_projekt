@@ -261,19 +261,34 @@ public class AddController {
 		public String messageType;
 		public Position lineStart;
 		public String ID;
+		public boolean isInconsistent;
 		
-		public AddMessage(GUIMain view, SequenceDiagram model, Position lineStart, String messageText, String messageType) {
+		public AddMessage(GUIMain view, SequenceDiagram model, Position lineStart, String messageText, String messageType, boolean Inconsistent) {
 			this.view = view;
 			this.model = model;
 			this.messageText = messageText;
 			this.messageType = messageType;
 			this.lineStart = lineStart;
+			this.isInconsistent = Inconsistent;
 		}
 		
 		@Override
 		public void run() {
 			UMLMessage newMessage = this.model.createMessage(this.view.selectedParticipant1.name,
 					this.view.selectedParticipant2.name, messageText, messageType);
+			
+			if(this.model.getMessageBefore() && messageType.equals("Return")){
+				newMessage.setIsInconsistent(true);
+			}
+			
+			if(isInconsistent) {
+				newMessage.setIsInconsistent(true);
+				this.model.setMessageBefore(true);
+			}
+			else {
+				this.model.setMessageBefore(false);
+			}
+			
 			this.ID = newMessage.getID();
 			
 			if(lineStart.getY() < 50) {

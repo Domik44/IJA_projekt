@@ -219,12 +219,12 @@ public class Writer {
 	public String writeParticipant(SequenceDiagram seqDiagram) {
 		String returnString = new String();
 		for(UMLParticipant par : seqDiagram.getParticipants()) {
-			String temporaryString = "Participant " + par.getName() + " " + par.getInstanceOf().getName() + " {\n";
+			String temporaryString = "Participant " + par.getName() + " " + par.getInstanceOf().getName() + " { \n";
 			temporaryString = temporaryString + "  startPos " + par.getStartPosition().getX() + " " + par.getStartPosition().getY();
-			temporaryString = temporaryString + "\n  endPos " + par.getEndPosition().getX() + " " + par.getEndPosition().getY();
-			temporaryString = temporaryString + "\n  lineStart " + par.getLineStartPosition().getX() + " " + par.getLineStartPosition().getY();
-			temporaryString = temporaryString + "\n  lineEnd " + par.getLineEndPosition().getX() + " " + par.getLineEndPosition().getY();
-			temporaryString = temporaryString + "\n}\n\n";
+			temporaryString = temporaryString + " \n  endPos " + par.getEndPosition().getX() + " " + par.getEndPosition().getY();
+			temporaryString = temporaryString + " \n  lineStart " + par.getLineStartPosition().getX() + " " + par.getLineStartPosition().getY();
+			temporaryString = temporaryString + " \n  lineEnd " + par.getLineEndPosition().getX() + " " + par.getLineEndPosition().getY();
+			temporaryString = temporaryString + " \n}\n\n";
 			returnString = returnString + temporaryString;
 		}
 		return returnString;
@@ -235,11 +235,13 @@ public class Writer {
 		for(UMLMessage mes : seqDiagram.getMessages()) {
 			String temporaryString = "Message " + mes.getName() + " " + mes.getType() + " {\n";
 			for(Position pos : mes.getPoints()) {
-				temporaryString = temporaryString + "  position " + pos.getX() + " " + pos.getY() + "\n";
+				temporaryString = temporaryString + "  position " + pos.getX() + " " + pos.getY() + " \n";
 			}
 			temporaryString = temporaryString + "  namePos " + mes.getPosition().getX() + " " + mes.getPosition().getY() + "\n";
-			temporaryString = temporaryString + "  startObject " + mes.getStartObject().getName() + "\n";
-			temporaryString = temporaryString + "  endObject " + mes.getEndObject().getName() + "\n";
+			temporaryString = temporaryString + "  startObject " + mes.getStartObject().getName() + " \n";
+			temporaryString = temporaryString + "  endObject " + mes.getEndObject().getName() + " \n";
+			if(mes.getIsInconsistent() == true)
+				temporaryString = temporaryString + "  inconsistent \n";
 			temporaryString = temporaryString + "}\n\n";
 			returnString = returnString + temporaryString;
 		}
@@ -250,9 +252,9 @@ public class Writer {
 		String returnString = new String();
 		for(UMLActivationBox act : seqDiagram.getActivationBoxes()) {
 			String temporaryString = "ActivationBox " + act.getBelognsTo().getName() + " {";
-			temporaryString = temporaryString + "\n  startPos " + act.getStartPosition().getX() + " " + act.getStartPosition().getY();
-			temporaryString = temporaryString + "\n  endPos " + act.getEndPosition().getX() + " " + act.getEndPosition().getY();
-			temporaryString = temporaryString + "\n}\n\n";
+			temporaryString = temporaryString + " \n  startPos " + act.getStartPosition().getX() + " " + act.getStartPosition().getY();
+			temporaryString = temporaryString + " \n  endPos " + act.getEndPosition().getX() + " " + act.getEndPosition().getY();
+			temporaryString = temporaryString + " \n}\n\n";
 			returnString = returnString + temporaryString;
 		}
 		return returnString;

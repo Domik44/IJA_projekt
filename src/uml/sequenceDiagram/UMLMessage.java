@@ -15,12 +15,14 @@ public class UMLMessage extends Element {
 	private UMLParticipant startObject;
 	private UMLParticipant endObject;
 	private String uniqueID;
+	private boolean isInconsistent;
 //	private List<UMLAttribute> attributes = new ArrayList<UMLAttribute>();
 	
 	public UMLMessage(String name, String type) {
 		super(name);
 		this.uniqueID = UUID.randomUUID().toString();
 		this.type = type;
+		this.isInconsistent = false;
 	}
 	
 	public String getID() {
@@ -106,6 +108,14 @@ public class UMLMessage extends Element {
 	
 	public UMLParticipant getEndObject() {
 		return this.endObject;
+	}
+	
+	public void setIsInconsistent(boolean value) {
+		this.isInconsistent = value;
+	}
+	
+	public boolean getIsInconsistent() {
+		return this.isInconsistent;
 	}
 	
 	@Override

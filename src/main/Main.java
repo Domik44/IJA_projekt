@@ -44,6 +44,7 @@ public class Main {
 		// TODO -> vratit zpatky mazani v pom.xml ze zalohy (v others)
 //		ClassDiagram classDiagram = new ClassDiagram("diagram");
 //		Reader.startReading(classDiagram);
+		
 //	
 		
 //		UMLClass newClass = classDiagram.createClass("Nakladni automobil");

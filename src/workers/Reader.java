@@ -368,6 +368,9 @@ public class Reader {
 				UMLParticipant endObject = seqDiagram.getParticipant(lineParsed[1]);
 				newMessage.setEndObject(endObject);
 			}
+			else if(lineParsed[0].equals("inconsistent")) {
+				newMessage.setIsInconsistent(true);
+			}
 		}
 	}
 	

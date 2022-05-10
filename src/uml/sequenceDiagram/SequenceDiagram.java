@@ -13,6 +13,7 @@ public class SequenceDiagram extends Element {
 	private List<UMLMessage> messages = new ArrayList<UMLMessage>();
 	private List<UMLActivationBox> activationBoxes = new ArrayList<UMLActivationBox>();
 	private boolean isSaved = true;
+	private boolean messageBeforeInconsistent = false;
 	
 	/**
 	 * Constructor for class representing sequence diagram.
@@ -289,6 +290,14 @@ public class SequenceDiagram extends Element {
 		}
 		
 		return returnList;
+	}
+	
+	public void setMessageBefore(boolean value) {
+		this.messageBeforeInconsistent = value;
+	}
+	
+	public boolean getMessageBefore() {
+		return this.messageBeforeInconsistent;
 	}
 
 }
