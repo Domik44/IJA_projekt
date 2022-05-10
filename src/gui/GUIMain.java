@@ -133,15 +133,6 @@ public class GUIMain extends Application implements Observer {
     }
 
     private void createAssociation() {
-//        RelAssociation a = diagram.createAssociation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
-//        fixBorderPoints();
-//        for (var p : positionList){
-//            a.addPosition(p);
-//        }
-//        a.setCardinality(LCardinality, RCardinality);
-//        a.setLabel(relationName);
-//        //place label into midle of start and end nodes
-//        setupFromDiagram(diagram);
     	var action = this.addControl.new AddAssociation(this, diagram);
     	run(action);
     }
@@ -540,7 +531,7 @@ public class GUIMain extends Application implements Observer {
                 MyNodeAnchor a2 = new MyNodeAnchor(0, 0, false);
                 Gm.setFromNodes(a1, a2);
                 a1.c.setRadius(5);
-                Gm.makeConnectionDraggableVerticaly(Gm.connection, pane.getHeight());
+                Gm.makeConnectionDraggableVerticaly(Gm.connection);
                 Gm.setLabelName(m.getName());
                 Gm.messageName.translateYProperty().bind(a1.getYprop().add(-20));
                 Gm.show(pane);
@@ -905,7 +896,7 @@ public class GUIMain extends Application implements Observer {
                 if (selectedParticipant1 == gParticipant) //selected the same GParticipant twice, invalid -> return
                     return;
                 selectedParticipant2 = gParticipant;
-                var retArr = CreateMessageWindow.display(messageType, selectedParticipant1);
+                var retArr = CreateMessageWindow.display(messageType, selectedParticipant2);
                 if (retArr != null && !retArr[0].equals("")) {
                     messageText = retArr[0];
                     messageInconsistent = true ? retArr[1].equals("true") : false;

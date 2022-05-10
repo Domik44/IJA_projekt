@@ -9,9 +9,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import uml.classDiagram.*;
@@ -23,18 +21,18 @@ import java.util.List;
  * Edit Class Window for attribute
  */
 public class ECWMethod {
-    /**
-     * Init window and setup values
-     */
     static String[] retArray;
 
     static List<Gattribute> GattributeList;
     static Gattribute selectedGattr = null;
     static Button attribEdit;
     static Button attribDelete;
-    static private final int labelHeight = 18;
     static int changeCnt;
 
+
+    /**
+     * Init window and setup values
+     */
     public static String[] display(UMLOperation operation){
         Stage window = new Stage();
         retArray = new String[3];
@@ -98,7 +96,7 @@ public class ECWMethod {
                 changeCnt++;
                 operation.addArgument(newUMLattr);
                 ClearGattributeLabels(grid);
-                SetupGattributeLabels(operation, grid);
+                SetupGoperationLabels(operation, grid);
             }
         });
         attribEdit = new Button("Edit Attribute");
@@ -119,7 +117,7 @@ public class ECWMethod {
             }
             if (change) { //need to redraw attributes
                 ClearGattributeLabels(grid);
-                SetupGattributeLabels(operation, grid);
+                SetupGoperationLabels(operation, grid);
             }
         });
         attribEdit.setDisable(true);
@@ -127,7 +125,7 @@ public class ECWMethod {
         attribDelete.setDisable(true);
 
         if (operation != null)
-            SetupGattributeLabels(operation, grid);
+            SetupGoperationLabels(operation, grid);
         attribsBB.getButtons().addAll(attribAdd, attribEdit, attribDelete);
         grid.add(attribsBB, 0, 2);
 
@@ -171,8 +169,12 @@ public class ECWMethod {
 }
 
 
-
-    public static void SetupGattributeLabels(UMLOperation operation, GridPane grid){
+    /**
+     * Setup Gattribute labels to pane
+     * @param operation use as source for atributes
+     * @param grid grid that will hold labels
+     */
+    public static void SetupGoperationLabels(UMLOperation operation, GridPane grid){
         GattributeList = new ArrayList<>();
         //setup attrib labels
         var argumentList = operation.getArguments();
@@ -183,7 +185,10 @@ public class ECWMethod {
         }
     }
 
-
+    /**
+     * Clear Gopperation labels from grid
+     * @param grid grid that holds labels
+     */
     public static void ClearGattributeLabels(GridPane grid){
         for (var Gattr : GattributeList){
             grid.getChildren().remove(Gattr);
@@ -191,6 +196,9 @@ public class ECWMethod {
     }
 
 
+    /**
+     * Event handler for selected Attribute
+     */
     public static EventHandler selectedAttribute = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent ME) {
@@ -205,6 +213,9 @@ public class ECWMethod {
         }
     };
 
+    /**
+     * Event Handler for removing selected attribute
+     */
     public static EventHandler<MouseEvent> removeselectedAttribute = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent ME) {

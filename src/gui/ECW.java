@@ -20,9 +20,6 @@ import java.util.List;
  * Edit Class Window
  */
 public class ECW {
-    /**
-     * Init window and setup values
-     */
     static List<Gattribute> GattributeList;
     static Gattribute selectedGattr = null;
     static Button attribEdit;
@@ -37,6 +34,9 @@ public class ECW {
     static private final int labelHeight = 18;
     static int changeCnt;
 
+    /**
+     * Init window and setup required elements
+     */
     public static int display(Object arg, ClassDiagram model){
         if (!(arg instanceof UMLInterface))
             return 0;
@@ -226,6 +226,11 @@ public class ECW {
     }
 
 
+    /**
+     * Setup Gattribute labels to pane
+     * @param Class use as source for atributes
+     * @param grid grid that will hold labels
+     */
     public static void SetupGattributeLabels(UMLClass Class, GridPane grid){
         GattributeList = new ArrayList<>();
         //setup attrib labels
@@ -238,6 +243,11 @@ public class ECW {
         }
     }
 
+    /**
+     * Setup Gopperation labels to pane
+     * @param Class use as source for oparations
+     * @param grid grid that will hold labels
+     */
     public static void SetupGoperationLabels(UMLInterface Class, GridPane grid){
         GoperationList = new ArrayList<>();
         var opList = Class.getOperations();
@@ -250,12 +260,20 @@ public class ECW {
         }
     }
 
+    /**
+     * Clear Gattribute labels from grid
+     * @param grid grid that holds labels
+     */
     public static void ClearGattributeLabels(GridPane grid){
         for (var Gattr : GattributeList){
             grid.getChildren().remove(Gattr);
         }
     }
 
+    /**
+     * Clear Gopperation labels from grid
+     * @param grid grid that holds labels
+     */
     public static void ClearOperationLabels(GridPane grid){
         for (var op : GoperationList){
             grid.getChildren().remove(op);

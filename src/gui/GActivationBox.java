@@ -39,6 +39,12 @@ public class GActivationBox {
     double eX;
     double eY;
 
+    /**
+     * Constructor for GActivationBox
+     * @param y1 Y value of top node position
+     * @param y2 Y value of bottom node position
+     * @param ID UMLActivationBox ID corresponding to uml equivalent
+     */
     public GActivationBox(double y1, double y2, String ID) {
         this.ID = ID;
         final int initialClassWidth = 10;
@@ -68,6 +74,11 @@ public class GActivationBox {
     }
 
     private  double startY;
+
+    /**
+     * Set EventHandler for ActivationBoxe's TOP node
+     * @param node node to be set
+     */
     private void makeDraggableVerticalyTOP(Group node) {
 
         node.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
@@ -107,7 +118,10 @@ public class GActivationBox {
         });
     }
 
-
+    /**
+     * Set EventHandler for ActivationBoxe's BOTTOM node
+     * @param node node to be set
+     */
     private void makeDraggableVerticalyBOTTOM(Group node) {
 
         node.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {

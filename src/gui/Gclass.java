@@ -106,35 +106,6 @@ public class Gclass extends Observable {
 
         });
 
-//        border.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent e) {
-//                seteX(e.getX() + root.getTranslateX());
-//                seteY(e.getY() + root.getTranslateY());
-////                System.out.printf("Root %f   %f\n",root.getTranslateX(), root.getTranslateY());
-//
-//                setChanged();
-//                notifyObservers(e);
-//            }
-//        });
-
-//        border.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent e) {
-//                Line testline = new Line();
-//                testline.setStartX(eX);
-//                testline.setStartY(eY);
-//                testline.setEndX(e.getX() + root.getTranslateX());
-//                testline.setEndY(e.getY() + root.getTranslateY());
-//                System.out.printf("Relesae ex %f  eY %f   %f   %f\n",eX,eY, e.getX(), e.getY());
-//                pane.getChildren().add(testline);
-//                testline.toBack();
-//                root.toFront();
-//
-//                testline.setStartX(300.0);
-//
-//            }
-//        });
     }
     /**
      * Setter for eX (dragg event related)

@@ -12,12 +12,11 @@ import javafx.stage.Stage;
  * EditClassWindowClassName
  */
 public class CreateElementWindow {
-    /**
-     * Init window and setup values
-     */
-    static String retValue = null;
-    static boolean checkboxOut;
 
+    static String retValue = null;
+    /**
+     * Init window and setup required elements
+     */
     public static String display(String WindowName){
         Stage window = new Stage();
 

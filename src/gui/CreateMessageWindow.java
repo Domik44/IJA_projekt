@@ -16,11 +16,11 @@ import java.sql.Array;
  * EditClassWindowClassName
  */
 public class CreateMessageWindow {
-    /**
-     * Init window and setup values
-     */
-    static String[] retArr = null;
 
+    static String[] retArr = null;
+    /**
+     * Init window and setup required elements
+     */
     public static String[] display(String type, GParticipant selectedParticipant){
         Stage window = new Stage();
 
@@ -55,8 +55,10 @@ public class CreateMessageWindow {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText("Select Sequence diagram");
         comboBox.setMinWidth(200);
+        System.out.println(selectedParticipant.name);
         for (var m : selectedParticipant.UMLInstanceOf.getAllMethods()){
             comboBox.getItems().add(m.toString());
+            System.out.println(m.toString());
         }
 
         save.setOnAction(e -> {

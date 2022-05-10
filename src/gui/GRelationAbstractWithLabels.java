@@ -118,6 +118,11 @@ import java.util.List;
 
     private double startX;
     private  double startY;
+
+    /**
+     * Make Label Draggable
+     * @param label
+     */
     public void makeDraggable(Label label) {
 
         label.addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {

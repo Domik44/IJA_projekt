@@ -2,12 +2,8 @@ package gui;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import uml.classDiagram.UMLRelation;
 import uml.pos.Position;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.Observer;
 
 /**

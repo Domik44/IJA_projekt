@@ -17,6 +17,12 @@ import javafx.scene.paint.Color;
 import uml.classDiagram.UMLInterface;
 import uml.pos.Position;
 
+/**
+ * GParticipant represents GUI UMLParticipant
+ *
+ * @author  Adam Hos
+ * @version 1.0
+ */
 public class GParticipant extends Observable{
 	public String name;
     UMLInterface UMLInstanceOf;
@@ -29,7 +35,12 @@ public class GParticipant extends Observable{
 
 	double eX;
 	double eY;
-	
+
+    /**
+     * Constructor for GParticipant
+     * @param name name of UMLParticipant
+     * @param UMLInstanceOf the Class that this participant belongs to
+     */
 	public GParticipant(String name, UMLInterface UMLInstanceOf) {
         this.name = name;
         this.UMLInstanceOf = UMLInstanceOf;
@@ -111,6 +122,10 @@ public class GParticipant extends Observable{
         return this.root;
     }
 
+    /**
+     * Notify observers call
+     * @param position current GParticipant position
+     */
     public void movedNotifyObservers(Position position){
         setChanged();
         notifyObservers(position);

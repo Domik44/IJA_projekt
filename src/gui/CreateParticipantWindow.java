@@ -16,11 +16,11 @@ import uml.classDiagram.UMLAttribute;
  * Edit Class Window for attribute
  */
 public class CreateParticipantWindow {
-    /**
-     * Init window and setup values
-     */
-    static String[] retArray = null;
 
+    static String[] retArray = null;
+    /**
+     * Init window and setup required elements
+     */
     public static String[] display(UMLAttribute attr){
         Stage window = new Stage();
 

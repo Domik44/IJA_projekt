@@ -21,7 +21,12 @@ public class GAggregation extends GRelationAbstractWithLabels {
         super(parent, child, name);
     }
 
-    //need to override, need more space coz square
+    /**
+     * Add label to anchor with calculated position, override because end of relation has square, need to move label
+     * @param gclass class near label
+     * @param node anchor
+     * @param label label o be added
+     */
     public void showLabelsCardinality(Gclass gclass, MyNode node, Label label){
         Group tmpRoot = gclass.getRoot();
         node.g.getChildren().add(label);

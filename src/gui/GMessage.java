@@ -10,11 +10,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-
-import java.util.List;
-import java.util.Observable;
-
-import javafx.scene.text.FontWeight;
 import uml.pos.Position;
 import uml.sequenceDiagram.UMLMessage;
 
@@ -22,6 +17,7 @@ import uml.sequenceDiagram.UMLMessage;
  * This class represents message in GUI.
  * 
  * @author Dominik Pop
+ * @author Adam Hos
  *
  */
 public class GMessage{
@@ -86,7 +82,11 @@ public class GMessage{
         this.messageName.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
-    public void makeConnectionDraggableVerticaly( GConnection connection, double maxH) {
+    /**
+     * Handler for this message, makes MyNodeAnchor draggable and links the message position to it
+     * @param connection connection that will be set
+     */
+    public void makeConnectionDraggableVerticaly( GConnection connection) {
         connection.end.g.translateYProperty().bind(connection.start.g.translateYProperty());
 
         connection.start.g.addEventHandler(MouseEvent.MOUSE_DRAGGED, new EventHandler<MouseEvent>() {
@@ -110,6 +110,9 @@ public class GMessage{
         });
     }
 
+    /**
+     * Set rotation for polygon based Both Participants position
+     */
     public void setEndRotation(){
         if(startParticipant.getRoot().getTranslateX() < endParticipant.getRoot().getTranslateX())
             this.connection.end.polygonSetRotatoinLR(true);
@@ -138,6 +141,9 @@ public class GMessage{
         }
     }
 
+    /**
+     * Set connection color to indicate Inconsistency
+     */
     public void setColorToInconsistent(){
         connection.path.setStroke(Color.RED);
     }

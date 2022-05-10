@@ -17,7 +17,6 @@ import java.util.Observable;
  */
 public class MyNode extends Observable  {
     //Attributes
-    int order; //order in gconnection
     Group g;
     Circle c;
     boolean wantToBeDeleted = false;
@@ -101,11 +100,17 @@ public class MyNode extends Observable  {
 
     }
 
+    /**
+     * Observable - notify that position has changed
+     */
     public void NotifyPositionChanged(){
         setChanged();
         notifyObservers(this);
     }
 
+    /**
+     * Observable - notify connection that this node wants to be deleted
+     */
     public void NotifyWantToBeDeleted(){
         wantToBeDeleted = true;
         wantToBeExpanded = false;
@@ -113,6 +118,9 @@ public class MyNode extends Observable  {
         notifyObservers(this);
     }
 
+    /**
+     * Observable - notify connection that this node wants to be expanded (add copy of this to NodeList)
+     */
     public void NotifyWantToBeExpanded(){
         System.out.println("mid");
         wantToBeDeleted = false;

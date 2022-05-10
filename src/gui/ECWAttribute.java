@@ -13,11 +13,11 @@ import uml.classDiagram.UMLAttribute;
  * Edit Class Window for attribute
  */
 public class ECWAttribute {
-    /**
-     * Init window and setup values
-     */
-    static String[] retArray;
 
+    static String[] retArray;
+    /**
+     * Init window and setup required elements
+     */
     public static String[] display(UMLAttribute attr, boolean showVisibility){
         Stage window = new Stage();
         retArray = new String[3];

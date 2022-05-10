@@ -15,11 +15,11 @@ import javafx.stage.Stage;
  * EditClassWindowClassName
  */
 public class ECWClassName {
+
+    static String retValue = null;
     /**
      * Init window and setup values
      */
-    static String retValue = null;
-
     public static String display(){
         Stage window = new Stage();
 

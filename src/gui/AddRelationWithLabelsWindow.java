@@ -15,11 +15,11 @@ import javafx.stage.Stage;
  * Edit Class Window for attribute
  */
 public class AddRelationWithLabelsWindow {
+
+    static String[] retArray;
     /**
      * Init window and setup values
      */
-    static String[] retArray;
-
     public static String[] display(String windowName){
         Stage window = new Stage();
         retArray = new String[3];
