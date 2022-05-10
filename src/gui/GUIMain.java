@@ -18,6 +18,7 @@ import uml.sequenceDiagram.SequenceDiagram;
 import uml.sequenceDiagram.UMLMessage;
 import uml.sequenceDiagram.UMLParticipant;
 import workers.Reader;
+import workers.Writer;
 
 import java.io.IOException;
 import java.util.*;
@@ -608,6 +609,8 @@ public class GUIMain extends Application implements Observer {
         fileMenu.getItems().add(fileMenuSave);
         fileMenuSave.setOnAction(e ->{
             //TODO HERE IS SAVE FILE BUTTON
+        	//TODO -> zatim nemuzeme dat undo na save
+        	Writer.startWriting(diagram);
         });
 
         Menu classMenu = new Menu("Class");
