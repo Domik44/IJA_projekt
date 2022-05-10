@@ -2,12 +2,14 @@ package controller;
 
 import gui.GUIMain;
 import uml.classDiagram.ClassDiagram;
+import uml.classDiagram.UMLInterface;
 import uml.pos.Position;
 import uml.relations.RelAggregation;
 import uml.relations.RelAssociation;
 import uml.relations.RelGeneralization;
 import uml.sequenceDiagram.SequenceDiagram;
 import uml.sequenceDiagram.UMLParticipant;
+import workers.Converter;
 
 public class AddController {
 	
@@ -157,21 +159,37 @@ public class AddController {
 	public class AddParticipant implements UIAction{
 		
 		public GUIMain view;
-		public SequenceDiagram model;
+		public SequenceDiagram seqModel;
+		public ClassDiagram clsModel;
+		public String name;
+		public String instanceClassName;
 		
-		public AddParticipant(GUIMain view, SequenceDiagram model) {
+		public AddParticipant(GUIMain view, SequenceDiagram seqModel, ClassDiagram clsModel, String[] information) {
 			this.view = view;
-			this.model = model;
+			this.seqModel = seqModel;
+			this.clsModel = clsModel;
+			this.name = information[0];
+			this.instanceClassName = information[1];
 		}
 		
 		@Override
 		public void run() {
-
+			UMLInterface instanceClass = this.clsModel.getInterface(instanceClassName) == null ?  this.clsModel.getClass(instanceClassName) : this.clsModel.getInterface(instanceClassName);
+			if(instanceClass == null) {
+				 name = Converter.converToCamelCase(name); // TODO -> mozna volat pred hledanim tridy?
+				 instanceClass = new UMLInterface(instanceClassName);
+				 this.clsModel.addInconsistent(instanceClass);
+				 instanceClass.setIsInconsistent(true);
+			}
+			
+			this.seqModel.createParticipant(this.name, instanceClass);
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 		
 		@Override
 		public void undo() {
-
+			this.seqModel.deleteParticipant(name);
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 	}
 	

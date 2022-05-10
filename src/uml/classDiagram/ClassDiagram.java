@@ -29,6 +29,7 @@ public class ClassDiagram extends Element {
 	private List<RelGeneralization> relGeneralization = new ArrayList<RelGeneralization>();
 	private List<UMLClassifier> types = new ArrayList<UMLClassifier>();
 	private List<SequenceDiagram> sequenceDiagrams = new ArrayList<SequenceDiagram>();
+	private List<UMLInterface> inconsistents = new ArrayList<UMLInterface>();
 	private boolean isSaved = true;
 
 	// Constructors
@@ -105,7 +106,17 @@ public class ClassDiagram extends Element {
 			// TODO thow exception a handle pres vyskakovaci okno!
 			return null;
 		}
-		UMLInterface newInterface = new UMLInterface(name);
+		
+		UMLInterface newInterface;
+		
+		if(this.getInconsistent(name) != null) {
+			newInterface = (UMLInterface)this.getInconsistent(name);
+			newInterface.setIsInconsistent(false);
+		}
+		else {
+			newInterface = new UMLInterface(name);			
+		}
+		
 		this.interfaces.add(newInterface);
 
 		return newInterface;
@@ -169,7 +180,17 @@ public class ClassDiagram extends Element {
 			// TODO thow exception a handle pres vyskakovaci okno!
 			return null;
 		}
-		UMLClass newClass = new UMLClass(name);
+		
+		UMLClass newClass;
+		
+		if(this.getInconsistent(name) != null) {
+			newClass = (UMLClass)this.getInconsistent(name);
+			newClass.setIsInconsistent(false);
+		}
+		else {
+			newClass = new UMLClass(name);			
+		}
+		
 		this.classes.add(newClass);
 
 		return newClass;
@@ -472,6 +493,24 @@ public class ClassDiagram extends Element {
 				return seq;
 			}
 		}
+		return null;
+	}
+	
+	public void addInconsistent(UMLInterface inconsistentClass) {
+		this.inconsistents.add(inconsistentClass);
+	}
+	
+	public List<UMLInterface> getInconsistents(){
+		return this.inconsistents;
+	}
+	
+	public UMLInterface getInconsistent(String name) {
+		for(UMLInterface in : this.getInconsistents()) {
+			if(in.getName() == name) {
+				return in;
+			}
+		}
+		
 		return null;
 	}
 	
