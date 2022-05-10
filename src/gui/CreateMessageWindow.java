@@ -69,7 +69,7 @@ public class CreateMessageWindow {
                 if (type.equals("Delete"))
                     retArr[0] = "<<delete>>";
                 retArr[0] += field.getText();
-                retArr[1] = "true";
+                retArr[1] = "false";
             }
             else {
                 retArr[0] = field.getText();
