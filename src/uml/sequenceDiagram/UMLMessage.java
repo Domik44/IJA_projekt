@@ -10,12 +10,12 @@ import uml.pos.Position;
 
 public class UMLMessage extends Element {
 	private String type;
-	private List<Position> listPoints = new java.util.ArrayList<Position>(); // TODO -> v zadani nejsou uvedeny self message, takze by teoreticky stacili jen 2 body!
+	private List<Position> listPoints = new java.util.ArrayList<Position>();
 	private Position namePosition = new Position(0,0);
 	private UMLParticipant startObject;
 	private UMLParticipant endObject;
 	private String uniqueID;
-	private List<UMLAttribute> attributes = new ArrayList<UMLAttribute>();
+//	private List<UMLAttribute> attributes = new ArrayList<UMLAttribute>();
 	
 	public UMLMessage(String name, String type) {
 		super(name);

@@ -79,12 +79,11 @@ public class SequenceDiagram extends Element {
 	 * 
 	 * @param name Contains name of participant to be deleted.
 	 */
-	public void deleteParticipant(String name) { //TODO -> odstraneni messagu
+	public void deleteParticipant(String name) {
 		UMLParticipant toBeDeleted = this.getParticipant(name);
 		if(toBeDeleted != null) {
 			this.deleteMessagesWith(toBeDeleted);
 			this.participants.remove(toBeDeleted);
-//			toBeDeleted = null;
 		}
 	}
 	
@@ -92,7 +91,6 @@ public class SequenceDiagram extends Element {
 		for(UMLParticipant par : this.participants) {
 			if(par.getInstanceOf() == instanceClass) {
 				this.deleteMessagesWith(par);
-//				this.deleteParticipant(par.getName());
 			}
 		}
 		
@@ -108,7 +106,7 @@ public class SequenceDiagram extends Element {
 	 * @param type Contains type of message.
 	 * @return Returns reference to newly created message.
 	 */
-	public UMLMessage createMessage(String startParticipantName, String endParticipantName, String name, String type) { // TODO!!! -> pridat aby se tady nastavovali i participenti!!
+	public UMLMessage createMessage(String startParticipantName, String endParticipantName, String name, String type) {
 //		name = Converter.converToCamelCase(name);
 		UMLParticipant startParticipant = this.getParticipant(startParticipantName);
 		UMLParticipant endParticipant = this.getParticipant(endParticipantName);
@@ -127,7 +125,7 @@ public class SequenceDiagram extends Element {
 	 * @param type Contains type of message.
 	 * @return Returns reference to newly created message.
 	 */
-	public UMLMessage createMessage(String name, String type) { // TODO!!! -> pridat aby se tady nastavovali i participenti!!
+	public UMLMessage createMessage(String name, String type) {
 //		name = Converter.converToCamelCase(name);
 		UMLMessage newMessage = new UMLMessage(name, type);
 		this.messages.add(newMessage);
@@ -184,9 +182,6 @@ public class SequenceDiagram extends Element {
 		return null;
 	}
 	
-	// Vytvoril se aktivacni box a pridal k participantovi
-	// canCreate je false, takze dokud neukoncim tenhle nemuzu pridat dalsi 
-	// ukoncit to muze message -> hrani si s pozici (konci na pozici message) -> nastaveni canCreate na true
 	/**
 	 * Creates activation box and sets its unique ID.
 	 * 
@@ -197,7 +192,6 @@ public class SequenceDiagram extends Element {
 		UMLActivationBox newBox = new UMLActivationBox();
 		this.activationBoxes.add(newBox);
 		participant.addBox(newBox);
-//		participant.setCanCreateActivationBox(false);
 		
 		return newBox;
 	}
