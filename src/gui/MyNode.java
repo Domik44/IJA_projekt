@@ -1,7 +1,6 @@
 package gui;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ObservableDoubleValue;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
@@ -15,8 +14,9 @@ import java.util.Observable;
  * @author  Adam Hos
  * @version 1.0
  */
-public class MyNode {
+public class MyNode extends Observable  {
     //Attributes
+    int order; //order in gconnection
     Group g;
     Circle c;
 
@@ -81,5 +81,17 @@ public class MyNode {
                 node.setTranslateY(Y);
             }
         });
+
+        node.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                NotifyPositionChanged();
+            }
+        });
+    }
+
+    public void NotifyPositionChanged(){
+        setChanged();
+        notifyObservers(this);
     }
 }

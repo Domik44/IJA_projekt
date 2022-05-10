@@ -197,7 +197,6 @@ public class ECWMethod {
             Object obj = ME.getSource();
             if (obj instanceof Gattribute) {
                 Gattribute tmp = (Gattribute) obj;
-                System.out.println("Clicked " + tmp.label.getText());
                 selectedGattr = tmp;
                 attribEdit.setDisable(false);
                 attribDelete.setDisable(false);

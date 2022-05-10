@@ -81,7 +81,6 @@ import java.util.List;
         Group tmpRoot = gclass.getRoot();
         node.g.getChildren().add(label);
         Platform.runLater(() ->{
-            System.out.println(label.getWidth());
             double xdiff = node.g.getTranslateX() - tmpRoot.getTranslateX();
             double ydiff = node.g.getTranslateY() - tmpRoot.getTranslateY();
             int smalloffset = 5;

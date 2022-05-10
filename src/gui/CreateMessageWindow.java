@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import uml.classDiagram.UMLInterface;
 
 /**
  * EditClassWindowClassName
@@ -19,7 +20,7 @@ public class CreateMessageWindow {
     static String retValue = null;
     static boolean checkboxOut;
 
-    public static String display(String type){
+    public static String display(String type, GParticipant selectedParticipant){
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
@@ -55,13 +56,9 @@ public class CreateMessageWindow {
         comboBox.setOnAction(e ->{
             save.setDisable(false);
         });
-        for( var m : GUIMain.SD.getMessages()){
-            if (m.getType() != null && m.getType().equals(type))
-                comboBox.getItems().add(m.getName());
+        for (var m : selectedParticipant.UMLInstanceOf.getAllMethods()){
+            comboBox.getItems().add(m.toString());
         }
-
-        for( var x : GUIMain.SD.getMessages())
-            System.out.println(x.getType()+ " " +x.getName());
 
         save.setOnAction(e -> {
             retValue = field.getText();

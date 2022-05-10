@@ -1,28 +1,25 @@
 package gui;
 
-import java.util.List;
 import java.util.Observable;
 
-import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import uml.classDiagram.UMLInterface;
 import uml.pos.Position;
 
 public class GParticipant extends Observable{
 	String name;
+    UMLInterface UMLInstanceOf;
 	Group root;
 	Rectangle border;
 	Label participantNameLabel;
@@ -33,7 +30,9 @@ public class GParticipant extends Observable{
 	double eX;
 	double eY;
 	
-	public GParticipant() {
+	public GParticipant(String name, UMLInterface UMLInstanceOf) {
+        this.name = name;
+        this.UMLInstanceOf = UMLInstanceOf;
 		final int initialParticipantWidth = 200; //TODO change width during runtime if needed?
 		final int initialParticipantHeight = 30;
 		
@@ -69,6 +68,10 @@ public class GParticipant extends Observable{
         border.toFront();
         participantVB.toFront();
         dashed.toBack();
+
+        if (UMLInstanceOf.getIsInconsistent())
+            border.setFill(Color.RED);
+
 
 	}
 	

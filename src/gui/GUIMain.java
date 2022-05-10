@@ -402,20 +402,32 @@ public class GUIMain extends Application implements Observer {
             for( var node : casted.connection.between){
                 node.g.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                     if (state == 0) {
+                        if (selectedRelation != null)
+                            ((GRelationAbstract)selectedRelation).setColorToUNSelected();
                         selectedRelation = o;
+                        ((GRelationAbstract)selectedRelation).setColorToSelected();
                         deleteteRelation.setDisable(false);
                         editClass.setDisable(true);
                         deleteClass.setDisable(true);
+
+                        if (selectedGclass1 != null)
+                            selectedGclass1.setColorToUNSelected();
                         e.consume();
                     }
                 });
             }
             casted.connection.start.g.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
                 if (state == 0) {
+                    if (selectedRelation != null)
+                        ((GRelationAbstract)selectedRelation).setColorToUNSelected();
                     selectedRelation = o;
+                    ((GRelationAbstract)selectedRelation).setColorToSelected();
                     deleteteRelation.setDisable(false);
                     editClass.setDisable(true);
                     deleteClass.setDisable(true);
+
+                    if (selectedGclass1 != null)
+                        selectedGclass1.setColorToUNSelected();
                     e.consume();
                 }
             });
@@ -430,10 +442,9 @@ public class GUIMain extends Application implements Observer {
      */
     public void setupParticipants(List<UMLParticipant> participants) {
         for (UMLParticipant par : participants) {
-            GParticipant tmp = new GParticipant();
+            GParticipant tmp = new GParticipant(par.getName(), par.getInstanceOf());
             //selected event handler
             makeGParticipantDraggableAndSelected(tmp, scene.getWidth(), scene.getHeight());
-            tmp.name = par.getName();
 
             gParticipantList.add(tmp);
             tmp.getRoot().toBack();
@@ -458,7 +469,7 @@ public class GUIMain extends Application implements Observer {
                 if (arg instanceof Position){
                     var p = (Position)arg;
                     par.setStartPosition(p.getX(), p.getY());
-                    setupFromSEQDiagram(SD);
+                    setupFromSEQDiagram(SD);  //refresh needed for arrow directions
                 }
             });
 
@@ -491,7 +502,8 @@ public class GUIMain extends Application implements Observer {
                     var half = a2.getXprop().subtract(a1.getXprop()).divide(2);
 //                    Gm.messageName.translateXProperty().bind(a1.getXprop().add(half).subtract(Gm.messageName.getWidth() / 2));
                     double magicalCenteringConstant = 3.6;
-                    Gm.messageName.translateXProperty().bind(a1.getXprop().add(half).subtract(Gm.messageName.getText().length()*magicalCenteringConstant));
+                    if ( Gm.messageName != null)
+                        Gm.messageName.translateXProperty().bind(a1.getXprop().add(half).subtract(Gm.messageName.getText().length()*magicalCenteringConstant));
                 });
 
                 Gm.setStyle(m);
@@ -586,6 +598,10 @@ public class GUIMain extends Application implements Observer {
                 deleteteRelation.setDisable(true);
 //                if (delete != null)
 //                    delete.setDisable(true);
+                if (selectedGclass1 != null)
+                    selectedGclass1.setColorToUNSelected();
+                if (selectedRelation != null)
+                    ((GRelationAbstract)selectedRelation).setColorToUNSelected();
             }
         });
         pane.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -608,9 +624,18 @@ public class GUIMain extends Application implements Observer {
         MenuItem fileMenuSave = new MenuItem("Save");
         fileMenu.getItems().add(fileMenuSave);
         fileMenuSave.setOnAction(e ->{
-            //TODO HERE IS SAVE FILE BUTTON
         	//TODO -> zatim nemuzeme dat undo na save
         	Writer.startWriting(diagram);
+        });
+
+        MenuItem fileMenuCreateSD = new MenuItem("Create Sequence Diagram");
+        fileMenu.getItems().add(fileMenuCreateSD);
+        fileMenuCreateSD.setOnAction(e ->{
+            String name = CreateElementWindow.display("Create Sequence Diagram");
+            if (name != null && !name.equals("")) {
+                diagram.createSequenceDiagram(name);
+                comboBoxSDSelection.getItems().add(name);
+            }
         });
 
         Menu classMenu = new Menu("Class");
@@ -620,7 +645,7 @@ public class GUIMain extends Application implements Observer {
         addClass = new MenuItem("Add Class");
         classMenu.getItems().add(addClass);
         addClass.setOnAction(e ->{
-            String name = CreateClassWindow.display();
+            String name = CreateElementWindow.display("Create Class");
             if (name != null && !name.equals("")) {
                 var action = this.addControl.new AddClass(this, diagram, name);
                 run(action);
@@ -630,7 +655,7 @@ public class GUIMain extends Application implements Observer {
         addInterface = new MenuItem("Add Interface");
         classMenu.getItems().add(addInterface);
         addInterface.setOnAction(e ->{ // TODO predelat na action
-            String name = CreateClassWindow.display();
+            String name = CreateElementWindow.display("Create interface");
             if (name != null && !name.equals("")) {
           	  var action = this.addControl.new AddInterface(this, diagram, name);
           	  run(action);
@@ -815,6 +840,7 @@ public class GUIMain extends Application implements Observer {
                 if (selectedParticipant1 == gParticipant) //selected the same GParticipant twice, invalid -> return
                     return;
                 selectedParticipant2 = gParticipant;
+                messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
                 createGMessage(starPoint, messageText, messageType);
 
             }
@@ -842,6 +868,8 @@ public class GUIMain extends Application implements Observer {
     }
 
     private void createGMessage(Position lineStart, String messageText, String messageType) {
+        if (messageText == null)
+            return;
         UMLMessage m = SD.createMessage(selectedParticipant1.name,
                 selectedParticipant2.name,
                 messageText,
@@ -936,7 +964,6 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addSynchronous);
         addSynchronous.setOnAction(e -> {
             messageType = "Synchronous";
-            messageText = CreateMessageWindow.display(messageType);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -945,7 +972,7 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addAsynchronous);
         addAsynchronous.setOnAction(e -> {
             messageType = "Asynchronous";
-            messageText = CreateMessageWindow.display(messageType);
+            messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -954,7 +981,7 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addCreate);
         addCreate.setOnAction(e -> {
             messageType = "Create";
-            messageText = CreateMessageWindow.display(messageType);
+            messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -963,7 +990,7 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addReturn);
         addReturn.setOnAction(e -> {
             messageType = "Return";
-            messageText = CreateMessageWindow.display(messageType);
+            messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -972,7 +999,7 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addDelete);
         addDelete.setOnAction(e -> {
             messageType = "Delete";
-            messageText = CreateMessageWindow.display(messageType);
+            messageText = CreateMessageWindow.display(messageType, selectedParticipant2);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -1182,7 +1209,12 @@ public class GUIMain extends Application implements Observer {
             public void handle(MouseEvent e) {
                 if (GUIMain.state != 0)
                     return;
+                if (selectedRelation != null)
+                    ((GRelationAbstract)selectedRelation).setColorToUNSelected();
+                if (selectedGclass1 != null)
+                    selectedGclass1.setColorToUNSelected();
                 selectedGclass1 = gclass;
+                gclass.setColorToSelected();
                 deleteteRelation.setDisable(true);
                 deleteClass.setDisable(false);
                 editClass.setDisable(false);

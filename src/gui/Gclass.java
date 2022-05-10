@@ -220,4 +220,12 @@ public class Gclass extends Observable {
         setChanged();
         notifyObservers();
     }
+
+    public void setColorToSelected(){
+        border.setFill(Color.LIGHTBLUE);
+    }
+
+    public void setColorToUNSelected(){
+        border.setFill(Color.BLUEVIOLET);
+    }
 }

@@ -5,26 +5,25 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
  * EditClassWindowClassName
  */
-public class CreateClassWindow {
+public class CreateElementWindow {
     /**
      * Init window and setup values
      */
     static String retValue = null;
     static boolean checkboxOut;
 
-    public static String display(){
+    public static String display(String WindowName){
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Create class/interface");
-        window.setMinWidth(300);
+        window.setTitle(WindowName);
+        window.setMinWidth(330);
 
         Label classNameLabel = new Label();
         classNameLabel.setText("Name: ");
