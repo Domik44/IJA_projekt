@@ -541,7 +541,7 @@ public class GUIMain extends Application implements Observer {
      * Setup pane from SequenceDiagram (redraw all Gclasses (relevant to this diagram))
      * @param  SD SequenceDiagram that will be read from
      */
-    private void setupFromSEQDiagram(SequenceDiagram SD) {
+    public void setupFromSEQDiagram(SequenceDiagram SD) {
         gParticipantList.clear();
         pane.getChildren().clear();
         setupParticipants(SD.getParticipants());
@@ -920,8 +920,8 @@ public class GUIMain extends Application implements Observer {
         addParticipant.setOnAction(e -> {
             var retArr = CreateParticipantWindow.display(null);
             if (retArr != null) {
-                SD.createParticipant(retArr[0], new UMLClass(retArr[1])); //TODO domluvit se na implementaci
-                setupFromSEQDiagram(SD);
+            	var action = this.addControl.new AddParticipant(this, SD, diagram, retArr);
+                run(action);
             }
         });
 
@@ -1026,10 +1026,19 @@ public class GUIMain extends Application implements Observer {
         returnButton.setOnAction(e -> {
             SwitchToCDContext();
         });
-        hBox.getChildren().addAll(returnButton, cancelSD, delete);
+        
+        Button undoButton = new Button("Undo");
+//        buttonBar.getButtons().add(undoButton);
+
+        undoButton.setOnAction(e ->{
+        	undo();
+        });
+        
+        hBox.getChildren().addAll(returnButton, cancelSD, delete, undoButton);
         vBoxSD.getChildren().add(hBox);
         vBoxSD.getChildren().add(pane);
         Scene x = new Scene(vBoxSD, 1000, 600);
+        
 
         setupFromSEQDiagram(SD);
 
