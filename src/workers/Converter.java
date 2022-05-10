@@ -3,6 +3,9 @@ package workers;
 public class Converter {
 	
 	public static String converToCamelCase (String text) {
+		if(text.equals("")) {
+			return text;
+		}
 		if(!text.contains(" ")) {
 			return text;
 		}

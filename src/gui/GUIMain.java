@@ -76,8 +76,8 @@ public class GUIMain extends Application implements Observer {
     VBox vBoxSD;
     List<GParticipant> gParticipantList = new ArrayList<>();
     public static SequenceDiagram SD;
-    private GParticipant selectedParticipant1;
-    private GParticipant selectedParticipant2;
+    public GParticipant selectedParticipant1;
+    public GParticipant selectedParticipant2;
     private Button returnButton;
     static MenuItem addParticipant;
     static MenuItem addSynchronous;
@@ -128,16 +128,8 @@ public class GUIMain extends Application implements Observer {
     	run(action);
     }
     private void createAggregation() {
-        RelAggregation a = diagram.createAggregation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
-        fixBorderPoints();
-        for (var p : positionList){
-            a.addPosition(p);
-        }
-        a.setCardinality(LCardinality, RCardinality);
-        a.setLabel(relationName);
-        //place label into midle of start and end nodes
-        a.setLabelPosition(50,50);
-        setupFromDiagram(diagram);
+    	var action = this.addControl.new AddAggregation(this, diagram);
+    	run(action);
     }
 
     private void createAssociation() {
@@ -158,6 +150,8 @@ public class GUIMain extends Application implements Observer {
         System.out.println(x);
         a.setLabelPosition(x,y);
         setupFromDiagram(diagram);
+    	var action = this.addControl.new AddAssociation(this, diagram);
+    	run(action);
     }
 
     /**
@@ -671,7 +665,7 @@ public class GUIMain extends Application implements Observer {
         
         addInterface = new MenuItem("Add Interface");
         classMenu.getItems().add(addInterface);
-        addInterface.setOnAction(e ->{ // TODO predelat na action
+        addInterface.setOnAction(e ->{
             String name = CreateElementWindow.display("Create interface");
             if (name != null && !name.equals("")) {
           	  var action = this.addControl.new AddInterface(this, diagram, name);
@@ -762,7 +756,7 @@ public class GUIMain extends Application implements Observer {
         deleteteRelation = new MenuItem("Delete Relation");
         deleteteRelation.setDisable(true);
         relationsMenu.getItems().add(deleteteRelation);
-        deleteteRelation.setOnAction(e -> { // TODO -> predelat na aciton
+        deleteteRelation.setOnAction(e -> {
             if(selectedRelation instanceof GGeneralization){
             	var action = this.deleteControl.new DeleteGeneralization(this, diagram, ((GGeneralization)selectedRelation).name);
                 run(action);
@@ -887,6 +881,7 @@ public class GUIMain extends Application implements Observer {
                 box.setStartPosition(0, starPoint.getY());
                 box.setEndPosition(0, endPoint.getY());
                 selectedParticipant1.dashedStart.getChildren().add(Gbox.root);
+                box.setBelongsTo(SD.getParticipant(selectedParticipant1.name)); //TODO -> important! chybelo
                 AddMessageENDSetupButtons();
             }
             e.consume();
@@ -896,14 +891,8 @@ public class GUIMain extends Application implements Observer {
     private void createGMessage(Position lineStart, String messageText, String messageType, boolean messageInconsistent) {
         if (messageText == null)
             return;
-        UMLMessage m = SD.createMessage(selectedParticipant1.name,
-                selectedParticipant2.name,
-                messageText,
-                messageType);
-        if(lineStart.getY() < 50)
-            lineStart.setY(50);
-        m.addPosition(lineStart);
-        setupFromSEQDiagram(SD);
+        var action = this.addControl.new AddMessage(this, SD, lineStart, messageText, messageType);
+        run(action);
     }
 
     public static void AddRelationSetupButtons(){

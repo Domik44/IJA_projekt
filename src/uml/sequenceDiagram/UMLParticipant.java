@@ -13,7 +13,7 @@ public class UMLParticipant extends Element {
 	private Position endPosition = new Position(0,0);
 	private Position lineStartPosition = new Position(0,0);
 	private Position lineEndPosition = new Position(0,0);
-	private UMLInterface instanceOf; // TODO
+	private UMLInterface instanceOf;
 	private List<UMLActivationBox> boxes = new ArrayList<UMLActivationBox>();
  
 	public UMLParticipant(String name) {
@@ -72,8 +72,8 @@ public class UMLParticipant extends Element {
 	public void addBox(UMLActivationBox box) {
 		this.boxes.add(box);
 	}
-//	
-	public void deleteBox(String ID) { //TODO 
+
+	public void deleteBox(String ID) { 
 		this.boxes.removeIf(box -> (box.getID().equals(ID)));
 	}
 	

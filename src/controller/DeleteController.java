@@ -56,12 +56,14 @@ public class DeleteController {
 			
 			this.deletedInterface.setIsInconsistent(true);
 			this.model.deleteInterface(name);
+			this.model.addInconsistent(deletedInterface);
 			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
 			this.deletedInterface.setIsInconsistent(false);
+			this.model.removeInconsistent(deletedInterface);
 			this.model.addInterface(deletedInterface);
 			for(RelGeneralization rel : this.deletedGeneralizations) {
 				this.model.addGeneralization(rel);				
@@ -75,7 +77,6 @@ public class DeleteController {
 				this.model.addAggregation(rel);				
 			}
 			this.view.setupFromDiagram(model);
-			// TODO -> dodelat vraceni vztahu, participantu i messagu!!!
 		}
 	}
 	
@@ -116,6 +117,7 @@ public class DeleteController {
 			}
 			
 			this.deletedClass.setIsInconsistent(true);
+			this.model.addInconsistent(deletedClass);
 			this.model.deleteClass(name);
 			this.view.setupFromDiagram(model);
 		}
@@ -123,6 +125,7 @@ public class DeleteController {
 		@Override
 		public void undo() {
 			this.deletedClass.setIsInconsistent(false);
+			this.model.removeInconsistent(deletedClass);
 			this.model.addClass(deletedClass);
 			for(RelGeneralization rel : this.deletedGeneralizations) {
 				this.model.addGeneralization(rel);				
@@ -135,8 +138,8 @@ public class DeleteController {
 			for(RelAggregation rel : this.deletedAggregations) {
 				this.model.addAggregation(rel);				
 			}
+			this.model.removeInconsistent(deletedClass);
 			this.view.setupFromDiagram(model);
-			// TODO -> dodelat vraceni vztahu, participantu i messagu!!!
 		}
 	}
 	
@@ -272,7 +275,6 @@ public class DeleteController {
 	
 	public class DeleteMessage implements UIAction{
 		
-		//TODO -> view pro sekvencni diagram
 		public GUIMain view;
 		public SequenceDiagram seqModel;
 		public ClassDiagram clsModel;
@@ -306,7 +308,6 @@ public class DeleteController {
 	
 	public class DeleteActivationBox implements UIAction{
 		
-		//TODO -> view pro sekvencni diagram
 		public GUIMain view;
 		public SequenceDiagram seqModel;
 		public ClassDiagram clsModel;

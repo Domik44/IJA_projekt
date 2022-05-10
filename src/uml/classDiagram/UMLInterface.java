@@ -79,6 +79,10 @@ public class UMLInterface extends UMLClassifier {
 		return -1;
 	}
 	
+	public void deleteOperation(String name) {
+		this.methods.removeIf(op -> (op.getName().equals(name)));
+	}
+	
 	/**
 	 * Getter for operations list.
 	 * @return Returns reference to unmodifiable list of operations.
@@ -110,7 +114,6 @@ public class UMLInterface extends UMLClassifier {
 	}
 	
 	public void addInheritedMethods (List<UMLOperation> inheritedMethods) {
-//		this.inheritedMethods = inheritedMethods;
 		this.inheritedMethods.addAll(inheritedMethods);
 	}
 	

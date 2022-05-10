@@ -40,7 +40,6 @@ public class EditController {
 		
 		@Override
 		public void undo() {
-			//TODO!!
 			UMLInterface restoreInterface = this.model.getInterface(name);
 			restoreInterface.rename(this.originalInterface.getName());
 			restoreInterface.clean();
@@ -85,7 +84,6 @@ public class EditController {
 		
 		@Override
 		public void undo() {
-			//TODO!!
 			UMLClass restoreClass = this.model.getClass(name);
 			restoreClass.rename(this.originalClass.getName());
 			restoreClass.clean();

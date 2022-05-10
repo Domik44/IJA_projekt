@@ -113,7 +113,7 @@ public class Writer {
 	public String writeInterfaces(ClassDiagram classDiagram) {
 		String returnString = new String();
 		for(UMLInterface processsedInterface : classDiagram.getInterfaces()) {
-			if(processsedInterface.getIsInconsistent() == true) { // TODO -> pridani continue na nezapisovani inconsistent trid
+			if(processsedInterface.getIsInconsistent() == true) {
 				continue;
 			}
 			String temporaryString = "Interface " + processsedInterface.getName() + " {\n  position ";
@@ -132,7 +132,6 @@ public class Writer {
 		return returnString;
 	}
 	
-	// TODO
 	public String writeAssociations(ClassDiagram classDiagram) {
 		String returnString = new String();
 		for(RelAssociation processsedRelation : classDiagram.getAssociations()) {
@@ -250,7 +249,7 @@ public class Writer {
 	public String writeActivationBox(SequenceDiagram seqDiagram) {
 		String returnString = new String();
 		for(UMLActivationBox act : seqDiagram.getActivationBoxes()) {
-			String temporaryString = "ActivationBox " + act.getBelognsTo().getName() + " {"; // TODO
+			String temporaryString = "ActivationBox " + act.getBelognsTo().getName() + " {";
 			temporaryString = temporaryString + "\n  startPos " + act.getStartPosition().getX() + " " + act.getStartPosition().getY();
 			temporaryString = temporaryString + "\n  endPos " + act.getEndPosition().getX() + " " + act.getEndPosition().getY();
 			temporaryString = temporaryString + "\n}\n\n";
