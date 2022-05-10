@@ -19,11 +19,10 @@ public class CreateParticipantWindow {
     /**
      * Init window and setup values
      */
-    static String[] retArray;
+    static String[] retArray = null;
 
     public static String[] display(UMLAttribute attr){
         Stage window = new Stage();
-        retArray = new String[2];
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Create Participant");
@@ -56,14 +55,14 @@ public class CreateParticipantWindow {
 
         Button save = new Button("Save");
         save.setOnAction(e -> {
+            retArray = new String[2];
             retArray[0] = nameTF.getText();
             retArray[1] = typeTF.getText();
             window.close();
         });
         Button discard = new Button("Discard");
         discard.setOnAction(e -> {
-            retArray[0] = null;
-            retArray[1] = null;
+            retArray = null;
             window.close();
         });
 

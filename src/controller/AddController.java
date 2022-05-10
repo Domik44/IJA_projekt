@@ -190,8 +190,16 @@ public class AddController {
 			
 			newAssociation.setCardinality(this.view.LCardinality, this.view.RCardinality);
 			newAssociation.setLabel(this.view.relationName);
-	    	// TODO -> label pozice moc nefunguje
-			newAssociation.setLabelPosition(50, 50);
+
+			int x =(int)(view.positionList.get(0).getX() + view.selectedGclass1.getRoot().getTranslateX()
+					+ view.positionList.get(view.positionList.size() - 1).getX() + view.selectedGclass1.getRoot().getTranslateX()) / 2;
+			int y =(int)(view.positionList.get(0).getY() + view.selectedGclass1.getRoot().getTranslateY()
+					+ view.positionList.get(view.positionList.size() - 1).getY() + view.selectedGclass1.getRoot().getTranslateY()) / 2;
+
+			System.out.println(x);
+			System.out.println(y);
+			newAssociation.setLabelPosition(50,50);
+			newAssociation.setLabelPosition(x,y);
 			
 			this.view.setupFromDiagram(model);
 		}

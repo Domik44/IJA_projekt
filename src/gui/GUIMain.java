@@ -133,23 +133,15 @@ public class GUIMain extends Application implements Observer {
     }
 
     private void createAssociation() {
-        RelAssociation a = diagram.createAssociation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
-        fixBorderPoints();
-        for (var p : positionList){
-            a.addPosition(p);
-        }
-        a.setCardinality(LCardinality, RCardinality);
-        a.setLabel(relationName);
-        //place label into midle of start and end nodes
-        int x =(int)(positionList.get(0).getX() + selectedGclass1.getRoot().getTranslateX()
-                + positionList.get(positionList.size() - 1).getX() + selectedGclass2.getRoot().getTranslateX()) / 2;
-        int y =(int)(positionList.get(0).getY() + selectedGclass1.getRoot().getTranslateY()
-                + positionList.get(positionList.size() - 1).getY() + selectedGclass2.getRoot().getTranslateY()) / 2;
-        System.out.println(positionList.get(0).getX());
-        System.out.println(positionList.get(positionList.size() - 1).getX());
-        System.out.println(x);
-        a.setLabelPosition(x,y);
-        setupFromDiagram(diagram);
+//        RelAssociation a = diagram.createAssociation(selectedGclass1.getName(), selectedGclass2.getName(), relationType);
+//        fixBorderPoints();
+//        for (var p : positionList){
+//            a.addPosition(p);
+//        }
+//        a.setCardinality(LCardinality, RCardinality);
+//        a.setLabel(relationName);
+//        //place label into midle of start and end nodes
+//        setupFromDiagram(diagram);
     	var action = this.addControl.new AddAssociation(this, diagram);
     	run(action);
     }

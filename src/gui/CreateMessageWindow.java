@@ -20,18 +20,16 @@ public class CreateMessageWindow {
      * Init window and setup values
      */
     static String[] retArr = null;
-    static boolean checkboxOut;
 
     public static String[] display(String type, GParticipant selectedParticipant){
         Stage window = new Stage();
-        retArr = new String[2];
 
         boolean createORreturnORdelete = false;
         if(type.equals("Create") || type.equals("Return") || type.equals("Delete"))
             createORreturnORdelete = true;
 
         window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle("Create " + type + " message");
+        window.setTitle("Create \"" + type + "\" message");
         window.setMinWidth(350);
 
         GridPane grid = new GridPane();
@@ -62,6 +60,7 @@ public class CreateMessageWindow {
         }
 
         save.setOnAction(e -> {
+            retArr = new String[2];
             if (type.equals("Create") || type.equals("Return") || type.equals("Delete")){
                 if (type.equals("Create"))
                     retArr[0] = "<<create>>";
