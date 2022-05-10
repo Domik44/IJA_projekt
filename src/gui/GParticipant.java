@@ -18,7 +18,7 @@ import uml.classDiagram.UMLInterface;
 import uml.pos.Position;
 
 public class GParticipant extends Observable{
-	String name;
+	public String name;
     UMLInterface UMLInstanceOf;
 	Group root;
 	Rectangle border;
