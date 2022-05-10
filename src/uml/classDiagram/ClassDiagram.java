@@ -107,15 +107,15 @@ public class ClassDiagram extends Element {
 			return null;
 		}
 		
-		UMLInterface newInterface;
+		UMLInterface newInterface = new UMLInterface(name);
 		
-		if(this.getInconsistent(name) != null) {
-			newInterface = (UMLInterface)this.getInconsistent(name);
-			newInterface.setIsInconsistent(false);
-		}
-		else {
-			newInterface = new UMLInterface(name);			
-		}
+//		if(this.getInconsistent(name) != null) {
+//			newInterface = (UMLInterface)this.getInconsistent(name);
+//			newInterface.setIsInconsistent(false);
+//		}
+//		else {
+//			newInterface = new UMLInterface(name);			
+//		}
 		
 		this.interfaces.add(newInterface);
 
@@ -181,15 +181,15 @@ public class ClassDiagram extends Element {
 			return null;
 		}
 		
-		UMLClass newClass;
+		UMLClass newClass = new UMLClass(name);
 		
-		if(this.getInconsistent(name) != null) {
-			newClass = (UMLClass)this.getInconsistent(name);
-			newClass.setIsInconsistent(false);
-		}
-		else {
-			newClass = new UMLClass(name);			
-		}
+//		if(this.getInconsistent(name) != null) {
+//			newClass = (UMLClass)this.getInconsistent(name);
+//			newClass.setIsInconsistent(false);
+//		}
+//		else {
+//			newClass = new UMLClass(name);			
+//		}
 		
 		this.classes.add(newClass);
 
@@ -500,13 +500,17 @@ public class ClassDiagram extends Element {
 		this.inconsistents.add(inconsistentClass);
 	}
 	
+	public void removeInconsistent(UMLInterface inconsistentClass){
+		this.inconsistents.removeIf(in -> (in.getName().equals(inconsistentClass.getName())));
+	}
+	
 	public List<UMLInterface> getInconsistents(){
 		return this.inconsistents;
 	}
 	
 	public UMLInterface getInconsistent(String name) {
 		for(UMLInterface in : this.getInconsistents()) {
-			if(in.getName() == name) {
+			if(in.getName().equals(name)) {
 				return in;
 			}
 		}
