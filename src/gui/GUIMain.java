@@ -572,6 +572,9 @@ public class GUIMain extends Application implements Observer {
                     e.consume();
                 });
 
+                if(m.getIsInconsistent())
+                    Gm.setColorToInconsistent();
+
             }
             catch (Exception e){
                 System.out.println("Sequence diagram inconsistent input during relation: " + m.getName());

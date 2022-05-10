@@ -137,4 +137,8 @@ public class GMessage{
             this.setEndRotation();
         }
     }
+
+    public void setColorToInconsistent(){
+        connection.path.setStroke(Color.RED);
+    }
 }
