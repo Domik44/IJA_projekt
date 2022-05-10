@@ -208,6 +208,9 @@ public class SequenceDiagram extends Element {
 	 * @param ID Contains ID of box that is to be deleted.
 	 */
 	public void deleteActivationBox(String ID) {
+		UMLActivationBox deletedBox = this.getActivationBox(ID);
+		UMLParticipant par = deletedBox.getBelognsTo();
+		par.deleteBox(ID);
 		this.activationBoxes.removeIf(box -> (box.getID().equals(ID)));
 	}
 	

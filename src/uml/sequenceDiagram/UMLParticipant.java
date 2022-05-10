@@ -66,7 +66,7 @@ public class UMLParticipant extends Element {
 	
 	@Override
 	public String toString() {
-		return this.instanceOf.getName() + ": " + this.getName();
+		return this.getName() + " :" + this.instanceOf.getName();
 	}
 	
 	public void addBox(UMLActivationBox box) {
