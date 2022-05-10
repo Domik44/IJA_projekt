@@ -1,144 +1,147 @@
 @startuml
 
-Class Motorka {
-  position 100 300
-  attrib omezeni bool +
-  oper postavitNaZadni str + hvezdicky:int
+Class Element {
+  position 509 9
+  attrib name String +
+  oper Element  + name:String 
+  oper getName String + 
+  oper rename void + name:String 
 }
 
-Class Auto {
-  position 500 300
-  attrib tazne bool +
-  attrib vykon int +
-  attrib hmotnost int -
-  attrib znacka str ~
-  attrib barva str #
-  oper vypisInfo str -
-  oper vypisKM int + najezd:int pepa:int
+Class ClassDiagram {
+  position 919 218
+  attrib classes List<UMLClassifier> +
+  oper createClass UMLClass + name:String 
+  oper classifierForName UMLClassifier + name:String 
 }
 
-Interface OperaceVozidlo {
-  position 300 100
-  oper vypisInfo str -
-  oper vypisBarva str + barva:str
+Class UMLAttribute {
+  position 150 222
+  attrib type UMLClassifier +
+  oper getType UMLClassifier + 
 }
 
-Relation Generalization {
-  lClass OperaceVozidlo
-  rClass Auto
-  position 172 93
-  position 470 250
-  position 625 250
-  position 125 0
+Class UMLClassifier {
+  position 509 220
+  oper UMLClassifier  + name:String 
+  oper isUserDefined boolean + 
 }
 
-Relation Generalization {
-  lClass OperaceVozidlo
-  rClass Motorka
-  position 70 93
-  position 370 250
-  position 225 250
-  position 125 0
-}
-
-Relation Generalization {
-  lClass Auto
-  rClass Motorka
-  position 125 165
-  position 625 520
-  position 225 520
-  position 125 80
+Class UMLClass {
+  position 514 387
+  attrib attributes List<UMLAttributes> +
+  oper addAttribute boolean + attr:UMLAttribute 
+  oper getAttrPosition int + attr:UMLAttribute 
 }
 
 Relation Association {
-  position 250 80
-  position 800 380
-  position 800 150
-  position 250 50
-  lClass Auto
-  rClass OperaceVozidlo
-  lCard 1
-  rCard *
-  label je 805 280
+  position 0 52
+  position 834 270
+  position 833 242
+  position 250 23
+  lClass ClassDiagram
+  rClass UMLClassifier
 }
 
-Relation Aggregation {
-  position 250 50
-  position 0 50
-  lClass Motorka
-  rClass Auto
-  lCard 1
-  rCard *
-  label je 400 310
+Relation Association {
+  position 250 42
+  position 450 264
+  position 450 230
+  position 508 231
+  position 0 11
+  lClass UMLAttribute
+  rClass UMLClassifier
 }
 
-@startSequence
+Relation Association {
+  position 250 71
+  position 436 294
+  position 436 438
+  position 0 51
+  lClass UMLAttribute
+  rClass UMLClass
+}
 
-Participant OperaceVozidlo:1 OperaceVozidlo {
-  startPos 700 0
+Relation Generalization {
+  position 16 119
+  position 524 172
+  position 278 170
+  position 127 0
+  lClass Element
+  rClass UMLAttribute
+}
+
+Relation Generalization {
+  position 121 119
+  position 124 0
+  lClass Element
+  rClass UMLClassifier
+}
+
+Relation Generalization {
+  position 221 119
+  position 731 167
+  position 1037 168
+  position 119 0
+  lClass Element
+  rClass ClassDiagram
+}
+
+Relation Generalization {
+  position 124 84
+  position 120 0
+  lClass UMLClassifier
+  rClass UMLClass
+}
+
+@startSequence 
+
+Participant  Main {
+  startPos 49 0
   endPos 0 0
-  lineStart 15 30
-  lineEnd 15 40
+  lineStart 0 0
+  lineEnd 0 0
 }
 
-Participant Auto:1 Auto {
-  startPos 100 0
+Participant d ClassDiagram {
+  startPos 287 0
   endPos 0 0
-  lineStart 35 30
-  lineEnd 35 40
+  lineStart 0 0
+  lineEnd 0 0
 }
 
-Participant Motorka:1 Motorka {
-  startPos 400 0
+Participant cl UMLClass {
+  startPos 503 0
   endPos 0 0
-  lineStart 55 30
-  lineEnd 45 40
+  lineStart 0 0
+  lineEnd 0 0
 }
 
-Message postavitNaZadni Synchronous {
-  position 0 100
-  position 0 0
-  namePos 20 33
-  startObject Auto:1
-  endObject Motorka:1
+Participant al UMLAttribute {
+  startPos 743 0
+  endPos 0 0
+  lineStart 0 0
+  lineEnd 0 0
 }
 
-Message vypisInfo Asynchronous {
-  position 0 150
-  position 0 0
-  namePos 20 36
-  startObject Motorka:1
-  endObject Auto:1
+ActivationBox  {
+  startPos 0 35
+  endPos 0 458
 }
 
-Message <<return>> Return {
-  position 0 200
-  position 0 0
-  namePos 20 36
-  startObject Motorka:1
-  endObject Auto:1
+ActivationBox d {
+  startPos 0 84
+  endPos 0 180
 }
 
-Message <<create>> Create {
-  position 0 250
-  position 0 0
-  namePos 20 36
-  startObject OperaceVozidlo:1
-  endObject Auto:1
+ActivationBox cl {
+  startPos 0 269
+  endPos 0 411
 }
 
-Message <<delete>> Delete {
-  position 0 300
-  position 0 0
-  namePos 20 36
-  startObject OperaceVozidlo:1
-  endObject Auto:1
-}
-
-
-ActivationBox Auto:1 {
-  startPos 0 50
-  endPos 0 400
+ActivationBox al {
+  startPos 0 392
+  endPos 0 511
 }
 
 @endSequence

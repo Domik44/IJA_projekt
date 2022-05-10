@@ -23,7 +23,7 @@ public class UMLClassifier extends Element {
 	 */
 	public UMLClassifier(String name) {
 		super(name);
-		this.userDefined = false; // Tady zmena oproti ukolu 1
+		this.userDefined = false;
 	}
 	
 	/**
@@ -60,8 +60,6 @@ public class UMLClassifier extends Element {
 	 */
 	@Override
 	public String toString(){
-		// TODO changed this -> maybe change back for future use?
-		//java.lang.String result = this.getName() + '(' + this.isUserDefined() +  ')';
 		String result = this.getName();
 		
 		if(result.equals("null")) {

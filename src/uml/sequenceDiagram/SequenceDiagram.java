@@ -8,6 +8,13 @@ import uml.classDiagram.UMLInterface;
 import uml.classDiagram.UMLOperation;
 import workers.Converter;
 
+/**
+ * This Class represents sequence diagram and its actions.
+ *
+ * @author Dominik Pop
+ * @version 1.0
+ * @since 2022-05-10
+ */
 public class SequenceDiagram extends Element {
 	private List<UMLParticipant> participants = new ArrayList<UMLParticipant>();
 	private List<UMLMessage> messages = new ArrayList<UMLMessage>();
@@ -45,6 +52,11 @@ public class SequenceDiagram extends Element {
 		return newParticipant;
 	}
 	
+	/**
+	 * Method adds participant to participants list.
+	 * 
+	 * @param par Participant to be added.
+	 */
 	public void addParticipant(UMLParticipant par) {
 		this.participants.add(par);
 	}
@@ -62,6 +74,7 @@ public class SequenceDiagram extends Element {
 	
 	/**
 	 * Getter for participant by its name.
+	 * 
 	 * @param name Contains name of participant.
 	 * @return Returns reference to certain participant.
 	 */
@@ -88,6 +101,11 @@ public class SequenceDiagram extends Element {
 		}
 	}
 	
+	/**
+	 * Deletes all participants with given instance interface/class.
+	 * 
+	 * @param instanceClass Interface/class determining if participant should be deleted.
+	 */
 	public void deleteParticipantsWith(UMLInterface instanceClass) {
 		for(UMLParticipant par : this.participants) {
 			if(par.getInstanceOf() == instanceClass) {
@@ -134,6 +152,11 @@ public class SequenceDiagram extends Element {
 		return newMessage;
 	}
 	
+	/**
+	 * Method adds message to message list.
+	 * 
+	 * @param added Message to be added.
+	 */
 	public void addMessage(UMLMessage added) {
 		this.messages.add(added);
 	}
@@ -197,6 +220,11 @@ public class SequenceDiagram extends Element {
 		return newBox;
 	}
 	
+	/**
+	 * Method adds activation box to AB list.
+	 * 
+	 * @param added Activation box to be added.
+	 */
 	public void addActivationBox(UMLActivationBox added) {
 		this.activationBoxes.add(added);
 	}
@@ -292,10 +320,19 @@ public class SequenceDiagram extends Element {
 		return returnList;
 	}
 	
+	/**
+	 * Sets if message before this one was inconsistent.
+	 * 
+	 * @param value True if it was, false if it wasn't.
+	 */
 	public void setMessageBefore(boolean value) {
 		this.messageBeforeInconsistent = value;
 	}
 	
+	/**
+	 * 
+	 * @return Returns True if message before this one was inconsistent, false if not.
+	 */
 	public boolean getMessageBefore() {
 		return this.messageBeforeInconsistent;
 	}

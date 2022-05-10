@@ -44,6 +44,11 @@ public class UMLClass extends UMLInterface {
 	}
 	
 	// Attribute methods
+	/**
+	 * Method changes list of attributes for different one.
+	 * 
+	 * @param attributes New list of attributes.
+	 */
 	public void setAttributes(List<UMLAttribute> attributes) {
 		this.attributes = attributes;
 	}
@@ -75,6 +80,7 @@ public class UMLClass extends UMLInterface {
 	
 	/**
 	 * Method for getting position of attribute in class.
+	 * 
 	 * @param attr Contains reference to attribute object.
 	 * @return Returns index representing position of attribute inside class.
 	 */
@@ -84,6 +90,7 @@ public class UMLClass extends UMLInterface {
 	
 	/**
 	 * Method for moving attribute to certain position inside class.
+	 * 
 	 * @param attr Contains reference to attribute object.
 	 * @param pos Contains position attribute where attribute will be moved to.
 	 * @return Returns position number if successful, -1 if not.
@@ -101,6 +108,7 @@ public class UMLClass extends UMLInterface {
 	
 	/**
 	 * Getter for attributes list.
+	 * 
 	 * @return Returns unmodifiable list of attributes of class.
 	 */
 	public List<UMLAttribute> getAttributes(){
@@ -125,15 +133,27 @@ public class UMLClass extends UMLInterface {
 		return null;
 	}
 	
+	/**
+	 * Method clears the attributes list.
+	 */
 	public void removeAllAttributes() {
 		this.attributes.clear();
 	}
 	
+	/**
+	 * Method for cleaning all lists. 
+	 * Calls super class method.
+	 */
 	public void clean() {
 		super.clean();
 		this.removeAllAttributes();
 	}
 	
+	/**
+	 * Method for deep copy of class.
+	 * 
+	 * @param edited Class which we copy.
+	 */
 	public void copy(UMLClass edited) {
 		super.copy(edited);
 		this.setAbstract(edited.isAbstract());

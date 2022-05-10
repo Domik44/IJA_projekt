@@ -100,7 +100,7 @@ public class ClassDiagram extends Element {
 	 * @param name Contains name of created interface.
 	 * @return Returns reference to newly created interface.
 	 */
-	public UMLInterface createInterface(String name) { // TO DO
+	public UMLInterface createInterface(String name) {
 		name = Converter.converToCamelCase(name);
 		if(this.getInterface(name) != null) {
 			// TODO thow exception a handle pres vyskakovaci okno!
@@ -109,19 +109,16 @@ public class ClassDiagram extends Element {
 		
 		UMLInterface newInterface = new UMLInterface(name);
 		
-//		if(this.getInconsistent(name) != null) {
-//			newInterface = (UMLInterface)this.getInconsistent(name);
-//			newInterface.setIsInconsistent(false);
-//		}
-//		else {
-//			newInterface = new UMLInterface(name);			
-//		}
-		
 		this.interfaces.add(newInterface);
 
 		return newInterface;
 	}
 	
+	/**
+	 * Method adds interface to interface list.
+	 * 
+	 * @param addedInterface Interface to be added
+	 */
 	public void addInterface(UMLInterface addedInterface) {
 		this.interfaces.add(addedInterface);
 	}
@@ -174,7 +171,7 @@ public class ClassDiagram extends Element {
 	 * @param name Contains name of created class.
 	 * @return Returns reference to newly created class.
 	 */
-	public UMLClass createClass(String name) { // TO DO
+	public UMLClass createClass(String name) {
 		name = Converter.converToCamelCase(name);
 		if(this.getClass(name) != null) {
 			// TODO thow exception a handle pres vyskakovaci okno!
@@ -183,19 +180,16 @@ public class ClassDiagram extends Element {
 		
 		UMLClass newClass = new UMLClass(name);
 		
-//		if(this.getInconsistent(name) != null) {
-//			newClass = (UMLClass)this.getInconsistent(name);
-//			newClass.setIsInconsistent(false);
-//		}
-//		else {
-//			newClass = new UMLClass(name);			
-//		}
-		
 		this.classes.add(newClass);
 
 		return newClass;
 	}
 	
+	/**
+	 * Method adds class to class list.
+	 * 
+	 * @param addedClass Class to be added.
+	 */
 	public void addClass(UMLClass addedClass) {
 		this.classes.add(addedClass);
 	}
@@ -237,8 +231,6 @@ public class ClassDiagram extends Element {
 		if(toBeDeleted != null) {
 			this.deleteRelationsWith(toBeDeleted);
 			this.classes.remove(toBeDeleted);
-//			this.deleteParticipantsWith(toBeDeleted);
-//			toBeDeleted = null;
 		}
 			
 	}
@@ -251,12 +243,6 @@ public class ClassDiagram extends Element {
 		this.relAggregation.removeIf(rel -> (rel.getLeftClass().equals(deleted) || rel.getRightClass().equals(deleted)));
 		this.relAssociation.removeIf(rel -> (rel.getLeftClass().equals(deleted) || rel.getRightClass().equals(deleted)));
 		this.relGeneralization.removeIf(rel -> (rel.getLeftClass().equals(deleted) || rel.getRightClass().equals(deleted)));
-	}
-	
-	public void deleteParticipantsWith(UMLInterface deleted) {
-		for(SequenceDiagram seq : this.sequenceDiagrams) {
-			seq.deleteParticipantsWith(deleted);
-		}
 	}
 
 	/**
@@ -284,6 +270,11 @@ public class ClassDiagram extends Element {
 		return newRelation;
 	}
 	
+	/**
+	 * Method adds generalization to generalizations list.
+	 * 
+	 * @param added Generalization to be added.
+	 */
 	public void addGeneralization(RelGeneralization added) {
 		this.relGeneralization.add(added);
 	}
@@ -320,18 +311,14 @@ public class ClassDiagram extends Element {
 		return newRelation;
 	}
 	
+	/**
+	 * Method adds aggregation to generalizations list.
+	 * 
+	 * @param added Generalization to be added.
+	 */
 	public void addAggregation(RelAggregation added) {
 		this.relAggregation.add(added);
 	}
-	
-//	public RelAggregation createAggregation(UMLInterface parent, UMLInterface child, String type) {
-//		RelAggregation newRelation = new RelAggregation(parent, child, type);
-//		this.relAggregation.add(newRelation);
-//		parent.addCommunaction(child);
-//		child.addCommunaction(parent);
-//
-//		return newRelation;
-//	}
 
 	/**
 	 * Method deletes Aggregation from Aggregations list.
@@ -364,6 +351,11 @@ public class ClassDiagram extends Element {
 		return newRelation;
 	}
 	
+	/**
+	 * Method adds association to generalizations list.
+	 * 
+	 * @param added Generalization to be added.
+	 */
 	public void addAssociation(RelAssociation added) {
 		this.relAssociation.add(added);
 	}
@@ -496,18 +488,39 @@ public class ClassDiagram extends Element {
 		return null;
 	}
 	
+	/**
+	 * Method adds inconsistent interface/class to inconsistent list.
+	 * 
+	 * @param inconsistentClass Interface/class to be added to the list.
+	 */
 	public void addInconsistent(UMLInterface inconsistentClass) {
 		this.inconsistents.add(inconsistentClass);
 	}
 	
+	/**
+	 * Method removes inconsistent interface/class from the list.
+	 * 
+	 * @param inconsistentClass Interface/class to be deleted to the list.
+	 */
 	public void removeInconsistent(UMLInterface inconsistentClass){
 		this.inconsistents.removeIf(in -> (in.getName().equals(inconsistentClass.getName())));
 	}
 	
+	/**
+	 * Getter for inconsistent list.
+	 * 
+	 * @return Returns list of inconsistent interfaces/classes.
+	 */
 	public List<UMLInterface> getInconsistents(){
 		return this.inconsistents;
 	}
 	
+	/**
+	 * Returns inconsistent interface/class by name.
+	 * 
+	 * @param name Name of searched interface/class.
+	 * @return Returns reference to class if foud, null if not.
+	 */
 	public UMLInterface getInconsistent(String name) {
 		for(UMLInterface in : this.getInconsistents()) {
 			if(in.getName().equals(name)) {
