@@ -301,6 +301,7 @@ public class GUIMain extends Application implements Observer {
             GAssociation ass = new GAssociation(first, second, a.getName());
 //            ass.name = a.getName();
             ass.setFromList(listNode, start, end);
+            setConnectionBetweenEvent(listNode, ass);
             ass.setLabels(a.getLeftCardinality(),a.getRightCardinality(), a.getLabel());
             ass.setLabelName(a.getLabel(), a.getLabelPosition());
             pane.getChildren().add(ass.rLabel);
@@ -340,6 +341,7 @@ public class GUIMain extends Application implements Observer {
             GAggregation aggr = new GAggregation(first, second, a.getName());
 
             aggr.setFromList(listNode, start, end);
+            setConnectionBetweenEvent(listNode, aggr);
             aggr.setLabels(a.getLeftCardinality(),a.getRightCardinality(), a.getLabel());
             aggr.setLabelName(a.getLabel(), a.getLabelPosition());
             pane.getChildren().add(aggr.rLabel);
@@ -381,6 +383,7 @@ public class GUIMain extends Application implements Observer {
             second.relationList.add(g);
             GGeneralization generalization = new GGeneralization(first, second, g.getName());
             generalization.setFromList(listNode, start, end);
+            setConnectionBetweenEvent(listNode, generalization);
             start.polygonTriangle();
             start.polygonSetRotatoin(first);
 
@@ -388,6 +391,56 @@ public class GUIMain extends Application implements Observer {
 
             generalization.show(pane);
         }
+    }
+
+    private void setConnectionBetweenEvent(List<MyNode> list, GRelationAbstract Grelation){
+        for (var mynode : list){
+            mynode.addObserver((Observable o, Object arg) -> {
+                UMLRelation relation;
+                if (Grelation instanceof GAssociation)
+                    relation = GUIMain.diagram.getAssociation(Grelation.name);
+                else if (Grelation instanceof GAggregation)
+                    relation = GUIMain.diagram.getAggregation(Grelation.name);
+                else if (Grelation instanceof GGeneralization)
+                    relation = GUIMain.diagram.getGeneralization(Grelation.name);
+                else
+                    return;
+
+                List<Position> copy = relation.getPoints();
+                List<Position> tmpList = new ArrayList<>();
+                tmpList.add(copy.get(0));
+
+                if (mynode.wantToBeDeleted){
+                        for (var node : Grelation.connection.between) {
+                            if (node.g.getTranslateX() != ((MyNode)arg).g.getTranslateX() ||
+                                    node.g.getTranslateY() != ((MyNode)arg).g.getTranslateY())
+                                tmpList.add(convertMyNodeToPosition(node));
+                        }
+                }
+                else if (mynode.wantToBeExpanded){
+                    for (var node : Grelation.connection.between) {
+                        tmpList.add(convertMyNodeToPosition(node));
+                        if (node.g.getTranslateX() == ((MyNode)arg).g.getTranslateX() ||
+                                node.g.getTranslateY() == ((MyNode)arg).g.getTranslateY()){
+                            tmpList.add(convertMyNodeToPosition(node));
+                        }
+                    }
+                }
+                else {
+                        for (var node : Grelation.connection.between) {
+                            tmpList.add(convertMyNodeToPosition(node));
+                        }
+                }
+                tmpList.add(copy.get(copy.size() - 1));
+                relation.changeList(tmpList);
+                if (mynode.wantToBeDeleted || mynode.wantToBeExpanded)
+                    setupFromDiagram(diagram);
+            });
+        }
+    }
+
+    public Position convertMyNodeToPosition(MyNode myNode){
+        return new Position( (int)myNode.g.getTranslateX(), (int)myNode.g.getTranslateY());
     }
 
     private void addRelationSelectedHandler(Object o) {

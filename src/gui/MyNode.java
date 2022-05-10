@@ -3,6 +3,7 @@ package gui;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 
@@ -19,6 +20,8 @@ public class MyNode extends Observable  {
     int order; //order in gconnection
     Group g;
     Circle c;
+    boolean wantToBeDeleted = false;
+    boolean wantToBeExpanded = false;
 
     /**
      * Constructor for attribute object. Class constructor of super class Element and sets type of attribute.
@@ -75,22 +78,45 @@ public class MyNode extends Observable  {
             public void handle(MouseEvent e) {
                 if (GUIMain.state != 0)
                     return;
-                double X = e.getSceneX() - startX;
-                double Y = e.getSceneY() - startY;
-                node.setTranslateX(X);
-                node.setTranslateY(Y);
+                if (e.getButton() == MouseButton.PRIMARY) {
+                    double X = e.getSceneX() - startX;
+                    double Y = e.getSceneY() - startY;
+                    node.setTranslateX(X);
+                    node.setTranslateY(Y);
+                }
             }
         });
 
         node.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                NotifyPositionChanged();
+                if (e.getButton() == MouseButton.PRIMARY)
+                    NotifyPositionChanged();
+                else if (e.getButton() == MouseButton.SECONDARY)
+                    NotifyWantToBeDeleted();
+                else if (e.getButton() == MouseButton.MIDDLE)
+                    NotifyWantToBeExpanded();
             }
         });
+
     }
 
     public void NotifyPositionChanged(){
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public void NotifyWantToBeDeleted(){
+        wantToBeDeleted = true;
+        wantToBeExpanded = false;
+        setChanged();
+        notifyObservers(this);
+    }
+
+    public void NotifyWantToBeExpanded(){
+        System.out.println("mid");
+        wantToBeDeleted = false;
+        wantToBeExpanded = true;
         setChanged();
         notifyObservers(this);
     }

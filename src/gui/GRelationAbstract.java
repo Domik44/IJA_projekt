@@ -45,29 +45,6 @@ import java.util.Observer;
         connection.setEnd(end);
         if (list.size() > 0){
             connection.setBetween(list);
-            for (var mynode : list){
-                mynode.addObserver((Observable o, Object arg) -> {
-                    UMLRelation relation;
-                    if (this instanceof GAssociation)
-                        relation = GUIMain.diagram.getAssociation(name);
-                    else if (this instanceof GAggregation)
-                        relation = GUIMain.diagram.getAggregation(name);
-                    else if (this instanceof GGeneralization)
-                        relation = GUIMain.diagram.getGeneralization(name);
-                    else
-                        return;
-
-                    List<Position> copy = relation.getPoints();
-                    List<Position> tmpList = new ArrayList<>();
-                    tmpList.add(copy.get(0));
-                    for (var node : connection.between){
-                        tmpList.add(convertMyNodeToPosition(node));
-                    }
-                    tmpList.add(copy.get(copy.size() - 1));
-                    relation.changeList(tmpList);
-                });
-
-            }
         }
         connection.setBind();
         connection.connect();
