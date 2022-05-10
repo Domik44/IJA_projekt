@@ -262,6 +262,7 @@ public class AddController {
 		public Position lineStart;
 		public String ID;
 		public boolean isInconsistent;
+	    public boolean wasIncReturn;
 		
 		public AddMessage(GUIMain view, SequenceDiagram model, Position lineStart, String messageText, String messageType, boolean Inconsistent) {
 			this.view = view;
@@ -279,6 +280,7 @@ public class AddController {
 			
 			if(this.model.getMessageBefore() && messageType.equals("Return")){
 				newMessage.setIsInconsistent(true);
+				wasIncReturn = true;
 			}
 			
 			if(isInconsistent) {
@@ -301,6 +303,14 @@ public class AddController {
 		
 		@Override
 		public void undo() {
+			if(isInconsistent) {
+				this.model.setMessageBefore(false);
+			}
+			
+			if(wasIncReturn) {
+				this.model.setMessageBefore(true);
+			}
+			
 			this.model.deleteMessage(ID);
 			this.view.setupFromSEQDiagram(model);
 		}
