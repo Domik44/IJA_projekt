@@ -21,6 +21,8 @@ public class AddController {
 		public GUIMain view;
 		public ClassDiagram model;
 		public String name;
+		public UMLInterface inconsistent;
+		public UMLInterface newInterface;
 		
 		public AddInterface(GUIMain view, ClassDiagram model, String name) {
 			this.view = view;
@@ -30,12 +32,31 @@ public class AddController {
 		
 		@Override
 		public void run() {
-			this.model.createInterface(name);
+			newInterface = this.model.createInterface(name);
+			inconsistent = this.model.getInconsistent(name);
+			if(inconsistent != null) {
+				for(SequenceDiagram seq : this.model.getSequenceDiagrams()) {
+					for(UMLParticipant par : seq.getParticipants()) {
+						if(par.getInstanceOf() == inconsistent) {
+							par.setInstanceOf(newInterface);
+						}
+					}
+				}
+			}
 			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
+			if(inconsistent != null) {
+				for(SequenceDiagram seq : this.model.getSequenceDiagrams()) {
+					for(UMLParticipant par : seq.getParticipants()) {
+						if(par.getInstanceOf() == newInterface) {
+							par.setInstanceOf(inconsistent);
+						}
+					}
+				}
+			}
 			this.model.deleteInterface(name);
 			this.view.setupFromDiagram(model);
 		}
@@ -45,6 +66,8 @@ public class AddController {
 		public GUIMain view;
 		public ClassDiagram model;
 		public String name;
+		public UMLInterface inconsistent;
+		public UMLClass newClass;
 		
 		public AddClass(GUIMain view, ClassDiagram model, String name) {
 			this.view = view;
@@ -54,12 +77,32 @@ public class AddController {
 		
 		@Override
 		public void run() {
-			this.model.createClass(name);
+			newClass = this.model.createClass(name);
+			inconsistent = this.model.getInconsistent(name);
+			if(inconsistent != null) {
+				for(SequenceDiagram seq : this.model.getSequenceDiagrams()) {
+					for(UMLParticipant par : seq.getParticipants()) {
+						System.out.println(par.getName());
+						if(par.getInstanceOf() == inconsistent) {
+							par.setInstanceOf(newClass);
+						}
+					}
+				}
+			}
 			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
+			if(inconsistent != null) {
+				for(SequenceDiagram seq : this.model.getSequenceDiagrams()) {
+					for(UMLParticipant par : seq.getParticipants()) {
+						if(par.getInstanceOf() == newClass) {
+							par.setInstanceOf(inconsistent);
+						}
+					}
+				}
+			}
 			this.model.deleteClass(name);
 			this.view.setupFromDiagram(model);
 		}
@@ -178,12 +221,16 @@ public class AddController {
 		
 		@Override
 		public void run() {
+//			name = Converter.converToCamelCase(name);
+			instanceClassName = Converter.converToCamelCase(instanceClassName); // TODO -> mozna volat pred hledanim tridy?
 			UMLInterface instanceClass = this.clsModel.getInterface(instanceClassName) == null ?  this.clsModel.getClass(instanceClassName) : this.clsModel.getInterface(instanceClassName);
 			if(instanceClass == null) {
-				 name = Converter.converToCamelCase(name); // TODO -> mozna volat pred hledanim tridy?
-				 instanceClass = new UMLClass(instanceClassName);
-				 this.clsModel.addInconsistent((UMLClass)instanceClass);
-				 instanceClass.setIsInconsistent(true);
+				 instanceClass = this.clsModel.getInconsistent(instanceClassName);
+				 if(instanceClass == null) {
+					 instanceClass = new UMLInterface(instanceClassName);
+					 this.clsModel.addInconsistent(instanceClass);
+					 instanceClass.setIsInconsistent(true);					 
+				 }
 			}
 			
 			this.seqModel.createParticipant(this.name, instanceClass);
@@ -192,6 +239,7 @@ public class AddController {
 		
 		@Override
 		public void undo() {
+			this.clsModel.removeInconsistent(this.seqModel.getParticipant(name).getInstanceOf());
 			this.seqModel.deleteParticipant(name);
 			this.view.setupFromSEQDiagram(seqModel);
 		}
