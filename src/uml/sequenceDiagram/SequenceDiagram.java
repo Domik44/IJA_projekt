@@ -80,7 +80,7 @@ public class SequenceDiagram extends Element {
 		if(toBeDeleted != null) {
 			this.deleteMessagesWith(toBeDeleted);
 			this.participants.remove(toBeDeleted);
-			toBeDeleted = null;
+//			toBeDeleted = null;
 		}
 	}
 	

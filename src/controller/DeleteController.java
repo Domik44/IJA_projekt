@@ -54,12 +54,14 @@ public class DeleteController {
 				}
 			}
 			
+			this.deletedInterface.setIsInconsistent(true);
 			this.model.deleteInterface(name);
 			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
+			this.deletedInterface.setIsInconsistent(false);
 			this.model.addInterface(deletedInterface);
 			for(RelGeneralization rel : this.deletedGeneralizations) {
 				this.model.addGeneralization(rel);				
@@ -113,12 +115,14 @@ public class DeleteController {
 				}
 			}
 			
+			this.deletedClass.setIsInconsistent(true);
 			this.model.deleteClass(name);
 			this.view.setupFromDiagram(model);
 		}
 		
 		@Override
 		public void undo() {
+			this.deletedClass.setIsInconsistent(false);
 			this.model.addClass(deletedClass);
 			for(RelGeneralization rel : this.deletedGeneralizations) {
 				this.model.addGeneralization(rel);				

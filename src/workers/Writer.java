@@ -113,6 +113,9 @@ public class Writer {
 	public String writeInterfaces(ClassDiagram classDiagram) {
 		String returnString = new String();
 		for(UMLInterface processsedInterface : classDiagram.getInterfaces()) {
+			if(processsedInterface.getIsInconsistent() == true) { // TODO -> pridani continue na nezapisovani inconsistent trid
+				continue;
+			}
 			String temporaryString = "Interface " + processsedInterface.getName() + " {\n  position ";
 			temporaryString = temporaryString + processsedInterface.getPosition().getX() + " " + processsedInterface.getPosition().getY() + "\n";
 			for(UMLOperation operation : processsedInterface.getOperations()) {

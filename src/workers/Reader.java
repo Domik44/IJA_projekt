@@ -56,7 +56,7 @@ public class Reader {
 		String path = System.getProperty("user.dir").concat(fileName);
 		// Editing path because of JAR location
 //		return path.replace("dest", "data\\");
-		return "data/"+this.fileName;
+		 return "data/"+this.fileName;
 	}
 	
 	/**
@@ -295,6 +295,11 @@ public class Reader {
 		UMLInterface instanceOf = clDiagram.getInterface(instaceClass);
 		if(instanceOf == null) {
 			instanceOf = clDiagram.getClass(instaceClass);
+		}
+		
+		if(instanceOf == null) { // Participant is inconsistent with class diagram
+			instanceOf = new UMLInterface(instaceClass);
+			instanceOf.setIsInconsistent(true);
 		}
 		name = Converter.converToCamelCase(name);
 		UMLParticipant newParticipant = seqDiagram.createParticipant(name, instanceOf);

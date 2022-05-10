@@ -99,9 +99,15 @@ public class UMLOperation extends UMLAttribute {
 	@Override
 	public String toString(){
 		//String result = this.getVisibility() + " " + this.getName() + "("+ this.getArguments() + "): " + this.getType();
+		int cnt = this.getArguments().size() - 1;
 		String result = this.getVisibility() + " " + this.getName() + "(";
+		
 		for(UMLAttribute at : this.getArguments()) {
 			result = result + at;
+			if(cnt != 0) {
+				result = result + ", ";
+			}
+			cnt--;
 		}
 		result = result + "): " + this.getType();
 		

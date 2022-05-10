@@ -18,6 +18,7 @@ public class UMLInterface extends UMLClassifier {
 	private Position position = new Position(0, 0);
 	private List<UMLOperation> inheritedMethods = new ArrayList<UMLOperation>(); // TODO 
 	private List<UMLInterface> comunicatesWith = new ArrayList<UMLInterface>(); // TODO 
+	private boolean isInconsistent;
 	
 	// Constructors
 	/**
@@ -26,6 +27,7 @@ public class UMLInterface extends UMLClassifier {
 	 */
 	public UMLInterface(String name) {
 		super(name);
+		this.isInconsistent = false;
 	}
 	
 	public Object clone() throws CloneNotSupportedException {
@@ -169,5 +171,13 @@ public class UMLInterface extends UMLClassifier {
 		this.methods.addAll(edited.methods);
 		this.inheritedMethods.addAll(edited.inheritedMethods);
 		this.comunicatesWith.addAll(edited.comunicatesWith);
+	}
+	
+	public void setIsInconsistent(boolean value) {
+		this.isInconsistent = value;
+	}
+	
+	public boolean getIsInconsistent() {
+		return this.isInconsistent;
 	}
 }
