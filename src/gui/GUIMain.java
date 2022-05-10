@@ -91,6 +91,7 @@ public class GUIMain extends Application implements Observer {
     private Object selectForDelete;
     private String messageText;
     private String messageType;
+    private boolean messageInconsistent;
     
     ArrayDeque<UIAction> history = new ArrayDeque<>();
     DeleteController deleteControl = new DeleteController();
@@ -148,7 +149,14 @@ public class GUIMain extends Application implements Observer {
         a.setCardinality(LCardinality, RCardinality);
         a.setLabel(relationName);
         //place label into midle of start and end nodes
-        a.setLabelPosition(50,50);
+        int x =(int)(positionList.get(0).getX() + selectedGclass1.getRoot().getTranslateX()
+                + positionList.get(positionList.size() - 1).getX() + selectedGclass2.getRoot().getTranslateX()) / 2;
+        int y =(int)(positionList.get(0).getY() + selectedGclass1.getRoot().getTranslateY()
+                + positionList.get(positionList.size() - 1).getY() + selectedGclass2.getRoot().getTranslateY()) / 2;
+        System.out.println(positionList.get(0).getX());
+        System.out.println(positionList.get(positionList.size() - 1).getX());
+        System.out.println(x);
+        a.setLabelPosition(x,y);
         setupFromDiagram(diagram);
     }
 
@@ -596,8 +604,8 @@ public class GUIMain extends Application implements Observer {
                 editClass.setDisable(true);
                 deleteClass.setDisable(true);
                 deleteteRelation.setDisable(true);
-//                if (delete != null)
-//                    delete.setDisable(true);
+                if (delete != null && !(selectForDelete instanceof GParticipant))
+                    delete.setDisable(true);
                 if (selectedGclass1 != null)
                     selectedGclass1.setColorToUNSelected();
                 if (selectedRelation != null)
@@ -610,6 +618,7 @@ public class GUIMain extends Application implements Observer {
                 if (state == 2){
                     GUIMain.positionList.add(new Position((int)e.getX(),(int) e.getY()));
                 }
+                selectForDelete = null;
             }
         });
 
@@ -621,6 +630,14 @@ public class GUIMain extends Application implements Observer {
 
         Menu fileMenu = new Menu("File");
         menuBar.getMenus().add(fileMenu);
+
+        MenuItem fileMenuOpen = new MenuItem("Open File");
+        fileMenu.getItems().add(fileMenuOpen);
+        fileMenuOpen.setOnAction(e ->{
+            //TODO
+        });
+
+
         MenuItem fileMenuSave = new MenuItem("Save");
         fileMenu.getItems().add(fileMenuSave);
         fileMenuSave.setOnAction(e ->{
@@ -683,14 +700,19 @@ public class GUIMain extends Application implements Observer {
         classMenu.getItems().add(deleteClass);
         deleteClass.setDisable(true);
         deleteClass.setOnAction(e ->{
-        	if(selectedGclass1.isinterface) {
-        		var action = this.deleteControl.new DeleteInterface(this, diagram, selectedGclass1.getName());
-        		run(action);
-        	}
-        	else {
-        		var action = this.deleteControl.new DeleteClass(this, diagram, selectedGclass1.getName());
-        		run(action);
-        	}
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Deleting Class could create inconsistencies");
+            alert.showAndWait();
+            System.out.println(alert.getResult());
+            if (alert.getResult() == ButtonType.OK) {
+                if(selectedGclass1.isinterface) {
+                    var action = this.deleteControl.new DeleteInterface(this, diagram, selectedGclass1.getName());
+                    run(action);
+                }
+                else {
+                    var action = this.deleteControl.new DeleteClass(this, diagram, selectedGclass1.getName());
+                    run(action);
+                }
+            }
         });
 
         Menu relationsMenu = new Menu("Relations");
@@ -770,7 +792,6 @@ public class GUIMain extends Application implements Observer {
         ///READING FROM INPUT FILE
         diagram = new ClassDiagram("ClassDiagram");
         Reader.startReading(diagram);
-        setupFromDiagram(diagram);
 
         comboBoxSDSelection = new ComboBox<>();
         comboBoxSDSelection.setPromptText("Select Sequence diagram");
@@ -799,6 +820,8 @@ public class GUIMain extends Application implements Observer {
         });
 
         hboxCD = new HBox();
+        hboxCD.setSpacing(20);
+        hboxCD.setAlignment(Pos.CENTER);
         hboxCD.getChildren().addAll(buttonBar, comboBoxSDSelection, goToSD);
         vBoxCD.getChildren().add(hboxCD);
 
@@ -819,7 +842,7 @@ public class GUIMain extends Application implements Observer {
         stage.setScene(scene);
         stage.setTitle("Diagram");
         stage.show();
-//        setupFromDiagram(diagram);
+        setupFromDiagram(diagram);
         stage.setOnCloseRequest(e -> ClosingProgram());
     }
 
@@ -840,9 +863,12 @@ public class GUIMain extends Application implements Observer {
                 if (selectedParticipant1 == gParticipant) //selected the same GParticipant twice, invalid -> return
                     return;
                 selectedParticipant2 = gParticipant;
-                messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
-                createGMessage(starPoint, messageText, messageType);
-
+                var retArr = CreateMessageWindow.display(messageType, selectedParticipant1);
+                if (retArr != null && !retArr[0].equals("")) {
+                    messageText = retArr[0];
+                    messageInconsistent = true ? retArr[1].equals("true") : false;
+                    createGMessage(starPoint, messageText, messageType, messageInconsistent);
+                }
             }
             //Create Box events
             else if(state == 5){
@@ -867,7 +893,7 @@ public class GUIMain extends Application implements Observer {
         });
     }
 
-    private void createGMessage(Position lineStart, String messageText, String messageType) {
+    private void createGMessage(Position lineStart, String messageText, String messageType, boolean messageInconsistent) {
         if (messageText == null)
             return;
         UMLMessage m = SD.createMessage(selectedParticipant1.name,
@@ -972,7 +998,6 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addAsynchronous);
         addAsynchronous.setOnAction(e -> {
             messageType = "Asynchronous";
-            messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -981,7 +1006,6 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addCreate);
         addCreate.setOnAction(e -> {
             messageType = "Create";
-            messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -990,7 +1014,6 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addReturn);
         addReturn.setOnAction(e -> {
             messageType = "Return";
-            messageText = CreateMessageWindow.display(messageType, selectedParticipant1);
             state = 1;
             AddMessageSetupButtons();
         });
@@ -999,14 +1022,9 @@ public class GUIMain extends Application implements Observer {
         messageMenu.getItems().add(addDelete);
         addDelete.setOnAction(e -> {
             messageType = "Delete";
-            messageText = CreateMessageWindow.display(messageType, selectedParticipant2);
             state = 1;
             AddMessageSetupButtons();
         });
-
-
-
-
 
         cancelSD = new Button("Cancel");
         cancelSD.setDisable(true);
@@ -1044,16 +1062,12 @@ public class GUIMain extends Application implements Observer {
         HBox hBox = new HBox();
         hBox.setAlignment(Pos.CENTER);
         hBox.setSpacing(20);
-//        hBox.getChildren().addAll(returnButton,addParticipant,addBox ,addSynchronous, addAsynchronous, addCreate, addReturn,addDelete , cancelSD, delete);
-
         returnButton = new Button("<- Return");
         returnButton.setOnAction(e -> {
             SwitchToCDContext();
         });
         
         Button undoButton = new Button("Undo");
-//        buttonBar.getButtons().add(undoButton);
-
         undoButton.setOnAction(e ->{
         	undo();
         });

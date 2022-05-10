@@ -76,8 +76,8 @@ public class Gclass extends Observable {
         //add separating line
         classVB.getChildren().add(separator1);
 
-        DoubleBinding result = classVB.heightProperty().add(20);
-        border.heightProperty().bind(result);
+//        DoubleBinding result = ;
+        border.heightProperty().bind(classVB.heightProperty().add(20));
         Platform.runLater(()->{
 //            System.out.println(border.getHeight()); //TODO use this to get border height
         });

@@ -80,7 +80,6 @@ public class GMessage{
      * Set label with Message name, text and position.
      * 
      * @param name to be named
-     * @param labelPosition position to be moved
      */
     public void setLabelName(String name) {
         this.messageName.setText(name);
@@ -94,13 +93,16 @@ public class GMessage{
             @Override
             public void handle(MouseEvent e) {
                 double Y = e.getSceneY();
-                connection.start.g.setTranslateY(Y - 22);
+                final int magicConst = 55;
+                connection.start.g.setTranslateY(Y - magicConst);
             }
         });
 
         connection.start.g.addEventHandler(MouseEvent.MOUSE_RELEASED, new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
+                if (connection.start.g.getTranslateY() < 50)
+                    connection.start.g.setTranslateY(100);
                 GUIMain.SD.getMessage(ID).ClearList();
                 GUIMain.SD.getMessage(ID).addPosition(new Position(0,(int) connection.start.g.getTranslateY()));
                 GUIMain.SD.getMessage(ID).addPosition(new Position(0,(int) connection.start.g.getTranslateY()));

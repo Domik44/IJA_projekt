@@ -79,7 +79,7 @@ public class ECWMethod {
         ButtonBar attribsBB = new ButtonBar();
         Button attribAdd = new Button("Add Attribute");
         attribAdd.setOnAction(e -> {
-            var retArr = ECWAttribute.display(null);
+            var retArr = ECWAttribute.display(null, false);
             UMLAttribute newUMLattr = new UMLAttribute("", new UMLClassifier("")); //TODO je toto ok?
             boolean change = false;
             if (retArr[0] != null && !retArr[0].equals("")) {
@@ -103,7 +103,7 @@ public class ECWMethod {
         });
         attribEdit = new Button("Edit Attribute");
         attribEdit.setOnAction(e -> {
-            var tmp = ECWAttribute.display(selectedGattr.attribute);
+            var tmp = ECWAttribute.display(selectedGattr.attribute, false);
             boolean change = false;
             if (tmp[0] != null && !tmp[0].equals("")) {
                 selectedGattr.attribute.setVisibility(new UMLClassifier(tmp[0]));

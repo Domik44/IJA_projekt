@@ -99,7 +99,7 @@ public class ECW {
             ButtonBar attribsBB = new ButtonBar();
             Button attribAdd = new Button("Add Attribute");
             attribAdd.setOnAction(e -> {
-                var retArr = ECWAttribute.display(null);
+                var retArr = ECWAttribute.display(null, true);
                 UMLAttribute newUMLattr = new UMLAttribute("", new UMLClassifier("")); //TODO je toto ok?
                 boolean change = false;
                 if (retArr[0] != null && !retArr[0].equals("")) {
@@ -123,7 +123,7 @@ public class ECW {
             });
             attribEdit = new Button("Edit Attribute");
             attribEdit.setOnAction(e -> {
-                var tmp = ECWAttribute.display(selectedGattr.attribute);
+                var tmp = ECWAttribute.display(selectedGattr.attribute, true);
                 boolean change = false;
                 if (tmp[0] != null && !tmp[0].equals("")) {
                     selectedGattr.attribute.setVisibility(new UMLClassifier(tmp[0]));
@@ -145,6 +145,11 @@ public class ECW {
             attribEdit.setDisable(true);
             attribDelete = new Button("Delete Attribute");
             attribDelete.setDisable(true);
+            attribDelete.setOnAction(e -> {
+                ((UMLClass) Class).deleteAttribute(selectedGattr.attribute.getName());
+                ClearGattributeLabels(grid);
+                SetupGattributeLabels(((UMLClass) Class), grid);
+            });
 
             attribsBB.getButtons().addAll(attribAdd, attribEdit, attribDelete);
             grid.add(attribsBB, 0, 1, 1, 3);
@@ -199,6 +204,11 @@ public class ECW {
         });
 
         OpDelete = new Button("Delete Method");
+        OpDelete.setOnAction(e -> {
+
+            ClearOperationLabels(grid);
+            SetupGoperationLabels(Class, grid);
+        });
         OpDelete.setDisable(true);
 
         methodsBB.getButtons().addAll(methodAdd, OpEdit, OpDelete);

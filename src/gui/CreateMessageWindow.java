@@ -10,6 +10,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import uml.classDiagram.UMLInterface;
 
+import java.sql.Array;
+
 /**
  * EditClassWindowClassName
  */
@@ -17,15 +19,20 @@ public class CreateMessageWindow {
     /**
      * Init window and setup values
      */
-    static String retValue = null;
+    static String[] retArr = null;
     static boolean checkboxOut;
 
-    public static String display(String type, GParticipant selectedParticipant){
+    public static String[] display(String type, GParticipant selectedParticipant){
         Stage window = new Stage();
+        retArr = new String[2];
+
+        boolean createORreturnORdelete = false;
+        if(type.equals("Create") || type.equals("Return") || type.equals("Delete"))
+            createORreturnORdelete = true;
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Create " + type + " message");
-        window.setMinWidth(300);
+        window.setMinWidth(350);
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(5,5,5,5));
@@ -34,12 +41,10 @@ public class CreateMessageWindow {
                 new ColumnConstraints(100),
                 new ColumnConstraints(200)
         );
-        grid.getRowConstraints().addAll(
-                new RowConstraints(50),
-                new RowConstraints(40),
-                new RowConstraints(20),
-                new RowConstraints(60)
-        );
+        grid.getRowConstraints().addAll( new RowConstraints(50), new RowConstraints(40));
+        if (!createORreturnORdelete)
+            grid.getRowConstraints().addAll(new RowConstraints(20), new RowConstraints(60));
+
 
         Label classNameLabel = new Label("Create new: ");
         grid.add(classNameLabel, 0, 0);
@@ -48,33 +53,48 @@ public class CreateMessageWindow {
         grid.add(field, 1, 0);
 
         Label orSelect = new Label("Or Select an existing one ");
-        grid.add(orSelect, 0, 1, 2, 1);
         Button save = new Button("Save");
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText("Select Sequence diagram");
         comboBox.setMinWidth(200);
-        comboBox.setOnAction(e ->{
-            save.setDisable(false);
-        });
         for (var m : selectedParticipant.UMLInstanceOf.getAllMethods()){
             comboBox.getItems().add(m.toString());
         }
 
         save.setOnAction(e -> {
-            retValue = field.getText();
-            if (comboBox.getValue() != null)
-                retValue = comboBox.getValue();
+            if (type.equals("Create") || type.equals("Return") || type.equals("Delete")){
+                if (type.equals("Create"))
+                    retArr[0] = "<<create>>";
+                if (type.equals("Return"))
+                    retArr[0] = "<<return>>";
+                if (type.equals("Delete"))
+                    retArr[0] = "<<delete>>";
+                retArr[0] += field.getText();
+                retArr[1] = "true";
+            }
+            else {
+                retArr[0] = field.getText();
+                retArr[1] = "true";
+                if (comboBox.getValue() != null) {
+                    retArr[0] = comboBox.getValue();
+                    retArr[1] = "false";
+                }
+            }
             window.close();
         });
+
         Button discard = new Button("Discard");
         discard.setOnAction(e -> {
-            retValue = null;
+            retArr = null;
             window.close();
         });
 
         ButtonBar buttonBar = new ButtonBar();
         buttonBar.getButtons().addAll(save,discard);
-        grid.add(comboBox,0,2, 2, 1);
+        if (!createORreturnORdelete) {
+            grid.add(orSelect, 0, 1, 2, 1);
+            grid.add(comboBox, 0, 2, 2, 1);
+        }
         grid.add(buttonBar,0,3, 2, 1);
 
 
@@ -86,6 +106,6 @@ public class CreateMessageWindow {
         window.setScene(scene);
         window.showAndWait();
 
-        return retValue;
+        return retArr;
     }
 }
