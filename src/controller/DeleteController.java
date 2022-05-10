@@ -220,28 +220,53 @@ public class DeleteController {
 	
 	public class DeleteParticipant implements UIAction{
 		
-		GUIMain view;
-		SequenceDiagram model;
+		public GUIMain view;
+		public SequenceDiagram seqModel;
+		public ClassDiagram clsModel;
 		List<UMLMessage> deletedMessages = new ArrayList<>();
 		List<UMLActivationBox> deletedBoxes = new ArrayList<>();
 		UMLParticipant deletedParticipant;
 		String name;
 		
-		public DeleteParticipant(GUIMain view ,SequenceDiagram model, String name) {
+		public DeleteParticipant(GUIMain view, SequenceDiagram seqModel, ClassDiagram clsModel, String name) {
 			this.view = view;
-			this.model = model;
+			this.seqModel = seqModel;
+			this.clsModel = clsModel;
 			this.name = name;
 		}
 		
 		@Override
 		public void run() {
-			this.deletedParticipant = this.model.getParticipant(name);
-//			this.view
+			this.deletedParticipant = this.seqModel.getParticipant(name);
+			for(UMLMessage mes : this.seqModel.getMessages()) {
+				if(mes.getEndObject() == this.deletedParticipant || mes.getStartObject() == this.deletedParticipant) {
+					this.deletedMessages.add(mes);
+				}
+			}
+			
+			for(UMLActivationBox box : this.seqModel.getActivationBoxes()) {
+				if(box.getBelognsTo() == this.deletedParticipant) {
+					this.deletedBoxes.add(box);
+				}
+			}
+			
+			this.seqModel.deleteParticipant(this.name);
+			this.view.delete.setDisable(true);
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 		
 		@Override
 		public void undo() {
-//			this.view
+			this.seqModel.addParticipant(this.deletedParticipant);
+			for(UMLMessage mes : this.deletedMessages) {
+				this.seqModel.addMessage(mes);
+			}
+			
+			for(UMLActivationBox box : this.deletedBoxes) {
+				this.seqModel.addActivationBox(box);
+			}
+			
+			this.view.setupFromSEQDiagram(seqModel);
 		}
 	}
 	

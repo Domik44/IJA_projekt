@@ -87,7 +87,7 @@ public class GUIMain extends Application implements Observer {
     static MenuItem addDelete;
     static MenuItem addBox;
     private Button cancelSD;
-    private Button delete;
+    public Button delete;
     private Object selectForDelete;
     private String messageText;
     private String messageType;
@@ -994,9 +994,8 @@ public class GUIMain extends Application implements Observer {
             if (selectForDelete != null){
                 if (selectForDelete instanceof GParticipant){
                     var casted = (GParticipant)selectForDelete;
-                    SD.deleteParticipant(casted.name);
-                    delete.setDisable(true);
-                    setupFromSEQDiagram(SD);
+                    var action = this.deleteControl.new DeleteParticipant(this, SD, diagram, casted.name);
+                    run(action);
                 }
                 else if (selectForDelete instanceof GMessage){
                     var casted = (GMessage)selectForDelete;

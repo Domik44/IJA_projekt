@@ -44,6 +44,10 @@ public class SequenceDiagram extends Element {
 		return newParticipant;
 	}
 	
+	public void addParticipant(UMLParticipant par) {
+		this.participants.add(par);
+	}
+	
 	/**
 	 * Getter for participants list.
 	 * 
