@@ -150,6 +150,8 @@ public class GActivationBox {
                     node.setTranslateY(start.getYprop().getValue() + 50);
                 }
                 e.consume();
+                GUIMain.SD.getActivationBox(ID).setStartPosition(0, (int)start.g.getTranslateY());
+                GUIMain.SD.getActivationBox(ID).setEndPosition(0, (int)end.g.getTranslateY());
             }
         });
     }

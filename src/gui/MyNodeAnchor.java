@@ -125,6 +125,10 @@ public class MyNodeAnchor extends MyNode{
         });
     }
 
+    /**
+     * Set polygon rotation to left or right
+     * @param pointingLeft if polygon should be pointing left
+     */
     public void polygonSetRotatoinLR(boolean pointingLeft) {
         polygon.getTransforms().clear();
         rotation.setPivotX(0);
