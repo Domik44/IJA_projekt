@@ -25,6 +25,7 @@ public class UMLRelation extends Element{
 	
 	/**
 	 * Constructor for relation object. Sets type, left and right class of relation.
+	 * 
 	 * @param left Contains reference to interface/class.
 	 * @param right Contains reference to interface/class.
 	 * @param type Contains type of relation.
@@ -39,6 +40,7 @@ public class UMLRelation extends Element{
 	
 	/**
 	 * Getter for left class/interface of relation.
+	 * 
 	 * @return Returns name of class/interface. (Because of override toString in UMLClassifier)
 	 */
 	public UMLInterface getLeftClass() {
@@ -47,6 +49,7 @@ public class UMLRelation extends Element{
 	
 	/**
 	 * Getter for right class/interface of relation.
+	 * 
 	 * @return Returns name of class/interface.
 	 */
 	public UMLInterface getRightClass() {
@@ -55,6 +58,7 @@ public class UMLRelation extends Element{
 	
 	/**
 	 * Getter for type of relation.
+	 * 
 	 * @return Returns type of relation.
 	 */
 	public String getType() {
@@ -63,18 +67,25 @@ public class UMLRelation extends Element{
 	
 	/**
 	 * Method adds position of relation point to points list.
+	 * 
 	 * @param pos Contains position of point holding (x, y) coordinates.
 	 */
 	public void addPosition(Position pos) {
 		listPoints.add(pos);
 	}
 	
+	/**
+	 * Method deletes position from positions list.
+	 * 
+	 * @param pos
+	 */
 	public void deletePosition(Position pos) {
 		listPoints.remove(pos);
 	}
 	
 	/**
 	 * Getter for points list.
+	 * 
 	 * @return Returns unmodifiable list of relation points.
 	 */
 	public List<Position> getPoints() {
@@ -84,6 +95,7 @@ public class UMLRelation extends Element{
 	
 	/**
 	 * Method gets rid of old list of points and takes new one.
+	 * 
 	 * @param newList Returns reference to new points list.
 	 */
 	public void changeList(List<Position> newList) {

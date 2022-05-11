@@ -15,8 +15,22 @@ import uml.sequenceDiagram.UMLMessage;
 import uml.sequenceDiagram.UMLParticipant;
 import uml.relations.RelAggregation;
 
+/**
+ * This Class represents controller which handles all delete operations inside
+ * class and sequence diagrams.
+ *
+ * @author Dominik Pop
+ * @version 1.0
+ * @since 2022-05-10
+ */
 public class DeleteController {
 	
+	/**
+	 * Class for deleting interface inside class diagram. Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteInterface implements UIAction{
 		public GUIMain view;
 		public ClassDiagram model;
@@ -80,6 +94,13 @@ public class DeleteController {
 		}
 	}
 	
+	/**
+	 * Class for deleting class inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteClass implements UIAction{
 		public GUIMain view;
 		public ClassDiagram model;
@@ -143,6 +164,13 @@ public class DeleteController {
 		}
 	}
 	
+	/**
+	 * Class for deleting generalization inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteGeneralization implements UIAction {
 		public GUIMain view;
 		public ClassDiagram model;
@@ -169,6 +197,13 @@ public class DeleteController {
 		}
 	}
 	
+	/**
+	 * Class for deleting association inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteAssociation implements UIAction {
 		public GUIMain view;
 		public ClassDiagram model;
@@ -195,6 +230,13 @@ public class DeleteController {
 		}
 	}
 	
+	/**
+	 * Class for deleting aggregation inside class diagram.
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteAggregation implements UIAction {
 		public GUIMain view;
 		public ClassDiagram model;
@@ -221,6 +263,13 @@ public class DeleteController {
 		}
 	}
 	
+	/**
+	 * Class for deleting participant inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteParticipant implements UIAction{
 		
 		public GUIMain view;
@@ -273,6 +322,13 @@ public class DeleteController {
 		}
 	}
 	
+	/**
+	 * Class for deleting message inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteMessage implements UIAction{
 		
 		public GUIMain view;
@@ -306,6 +362,13 @@ public class DeleteController {
 		}
 	}
 	
+	/**
+	 * Class for deleting activation box inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class DeleteActivationBox implements UIAction{
 		
 		public GUIMain view;

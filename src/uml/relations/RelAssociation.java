@@ -21,7 +21,6 @@ public class RelAssociation extends RelAggregation {
 	 */
 	public RelAssociation(UMLInterface left, UMLInterface right, String type) {
 		super(left, right, type);
-		//this.asociationClass = null;
 	}
 	
 	/**
@@ -40,6 +39,11 @@ public class RelAssociation extends RelAggregation {
 		return this.asociationClass;
 	}
 	
+	/**
+	 * Method for deleting association class.
+	 * 
+	 * @param delete Association interface/class to be deleted.
+	 */
 	public void deleteAssociationClass(UMLInterface delete) {
 		if(this.asociationClass.equals(delete)) {
 			this.asociationClass = null;

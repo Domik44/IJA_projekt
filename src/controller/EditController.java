@@ -6,8 +6,23 @@ import uml.classDiagram.ClassDiagram;
 import uml.classDiagram.UMLClass;
 import uml.classDiagram.UMLInterface;
 
+/**
+ * This Class represents controller which handles all edit operations inside
+ * class and sequence diagrams.
+ *
+ * @author Dominik Pop
+ * @version 1.0
+ * @since 2022-05-10
+ */
 public class EditController {
 	
+	/**
+	 * Class for editing interface inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class EditInterface implements UIAction{
 		public GUIMain view;
 		public ClassDiagram model;
@@ -52,6 +67,13 @@ public class EditController {
 		}
 	}
 	
+	/**
+	 * Class for editing class inside class diagram. 
+	 * Supports undo operation.
+	 * 
+	 * @author xpopdo00
+	 *
+	 */
 	public class EditClass implements UIAction{
 		public GUIMain view;
 		public ClassDiagram model;

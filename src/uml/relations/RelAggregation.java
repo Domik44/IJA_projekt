@@ -38,10 +38,20 @@ public class RelAggregation extends UMLRelation {
 		this.rightCardinality = right;
 	}
 	
+	/**
+	 * Method sets left cardinality of object.
+	 * 
+	 * @param left String representation of cardinality.
+	 */
 	public void setLeftCardinality(String left) {
 		this.leftCardinality = left;
 	}
-	
+
+	/**
+	 * Method sets right cardinality of object.
+	 * 
+	 * @param right String representation of cardinality.
+	 */
 	public void setRightCardinality(String right) {
 		this.rightCardinality = right;
 	}
