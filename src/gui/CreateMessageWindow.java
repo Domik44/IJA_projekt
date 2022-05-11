@@ -57,7 +57,8 @@ public class CreateMessageWindow {
         comboBox.setMinWidth(200);
         System.out.println(selectedParticipant.name);
         for (var m : selectedParticipant.UMLInstanceOf.getAllMethods()){
-            comboBox.getItems().add(m.toString());
+//            comboBox.getItems().add(m.toString());
+        	comboBox.getItems().add(m.getName() + "()");
             System.out.println(m.toString());
         }
 
