@@ -50,14 +50,14 @@ public class Writer {
 	 * @return Returns name of output file.
 	 */
 	public String getFileName() {
-//		String path = System.getProperty("user.dir").concat(fileName);
+		String path = System.getProperty("user.dir").concat(fileName);
 		// Editing path because of JAR location
-//		return path.replace("dest", "data\\");
-		return "data/"+this.fileName; // use this for testing in IDE! (same for reader)
+		return path.replace("dest", "data\\");
+//		return "data/"+this.fileName; // use this for testing in IDE! (same for reader)
 	}
 	
 	public static void startWriting(ClassDiagram classDiagram) {
-		Writer writer = new Writer("ClassDiagramNew.cl"); //TODO -> predelat jmeno inputu!
+		Writer writer = new Writer("ClassDiagram.cl"); //TODO -> predelat jmeno inputu!
 		
 		File overWrittenFile = new File(writer.getFileName());
 		try {

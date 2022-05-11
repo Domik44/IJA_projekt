@@ -55,8 +55,8 @@ public class Reader {
 	public String getFileName() {
 		String path = System.getProperty("user.dir").concat(fileName);
 		// Editing path because of JAR location
-//		return path.replace("dest", "data\\");
-		 return "data/"+this.fileName;
+		return path.replace("dest", "data\\");
+//		 return "data/"+this.fileName;
 	}
 	
 	/**
@@ -397,10 +397,6 @@ public class Reader {
 				y = Integer.parseInt(lineParsed[2]);
 				newActivationBox.setEndPosition(x, y);
 			}
-//			else if(lineParsed[0].equals("participant")) {
-//				UMLParticipant par = seqDiagram.getParticipant(lineParsed[1]);
-//				par.addBox(newActivationBox);
-//			}
 		}
 	}
 	

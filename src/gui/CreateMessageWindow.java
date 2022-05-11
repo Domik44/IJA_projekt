@@ -68,7 +68,7 @@ public class CreateMessageWindow {
                 if (type.equals("Create"))
                     retArr[0] = "<<create>>";
                 if (type.equals("Return"))
-                    retArr[0] = "<<return>>";
+                    retArr[0] = "";
                 if (type.equals("Delete"))
                     retArr[0] = "<<delete>>";
                 retArr[0] += field.getText();

@@ -96,52 +96,139 @@ Relation Generalization {
 
 @startSequence 
 
-Participant  Main {
-  startPos 49 0
-  endPos 0 0
-  lineStart 0 0
-  lineEnd 0 0
+Participant m Main { 
+  startPos 0 0 
+  endPos 0 0 
+  lineStart 0 0 
+  lineEnd 0 0 
 }
 
-Participant d ClassDiagram {
-  startPos 287 0
-  endPos 0 0
-  lineStart 0 0
-  lineEnd 0 0
+Participant cl UMLClass { 
+  startPos 642 0 
+  endPos 0 0 
+  lineStart 0 0 
+  lineEnd 0 0 
 }
 
-Participant cl UMLClass {
-  startPos 503 0
-  endPos 0 0
-  lineStart 0 0
-  lineEnd 0 0
+Participant al UMLAttribute { 
+  startPos 930 0 
+  endPos 0 0 
+  lineStart 0 0 
+  lineEnd 0 0 
 }
 
-Participant al UMLAttribute {
-  startPos 743 0
-  endPos 0 0
-  lineStart 0 0
-  lineEnd 0 0
+Participant d ClassDiagram { 
+  startPos 374 0 
+  endPos 0 0 
+  lineStart 0 0 
+  lineEnd 0 0 
 }
 
-ActivationBox  {
-  startPos 0 35
-  endPos 0 458
+Message true Return {
+  position 0 427 
+  position 0 427 
+  namePos 0 0
+  startObject cl 
+  endObject m 
 }
 
-ActivationBox d {
-  startPos 0 84
-  endPos 0 180
+Message isAbstract() Synchronous {
+  position 0 469 
+  position 0 469 
+  namePos 0 0
+  startObject m 
+  endObject al 
+  inconsistent 
 }
 
-ActivationBox cl {
-  startPos 0 269
-  endPos 0 411
+Message false Return {
+  position 0 506 
+  position 0 506 
+  namePos 0 0
+  startObject al 
+  endObject m 
+  inconsistent 
 }
 
-ActivationBox al {
-  startPos 0 392
-  endPos 0 511
+Message <<create>>("cl") Create {
+  position 0 122 
+  position 0 122 
+  namePos 0 0
+  startObject d 
+  endObject cl 
+}
+
+Message cl Return {
+  position 0 177 
+  position 0 177 
+  namePos 0 0
+  startObject d 
+  endObject m 
+}
+
+Message cInt Return {
+  position 0 283 
+  position 0 283 
+  namePos 0 0
+  startObject d 
+  endObject m 
+}
+
+Message createClass() Synchronous {
+  position 0 96 
+  position 0 96 
+  namePos 0 0
+  startObject m 
+  endObject d 
+}
+
+Message classifierForName() Synchronous {
+  position 0 241 
+  position 0 241 
+  namePos 0 0
+  startObject m 
+  endObject d 
+}
+
+Message <<create>>("a1",cInt) Create {
+  position 0 323 
+  position 0 323 
+  namePos 0 0
+  startObject m 
+  endObject al 
+}
+
+Message addAttribute() Synchronous {
+  position 0 379 
+  position 0 379 
+  namePos 0 0
+  startObject m 
+  endObject cl 
+}
+
+ActivationBox d { 
+  startPos 0 66 
+  endPos 0 180 
+}
+
+ActivationBox cl { 
+  startPos 0 328 
+  endPos 0 411 
+}
+
+ActivationBox al { 
+  startPos 0 416 
+  endPos 0 511 
+}
+
+ActivationBox m { 
+  startPos 0 31 
+  endPos 0 565 
+}
+
+ActivationBox d { 
+  startPos 0 66 
+  endPos 0 180 
 }
 
 @endSequence
