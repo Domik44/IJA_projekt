@@ -124,7 +124,7 @@ Participant d ClassDiagram {
   lineEnd 0 0 
 }
 
-Message true Return {
+Message <<return>>true Return {
   position 0 427 
   position 0 427 
   namePos 0 0
@@ -141,7 +141,7 @@ Message isAbstract() Synchronous {
   inconsistent 
 }
 
-Message false Return {
+Message <<return>>false Return {
   position 0 506 
   position 0 506 
   namePos 0 0
@@ -158,7 +158,7 @@ Message <<create>>("cl") Create {
   endObject cl 
 }
 
-Message cl Return {
+Message <<return>>cl Return {
   position 0 177 
   position 0 177 
   namePos 0 0
@@ -166,7 +166,7 @@ Message cl Return {
   endObject m 
 }
 
-Message cInt Return {
+Message <<return>>cInt Return {
   position 0 283 
   position 0 283 
   namePos 0 0
