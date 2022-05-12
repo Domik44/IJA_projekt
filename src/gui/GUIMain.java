@@ -667,7 +667,12 @@ public class GUIMain extends Application implements Observer {
         MenuItem fileMenuOpen = new MenuItem("Open File");
         fileMenu.getItems().add(fileMenuOpen);
         fileMenuOpen.setOnAction(e ->{
-            //TODO
+            var retVar = SelectFileWindow.display();
+            if (retVar != null){
+                diagram = new ClassDiagram(retVar);
+                Reader.startReading(diagram, retVar + ".cl");
+                setupFromDiagram(diagram);
+            }
         });
 
 
@@ -824,7 +829,7 @@ public class GUIMain extends Application implements Observer {
 
         ///READING FROM INPUT FILE
         diagram = new ClassDiagram("ClassDiagram");
-        Reader.startReading(diagram);
+        Reader.startReading(diagram, "ClassDiagram.cl");
 
         comboBoxSDSelection = new ComboBox<>();
         comboBoxSDSelection.setPromptText("Select Sequence diagram");

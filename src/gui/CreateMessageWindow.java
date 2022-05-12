@@ -55,7 +55,6 @@ public class CreateMessageWindow {
         ComboBox<String> comboBox = new ComboBox<>();
         comboBox.setPromptText("Select Sequence diagram");
         comboBox.setMinWidth(200);
-        System.out.println(selectedParticipant.name);
         for (var m : selectedParticipant.UMLInstanceOf.getAllMethods()){
 //            comboBox.getItems().add(m.toString());
         	comboBox.getItems().add(m.getName() + "()");

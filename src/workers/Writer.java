@@ -57,8 +57,7 @@ public class Writer {
 	}
 	
 	public static void startWriting(ClassDiagram classDiagram) {
-		Writer writer = new Writer("ClassDiagram.cl"); //TODO -> predelat jmeno inputu!
-		
+		Writer writer = new Writer(classDiagram.getName() + ".cl");
 		File overWrittenFile = new File(writer.getFileName());
 		try {
 			FileWriter fileWriter = new FileWriter(overWrittenFile, false);

@@ -63,8 +63,8 @@ public class Reader {
 	 * Method starts reading informations about class diagram from input file.
 	 * @param diagram Contains reference to diagram object, where all information will be stored.
 	 */
-	public static void startReading(ClassDiagram diagram) {
-		Reader reader = new Reader("ClassDiagram.cl");
+	public static void startReading(ClassDiagram diagram, String filename) {
+		Reader reader = new Reader(filename);
 		int seqCounter = 0;
 		try {
 		      File inputFile = new File(reader.getFileName());
