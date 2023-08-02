@@ -1,5 +1,5 @@
 # IJA_projekt
-Project for IJA. 
+V rámci tohoto projektu byla vytvořena jednoduchá aplikace v jazyce Java, ve které uživatel může vytvářet diagramy tříd a sekvenční diagramy.
 
 ## Dates:  
 -	task_1 -> 13.3.2022  
