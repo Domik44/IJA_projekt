@@ -20,5 +20,25 @@ V rámci tohoto projektu byla vytvořena jednoduchá aplikace v jazyce Java, ve 
                            informace ke způsobu překladu a spuštění aplikace  
 - **rozdeleni.txt**    (soubor) soubor obsahuje rozdělení bodů mezi členy týmu;   
                            pokud tento soubor neexistuje, předpokládá se rovnoměrné rozdělení  
-- **requirements.pdf** (soubor) aktualizovaný seznam požadavků  
+- **requirements.pdf** (soubor) aktualizovaný seznam požadavků
+
+## Příklady překladu:
+- v kořenovém adresáři:
+- mvn 
+	 - vyčistí předtím vytvořené soubory, přeloží aplikaci a vytvoří spustitelný jar file + vygeneruje javadoc
+- mvn clean package javadoc:javadoc
+	 - udělá to samé co předchozí
+- mvn clean
+	 - vyčistí dest, doc (krom složky others) adresáře a vymaže build adresář
+- mvn package
+	 - přeloží .java soubory do build/classes a vytvoří .jar soubor v adresáři dest
+	 - zkopíruje závislosti do adresáře dest/dependencies a vstupní soubor do dest/data
+- mvn javadoc:javadoc
+	 - vytvoří java dokumentaci do adresáře doc
+ 
+## Příklady spuštění:
+- V adresáři dest:
+	- java -jar ija-app.jar
+	- kliknutím myší na ija-app.jar soubor
+
 
